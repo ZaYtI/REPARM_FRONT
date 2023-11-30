@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="988.5547px" height="1080.4004px" viewBox="0 0 988.5547 1080.4004" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB" id="filter_1">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+      <feGaussianBlur stdDeviation="2.5" result="effect0_gaussianBlur" />
+    </filter>
+    <path d="M-264.524 377.779C-119.526 170.7 179.928 130.204 404.325 287.329C534.411 378.416 334.822 203.792 118.18 182.892C-38.8839 167.741 -203.583 290.746 -264.524 377.779C-325.252 464.508 -371.706 643.914 -304.075 785.935C-210.227 983.01 9.6554 1128.54 -120.759 1037.23C-345.156 880.102 -409.521 584.857 -264.524 377.779Z" id="path_1" />
+    <clipPath id="clip_1">
+      <use xlink:href="#path_1" />
+    </clipPath>
+  </defs>
+  <g id="Ovale" filter="url(#filter_1)">
+    <g clip-path="url(#clip_1)">
+      <use xlink:href="#path_1" fill="none" stroke="#62C3FF" stroke-width="26" />
+    </g>
+  </g>
+</svg>
