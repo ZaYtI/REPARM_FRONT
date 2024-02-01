@@ -1,14 +1,12 @@
-
-import type AppNavbarVue from '~/components/nav/AppNavbar.vue';
 <template>
   <div class="d-flex flex-column default-layout">
       <NavAppNavbar/>
 
-      <main class="default-layout-content overflow-hidden">
+      <main class="default-layout-content overflow-hidden bg-color-primary">
           <slot />
       </main>
 
-      <NavAppFooter/>
+      <NavAppFooter class="bg-color-primary"/>
   </div>
 </template>
 
@@ -22,5 +20,9 @@ import type AppNavbarVue from '~/components/nav/AppNavbar.vue';
 }
 .default-layout{
     min-height: 100vh;
+}
+
+.bg-color-primary{
+  background-color: #3A483B;
 }
 </style>
