@@ -75,4 +75,14 @@
   max-width: 50%;
   margin: auto auto;
 }
+
+@media  screen and (max-width: 768px) {
+  .banniere_title{
+    font-size: 40px;
+  }
+  .banniere_subtitle{
+    max-width: 80%;
+  }
+
+}
 </style>
