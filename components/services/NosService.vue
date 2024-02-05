@@ -13,7 +13,7 @@ const element = [
   {
     svg:<thirdSvg/>,
     title:"POSE ET RÉGLAGES D’ACCESSOIRES POUR FUSIL",
-    path:"/accessoire"
+    path:"/pose"
   },
   {
     svg:<fourthSvg/>,

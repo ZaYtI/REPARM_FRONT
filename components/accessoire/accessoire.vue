@@ -4,9 +4,9 @@
     <p class="sub-title-accessoire">
       Pour toute commande d’accessoire merci de nous contacter directement.
     </p>
-    <button class="btn btn-lg button-accessoire">
+    <NuxtLink to="/contact" class="btn btn-lg button-accessoire">
       CONTACTEZ-NOUS
-    </button>
+    </NuxtLink>
   </div>
 </template>
 
