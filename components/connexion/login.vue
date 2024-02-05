@@ -1,36 +1,52 @@
+<script setup>
+import { reactive , toRaw } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+const router = useRouter();
+async function handleLogin(event){
+  event.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  await useAuthStore().login(email, password);
+  if (useAuthStore().isLoggedIn) {
+    await useAuthStore().profile();
+    router.push('/profile');
+  }
+}
+</script>
+
 <template>
-  <form class="connexion_form px-4" action="">
+  <form class="connexion_form px-4" @submit.prevent="handleLogin">
     <div class="form-group">
       <label class="connexion_form_label ms-4" for="email">Email</label>
-      <input type="email" name="email" id="email" class="form-control input_login" placeholder="email">
+      <input type="email" name="email" id="email" class="form-control input_login text-white" placeholder="email">
     </div>
     <div class="form-group">
       <label class="connexion_form_label ms-4" for="password">Mot de passe</label>
-      <input type="password" name="password" id="password" class="form-control input_login" placeholder="Mot de passe">
+      <input type="password" name="password" id="password" class="form-control input_login text-white" placeholder="Mot de passe">
     </div>
     <div class="form-group text-center mt-4">
-      <button class="btn btn-lg button_login mx-auto">SE CONNECTER</button>
+      <button class="btn btn-lg button_login mx-auto" type="submit">SE CONNECTER</button>
     </div>
   </form>
 </template>
 
 <style scoped>
-.connexion_form{
+.connexion_form {
   width: 100%;
 }
 
-.form-control:focus{
+.form-control:focus {
   box-shadow: none;
   background-color: #989898;
   color: white;
 }
 
-.connexion_form_label{
+.connexion_form_label {
   color: #B54A29;
   text-transform: uppercase;
 }
 
-.input_login{
+.input_login {
   border-radius: 3rem;
   padding: 1rem;
   margin-bottom: 1rem;
@@ -38,7 +54,7 @@
   background-color: #989898;
 }
 
-.input_login::placeholder{
+.input_login::placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
 
@@ -48,7 +64,7 @@
   border-radius: 3rem;
 }
 
-.button_login:hover{
+.button_login:hover {
   background-color: #B54A29;
 }
 </style>

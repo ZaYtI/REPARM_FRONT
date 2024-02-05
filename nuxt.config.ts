@@ -20,9 +20,7 @@ export default defineNuxtConfig({
         ],
     },
     ssr: false,
-
-    routeRules: {
-        '/**' : {prerender: true},
-    }
-
+    modules: [
+        '@pinia/nuxt',
+    ],
 })
