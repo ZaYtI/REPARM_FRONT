@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     ssr: false,
 
     routeRules: {
-        '/**' : {isr:false},
+        '/**' : {prerender: true},
     }
 
 })

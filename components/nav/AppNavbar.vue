@@ -17,7 +17,7 @@
           <NuxtLink class="nav-link" to="/product">CARABINES</NuxtLink>
         </li>
         <li class="nav-item">
-          <NuxtLink class="nav-link " to="/product">CROSS-SUR-MESURE</NuxtLink>
+          <NuxtLink class="nav-link " to="/crosse">CROSS-SUR-MESURE</NuxtLink>
         </li>
       </ul>
       <div class="d-flex justify-content-around" role="search">
@@ -25,7 +25,7 @@
         <NuxtLink class="nav-link px-2" to="/propos">A PROPOS</NuxtLink>
         <div class="account-icons d-flex">
           <div class="icon-panier px-3">
-            <NuxtLink class="nav-link" to="/panier">
+            <NuxtLink class="nav-link" to="/login">
               <component class="svg-container-navbar" :is="personSvg" />
             </NuxtLink>
           </div>

@@ -23,7 +23,7 @@ onMounted(()=>{
 <template>
   <div class="d-flex cross_wrapper">
     <CheckSlide />
-    <CheckListContainer :element="element" color="white" />
+    <CheckListContainer title="CRÉATION DE CROSSES SUR-MESURE" :element="element" color="white" />
   </div>
 </template>
 

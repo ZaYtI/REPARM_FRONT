@@ -32,7 +32,7 @@
   });
 </script>
 <template>
-<div class="mt-0 banniere" :style="{backgroundImage : `url(${props.img})`, height: props.img ? '323px' : 'auto',paddingTop: props.underBanniere ? '40px':'80px',paddingBottom: props.paddingBottom ? '80px':'0px'}" :class="{'bottom-border': props.bottomBorder}">
+<div class="mt-0 banniere" :class="{'default-height': props.img, 'bottom-border': props.bottomBorder}"  :style="{backgroundImage : `url(${props.img})`,paddingTop: props.underBanniere ? '40px':'80px',paddingBottom: props.paddingBottom ? '80px':'0px'}">
     <div class="title container">
       <div class="top-title">
         <h1 class="banniere_title" :style="{color: props.titleColor}">
@@ -52,12 +52,16 @@
   background-position: center;
   width: 100%;
   display: flex;
+  height: auto;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   &.bottom-border{
     border-bottom: 3px solid white;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  &.default-height{
+    height: 35vh;
   }
 }
 .banniere_title{
@@ -76,13 +80,13 @@
   margin: auto auto;
 }
 
-@media  screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .banniere_title{
-    font-size: 40px;
+    font-size: 30px;
   }
   .banniere_subtitle{
-    max-width: 80%;
+    width: 100%;
+    font-size: 15px;
   }
-
 }
 </style>

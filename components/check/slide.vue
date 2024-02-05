@@ -10,16 +10,11 @@
   <div class="cross_container">
     <div class="slide_container">
       <div class="slider">
-        <div class="slide" :style="{backgroundImage : `url(${firstImage})`}">
-        </div>
-        <div class="slide" :style="{backgroundImage : `url(${secondImage})`}">
-        </div>
-        <div class="slide" :style="{backgroundImage : `url(${thirdImage})`}">
-        </div>
-        <div class="slide" :style="{backgroundImage : `url(${fourthImage})`}">
-        </div>
-        <div class="slide" :style="{backgroundImage : `url(${fiveImage})`}">
-        </div>
+        <img class="slide" :src="firstImage" >
+        <img class="slide" :src="secondImage">
+        <img class="slide" :src="thirdImage">
+        <img class="slide" :src="fourthImage">
+        <img class="slide" :src="fiveImage">
       </div>
     </div>
   </div>
@@ -41,16 +36,14 @@
   display: flex;
   width: 500%;
   height: 100%;
-  animation: slides 30s ease-in-out infinite;
+  animation: slides 15s infinite;
 }
 
 .slide{
   width: 20%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   filter: brightness(75%);
+  object-fit: cover;
 }
 
 @keyframes slides{

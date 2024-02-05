@@ -6,17 +6,18 @@ const elementProps = defineProps({
     type: String,
     default: "white"
   },
-  subtitle: String
+  subtitle: String,
+  title: String
 })
 </script>
 
 <template>
     <div class="check-container">
-      <h1 class="text-center title ">Création de crosse sur-mesure</h1>
+      <h1 class="text-center title ">{{ elementProps.title }}</h1>
       <h4 class="list_title mt-4 ms-5" v-if="elementProps.subtitle !== null">{{ elementProps.subtitle }}</h4>
       <div class="checklist_container mt-5">
         <div class="list" v-for="(item, index) in element" :key="index">
-          <CheckElementList :title="item.title" :text="item.text" :color="elementProps.color" />
+          <CheckElementList :title="item.title" :text="item.text" :color="elementProps.color" :class="{ 'padding_with_no_text': !item.text }" />
         </div>
         <div class="text-center">
           <NuxtLink class="contact_button btn btn-lg">contactez-nous</NuxtLink>
@@ -48,6 +49,9 @@ const elementProps = defineProps({
   color: white;
   border-radius: 3rem;
   margin-top: 2rem;
+}
+.list .padding_with_no_text{
+  padding-bottom: 2rem;
 }
 
 </style>
