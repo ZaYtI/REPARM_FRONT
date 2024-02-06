@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth',{
   },
   actions: {
     async login(email: string, password: string): Promise<void> {
-      const response = await fetch('http://localhost:8000/auth/login', {
+      const response = await fetch('https://reparm-api.onrender.com/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore('auth',{
     },
 
     async profile(): Promise<void> {
-      const response = await fetch('http://localhost:8000/auth/profile', {
+      const response = await fetch('https://reparm-api.onrender.com/auth/profile', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
