@@ -27,12 +27,11 @@
   const data = ref([]);
 
   onMounted(async () => {
-    data.value = await $fetch('http://localhost:8000/product/getall');
+    data.value = await $fetch('https://reparm-api.onrender.com/product/getall');
   });
 
   const handleClickOnCategorie = (cat) => {
     selectedCat.value = cat;
-    console.log(selectedCat.value);
   }
 </script>
 
