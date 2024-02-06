@@ -27,7 +27,6 @@
   ]
 
   const divideListOfProduct = ref([]);
-  const data = ref([]);
 
   function handleClickOnCategorie(cat){
     store.setSelectedCat(cat);
@@ -37,5 +36,5 @@
 <template>
   <Banniere title="NOS FUSILS & CARABINES" subtitle="Notre spécialité chez Souchez Reparm est la vente de fusils d’occasion mais nous vendons également des armes neuves à la demande." title-color="#B54A29" bottom-border/>
   <ProductCategorieSelect :allCategorie="allCategorie" :handle-click-on-categorie="handleClickOnCategorie" :selected-cat="useSelectedCatStore.getSelectedCat" />
-  <ProductRowCard :product="data" />
+  <ProductRowCard :product="store.getListOfProducts" />
 </template>
