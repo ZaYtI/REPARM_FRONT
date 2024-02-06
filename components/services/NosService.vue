@@ -1,5 +1,8 @@
 <script lang="jsx" setup>
 import { firstSvg, secondSvg, thirdSvg, fourthSvg, lastSvg } from '~/components/svg/svgComponents'
+import { useSelectedCatStore } from '@/stores/selectedCat';
+
+const store = useSelectedCatStore();
 const element = [
   {
     svg :<firstSvg />,
@@ -8,7 +11,8 @@ const element = [
   },{
     svg:<secondSvg />,
     title: "VENTE DE FUSILS D’OCCASION & NEUFS SUR DEMANDE",
-    path:"/product"
+    path:"/product",
+    click: () => store.setSelectedCat('Tous les fusils')
   },
   {
     svg:<thirdSvg/>,
@@ -25,13 +29,19 @@ const element = [
     path:"/conform"
   }
 ];
+
+function handleClickItem(elt){
+    if(elt.click){
+      elt.click()
+    }
+  }
 </script>
 
 <template>
     <div class="container-fluid justify-content-center">
       <div class="row justify-content-center">
       <div v-for="elt in element" :key="element.title" class="col-12 col-lg-2 col-md-6 mb-lg-0 mb-5 container-items text-center">
-        <NuxtLink :to="elt.path" class="text-decoration-none">
+        <NuxtLink :to="elt.path" class="text-decoration-none" @click="handleClickItem(elt)">
           <div class="mx-auto">
             <component class="svg-container" :is="elt.svg" />
           </div>

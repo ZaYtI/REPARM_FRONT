@@ -1,5 +1,12 @@
 <script setup>
   import { personSvg , basketSvg} from '../svg/svgComponents';
+  import { useSelectedCatStore } from '@/stores/selectedCat';
+
+  const store = useSelectedCatStore();
+
+  function handleClickOnNuxtLinkCat(cat){
+    store.setSelectedCat(cat);
+  }
 </script>
 <template>
   <nav class="navbar navbar-expand-lg w-100">
@@ -11,10 +18,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent" v-bs-collapse>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <NuxtLink class="nav-link" to="/product">FUSILS</NuxtLink>
+          <NuxtLink class="nav-link" to="/product" @click="store.setSelectedCat('Tous les fusils')">FUSILS</NuxtLink>
         </li>
         <li class="nav-item">
-          <NuxtLink class="nav-link" to="/product">CARABINES</NuxtLink>
+          <NuxtLink class="nav-link" to="/product" @click="store.setSelectedCat('carabines')">CARABINES</NuxtLink>
         </li>
         <li class="nav-item">
           <NuxtLink class="nav-link " to="/crosse">CROSS-SUR-MESURE</NuxtLink>
