@@ -1,4 +1,6 @@
 <script setup>
+import { useSelectedCatStore } from '@/stores/selectedCat';
+const store = useSelectedCatStore();
 const props = defineProps({
   allCategorie: {
     type: Array,
@@ -21,7 +23,7 @@ const props = defineProps({
         <button
           class="btn mx-3 text-uppercase"
           @click="() => props.handleClickOnCategorie(cat.name)"
-          :class="{ 'active': props.selectedCat === cat.name }"
+          :class="{ 'active': store.getSelectedCat === cat.name }"
         >{{ cat.name }}</button>
       </div>
     </div>

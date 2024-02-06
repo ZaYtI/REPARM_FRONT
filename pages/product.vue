@@ -1,5 +1,8 @@
 <script setup>
-  const selectedCat = ref('Tous les fusils');
+  import { useSelectedCatStore } from '@/stores/selectedCat';
+
+  const store = useSelectedCatStore();
+
   const allCategorie = [
     {
       name: "Tous les fusils",
@@ -26,17 +29,13 @@
   const divideListOfProduct = ref([]);
   const data = ref([]);
 
-  onMounted(async () => {
-    data.value = await $fetch('https://reparm-api.onrender.com/product/getall');
-  });
-
-  const handleClickOnCategorie = (cat) => {
-    selectedCat.value = cat;
+  function handleClickOnCategorie(cat){
+    store.setSelectedCat(cat);
   }
 </script>
 
 <template>
   <Banniere title="NOS FUSILS & CARABINES" subtitle="Notre spécialité chez Souchez Reparm est la vente de fusils d’occasion mais nous vendons également des armes neuves à la demande." title-color="#B54A29" bottom-border/>
-  <ProductCategorieSelect :allCategorie="allCategorie" :handle-click-on-categorie="handleClickOnCategorie" :selected-cat="selectedCat" />
+  <ProductCategorieSelect :allCategorie="allCategorie" :handle-click-on-categorie="handleClickOnCategorie" :selected-cat="useSelectedCatStore.getSelectedCat" />
   <ProductRowCard :product="data" />
 </template>

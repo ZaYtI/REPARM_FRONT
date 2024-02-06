@@ -20,7 +20,6 @@
 
   function handleChangeCivility(event){
     formData.value.civility = event.target.value;
-    console.log(formData.value)
   }
 
   async function checkAllInput(){
@@ -129,7 +128,6 @@
     await isMajor();
     await checkIsPhone();
     await useAuthStore().register(formData.value);
-    console.log(useAuthStore().isLoggedIn,"isLogged")
     if (useAuthStore().isLoggedIn) {
       await useAuthStore().profile();
       router.push('/profile');
