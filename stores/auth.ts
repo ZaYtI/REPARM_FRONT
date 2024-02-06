@@ -20,6 +20,20 @@ interface UserProfile {
   updatedAt: string;
 }
 
+interface RegisterUser{
+  civility: string,
+  lastName: string,
+  firstName: string,
+  phone: string,
+  country: string,
+  address: string,
+  email: string,
+  password: string,
+  birthDate: string,
+  postalCode: string,
+  nick: string,
+}
+
 export const useAuthStore = defineStore('auth',{
   state: () => ({
     authenticated: localStorage.getItem('token') ? true : false,
@@ -71,6 +85,27 @@ export const useAuthStore = defineStore('auth',{
       } else {
         this.user = responseData;
         localStorage.setItem('user', JSON.stringify(responseData));
+      }
+    },
+
+    async register(formData: RegisterUser): Promise<void> {
+      formData.postalCode = "62620";
+      formData.nick = "test";
+      const response = await fetch('https://reparm-api.onrender.com/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const responseData = await response.json();
+      if(responseData.access_token !== undefined || responseData.access_token !== null){
+        this.token = responseData.access_token;
+        this.authenticated = true;
+        localStorage.setItem('token', responseData.access_token);
+      }else{
+        throw new Error(responseData.message || 'Failed to register');
       }
     },
   },
