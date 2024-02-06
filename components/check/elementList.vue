@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <div class="element">
+  <div class="element" :class="{'element_before':elementProps.text}">
     <component class="icons" :is="checkSvg()" />
     <h4 class="list_title" :style="{ color: elementProps.color }">{{ elementProps.title }}</h4>
     <p class="text_list px-2 text-white" >
@@ -32,7 +32,7 @@
   max-width: 660px;
 }
 
-.element::before{
+.element_before::before{
   content: "";
   position: absolute;
   top: 0;

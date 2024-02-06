@@ -1,5 +1,5 @@
 <script setup>
-  import { personSvg} from '../svg/svgComponents';
+  import { personSvg , basketSvg} from '../svg/svgComponents';
 </script>
 <template>
   <nav class="navbar navbar-expand-lg w-100">
@@ -17,7 +17,7 @@
           <NuxtLink class="nav-link" to="/product">CARABINES</NuxtLink>
         </li>
         <li class="nav-item">
-          <NuxtLink class="nav-link " to="/product">CROSS-SUR-MESURE</NuxtLink>
+          <NuxtLink class="nav-link " to="/crosse">CROSS-SUR-MESURE</NuxtLink>
         </li>
       </ul>
       <div class="d-flex justify-content-around" role="search">
@@ -25,15 +25,21 @@
         <NuxtLink class="nav-link px-2" to="/propos">A PROPOS</NuxtLink>
         <div class="account-icons d-flex">
           <div class="icon-panier px-3">
-            <NuxtLink class="nav-link" to="/panier">
-              <component class="svg-container-navbar" :is="personSvg" />
-            </NuxtLink>
+            <div class="nav-link" to="/login">
+              <NuxtLink to="login">
+                <component class="svg-container-navbar" :is="personSvg" />
+              </NuxtLink>
+              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-theme class="basket_button">
+                <component class="svg-container-navbar" :is="basketSvg" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </nav>
+<NavOffCanva />
 </template>
 
 
@@ -49,6 +55,12 @@
 .navbar{
   position: fixed ;
   z-index: 100;
+}
+
+.basket_button{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .svg-container-navbar{

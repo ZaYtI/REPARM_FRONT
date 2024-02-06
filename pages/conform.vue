@@ -26,7 +26,7 @@ onMounted(()=>{
 <template>
   <div class="d-flex conform_container">
     <CheckSlide />
-    <CheckListContainer :element="element" color="#B54A29" subtitle="Optez pour le confort et la performance:" />
+    <CheckListContainer title="MISE EN CONFORMITÉ" :element="element" color="#B54A29" subtitle="Optez pour le confort et la performance:" />
   </div>
 </template>
 
