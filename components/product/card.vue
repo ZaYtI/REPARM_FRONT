@@ -1,26 +1,31 @@
 <script setup>
+  import BanniereImage from '../assets/img/banniere_accueil.jpg';
   const props = defineProps({
     product: Object
   });
+
+  function handleClickOnCard(){
+    console.log('click')
+  }
+
 </script>
 
 <template>
-  <div class="card">
-    <img :src="props.product.image" class="card-img-top" alt="test_image">
+  <button class="card" :onclick="handleClickOnCard(props.product.id)">
+    <img :src="BanniereImage" class="card-img-top" alt="test_image">
     <div class="card-body">
       <h5 class="card-title">{{ props.product.name }}</h5>
     </div>
-  </div>
+  </button>
 </template>
-
 
 <style scoped>
 .card {
-  width: 100%;
-  max-width: 350px;
+  width: 350px;
   margin-bottom: 2rem;
   padding: 1rem;
   background-color: white;
+  transition: all 0.2s ease-in-out;
 }
 
 .card-img-top {

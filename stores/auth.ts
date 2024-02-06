@@ -1,5 +1,3 @@
-// useAuthStore.ts
-
 import { defineStore } from 'pinia';
 
 interface UserProfile {

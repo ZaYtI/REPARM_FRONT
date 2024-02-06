@@ -1,5 +1,4 @@
 <script setup>
-  import axios from 'axios';
   const selectedCat = ref('Tous les fusils');
   const allCategorie = [
     {
@@ -24,8 +23,11 @@
     }
   ]
 
+  const divideListOfProduct = ref([]);
+  const data = ref([]);
+
   onMounted(async () => {
-    const data = await $fetch('http://localhost:8000/product/getall');
+    data.value = await $fetch('http://localhost:8000/product/getall');
   });
 
   const handleClickOnCategorie = (cat) => {
@@ -37,5 +39,5 @@
 <template>
   <Banniere title="NOS FUSILS & CARABINES" subtitle="Notre spécialité chez Souchez Reparm est la vente de fusils d’occasion mais nous vendons également des armes neuves à la demande." title-color="#B54A29" bottom-border/>
   <ProductCategorieSelect :allCategorie="allCategorie" :handle-click-on-categorie="handleClickOnCategorie" :selected-cat="selectedCat" />
-  <ProductRowCard />
+  <ProductRowCard :product="data" />
 </template>
