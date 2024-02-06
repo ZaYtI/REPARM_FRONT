@@ -1,33 +1,218 @@
+<script setup>
+  import { useAuthStore } from '@/stores/auth';
+  const router = useRouter();
+  const formData = ref({
+    civility: '',
+    lastName: '',
+    firstName: '',
+    phone: '',
+    country: '',
+    address: '',
+    email: '',
+    password: '',
+    birthDate: '',
+    city: ''
+  });
+
+  const confirmPassword = ref('');
+
+  let isFormValid = ref(true);
+
+  function handleChangeCivility(event){
+    formData.value.civility = event.target.value;
+    console.log(formData.value)
+  }
+
+  async function checkAllInput(){
+    if(isFormValid.value === false){
+      isFormValid.value = true;
+    }
+    if(formData.value.lastName === ''){
+      document.getElementById('lastName-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('lastName-alert').style.opacity = 0;
+    }
+    if(formData.value.firstName === ''){
+      document.getElementById('firstName-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('firstName-alert').style.opacity = 0;
+    }
+    if(formData.value.phone === ''){
+      document.getElementById('phone-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('phone-alert').style.opacity = 0;
+    }
+    if(formData.value.birthDate === ''){
+      document.getElementById('birthDate-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('birthDate-alert').style.opacity = 0;
+    }
+    if(formData.value.country === ''){
+      document.getElementById('country-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('country-alert').style.opacity = 0;
+    }
+    if(formData.value.address === ''){
+      document.getElementById('address-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('address-alert').style.opacity = 0;
+    }
+    if(formData.value.email === ''){
+      document.getElementById('email-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('email-alert').style.opacity = 0;
+    }
+    if(formData.value.password === ''){
+      document.getElementById('password-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('password-alert').style.opacity = 0;
+    }
+    if(confirmPassword.value === ''){
+      document.getElementById('confirmation-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('confirmation-alert').style.opacity = 0;
+    }
+    if(formData.value.city === ''){
+      document.getElementById('city-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('city-alert').style.opacity = 0;
+    }
+  }
+
+  async function checkPassword(){
+    if(formData.value.password !== confirmPassword.value || formData.value.password.length < 8){
+      document.getElementById('confirmation-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('confirmation-alert').style.opacity = 0;
+    }
+  }
+
+  async function isMajor(){
+    let date = new Date();
+    let year = date.getFullYear();
+    let birthYear = formData.value.birthDate.split('-')[0];
+    if(year - birthYear < 18){
+      document.getElementById('birthDate-alert').innerText = 'Vous devez être majeur pour vous inscrire';
+      document.getElementById('birthDate-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('birthDate-alert').style.opacity = 0;
+    }
+  }
+
+  async function checkIsPhone(){
+    let phone = formData.value.phone;
+    if(phone.length !== 10){
+      document.getElementById('phone-alert').innerText = 'Veuillez entrer un numéro de téléphone valide';
+      document.getElementById('phone-alert').style.opacity = 1;
+      isFormValid.value = false;
+    }else{
+      document.getElementById('phone-alert').style.opacity = 0;
+    }
+  }
+
+  async function handleSubmit(event){
+    event.preventDefault();
+    await checkAllInput();
+    await checkPassword();
+    await isMajor();
+    await checkIsPhone();
+    await useAuthStore().register(formData.value);
+    console.log(useAuthStore().isLoggedIn,"isLogged")
+    if (useAuthStore().isLoggedIn) {
+      await useAuthStore().profile();
+      router.push('/profile');
+    }
+  }
+
+  onMounted(() => {
+    if(useAuthStore().isLoggedIn){
+      router.push('/profile');
+    }
+  })
+
+</script>
+
 <template>
-  <form class="connexion_form px-3" action="">
-    <div class="d-md-flex">
+  <form class="connexion_form px-3" @submit="handleSubmit">
+    <div class="d-flex">
       <div class="form-group me-2">
+        <label class="ms-4" for="Homme">H </label>
+        <input class="radio_input" type="radio" name="sexe" id="Homme" @click="handleChangeCivility" value="Homme">
+      </div>
+      <div>
+        <label class="ms-4" for="Femme">F </label>
+        <input class="radio_input" type="radio" name="sexe" id="Femme" @click="handleChangeCivility" value="Femme">
+      </div>
+    </div>
+    <div class="d-md-flex">
+      <div class="form-group">
         <label class="connexion_form_label ms-4" for="name">Nom</label>
-        <input type="text" name="name" id="name" class="form-control input_login" placeholder="Nom">
+        <input type="text" name="name" id="name" class="form-control input_login" placeholder="Nom" v-model="formData.lastName">
+        <small class="ms-4 text-danger" id="lastName-alert">Veuillez entrer votre nom</small>
       </div>
       <div class="form-group">
         <label class="connexion_form_label ms-4" for="firstname">Prénom</label>
-        <input type="text" name="firstname" id="firstname" class="form-control input_login" placeholder="Prénom">
+        <input type="text" name="firstname" id="firstname" class="form-control input_login" placeholder="Prénom" v-model="formData.firstName">
+        <small class="ms-4 text-danger" id="firstName-alert">Veuillez entrer votre prénom</small>
       </div>
     </div>
     <div class="form-group">
       <label class="connexion_form_label ms-4" for="phone">Numéro de téléphone</label>
-      <input type="tel" name="phone" id="phone" class="form-control input_login" placeholder="Numéro de téléphone">
+      <input type="tel" name="phone" id="phone" class="form-control input_login" placeholder="Numéro de téléphone" v-model="formData.phone">
+      <small class="ms-4 text-danger" id="phone-alert">Veuillez entrer votre numéro de téléphone</small>
+    </div>
+    <div class="form-group">
+      <label class="connexion_form_label ms-4" for="date">Date de naissance :</label>
+      <input type="date" name="date" id="date" class="form-control input_login" placeholder="Date de naissance" v-model="formData.birthDate">
+      <small class=" ms-4 text-danger" id="birthDate-alert">Veuillez entrer votre date de naissance</small>
+    </div>
+    <div class="form-group">
+      <label class="connexion_form_label ms-4" for="country">Pays</label>
+      <input type="text" name="country" id="country" class="form-control input_login" placeholder="Pays" v-model="formData.country">
+      <small class=" ms-4 text-danger" id="country-alert">Veuillez entrer votre pays</small>
+    </div>
+    <div class="form-group">
+      <label class="connexion_form_label ms-4" for="city">Ville</label>
+      <input type="text" name="city" id="city" class="form-control input_login" placeholder="ville" v-model="formData.city">
+      <small class="ms-4 text-danger" id="city-alert">Veuillez entrer votre ville</small>
+    </div>
+    <div class="form-group">
+      <label class="connexion_form_label ms-4" for="address">Adresse</label>
+      <input type="text" name="address" id="address" class="form-control input_login" placeholder="Adresse de maison" v-model="formData.address">
+      <small class="ms-4 text-danger" id="address-alert">Veuillez entrer votre adresse</small>
     </div>
     <div class="form-group">
       <label class="connexion_form_label ms-4" for="email">Email</label>
-      <input type="email" name="email" id="email" class="form-control input_login" placeholder="email">
+      <input type="email" name="email" id="email" class="form-control input_login" placeholder="email" v-model="formData.email">
+      <small class="ms-4 text-danger" id="email-alert">Veuillez entrer votre email</small>
     </div>
     <div class="form-group">
       <label class="connexion_form_label ms-4" for="password">Mot de passe</label>
-      <input type="password" name="password" id="password" class="form-control input_login" placeholder="Mot de passe">
+      <input type="password" name="password" id="password" class="form-control input_login" placeholder="Mot de passe" v-model="formData.password">
+      <div class="d-flex flex-column">
+        <small class="ms-4 text-secondary">* 8 caractère minimum</small>
+        <small class="ms-4 text-danger" id="password-alert">Veuillez entrer votre mot de passe</small>
+      </div>
     </div>
     <div class="form-group">
       <label class="connexion_form_label ms-4" for="confirm_password">Confirmation de mot de passe</label>
-      <input type="password" name="cofirm_password" id="confirm_password" class="form-control input_login" placeholder="Confirmation de mot de passe">
+      <input type="password" name="cofirm_password" id="confirm_password" class="form-control input_login" placeholder="Confirmation de mot de passe" v-model="confirmPassword">
+      <small class="ms-4 text-danger" id="confirmation-alert">Les mots de passe ne corresponde pas</small>
     </div>
     <div class="form-group text-center mt-4">
-      <button class="btn btn-lg button_login mx-auto">SE CONNECTER</button>
+      <button class="btn btn-lg button_login mx-auto">ENREGISTRER</button>
     </div>
   </form>
 </template>
@@ -35,6 +220,14 @@
 <style scoped>
 .connexion_form{
   width: 100%;
+}
+
+.text-danger{
+  opacity: 0;
+}
+
+.radio_input{
+  cursor: pointer;
 }
 
 .form-control:focus{
@@ -51,7 +244,6 @@
 .input_login{
   border-radius: 3rem;
   padding: 1rem;
-  margin-bottom: 1rem;
   width: 100%;
   background-color: #989898;
 }

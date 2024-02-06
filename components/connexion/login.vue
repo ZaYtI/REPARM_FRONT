@@ -12,6 +12,12 @@ async function handleLogin(event){
     router.push('/profile');
   }
 }
+
+onMounted(() => {
+  if (useAuthStore().isLoggedIn) {
+    router.push('/profile');
+  }
+});
 </script>
 
 <template>
