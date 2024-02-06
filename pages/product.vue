@@ -37,4 +37,5 @@
 <template>
   <Banniere title="NOS FUSILS & CARABINES" subtitle="Notre spécialité chez Souchez Reparm est la vente de fusils d’occasion mais nous vendons également des armes neuves à la demande." title-color="#B54A29" bottom-border/>
   <ProductCategorieSelect :allCategorie="allCategorie" :handle-click-on-categorie="handleClickOnCategorie" :selected-cat="selectedCat" />
+  <ProductRowCard />
 </template>
