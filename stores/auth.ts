@@ -39,6 +39,7 @@ export const useAuthStore = defineStore('auth',{
     authenticated: localStorage.getItem('token') ? true : false,
     token: localStorage.getItem('token') || null,
     user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null,
+    panier : null as  any,
   }),
   getters: {
     isLoggedIn(): boolean {
@@ -50,6 +51,9 @@ export const useAuthStore = defineStore('auth',{
     getToken(): string | null {
       return this.token;
     },
+    getPanier(): any{
+      return this.panier
+    }
   },
   actions: {
     async login(email: string, password: string): Promise<void> {
@@ -106,6 +110,22 @@ export const useAuthStore = defineStore('auth',{
         localStorage.setItem('token', responseData.access_token);
       }else{
         throw new Error(responseData.message || 'Failed to register');
+      }
+    },
+
+    async userPanier(): Promise<void> {
+      const response = await fetch('https://reparm-api.onrender.com/panier-item/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.token}`,
+        },
+      });
+      const responseData = await response.json()
+
+      if(response.status !== 200){
+        throw new Error(responseData.message || 'Failed to get the basket');
+      }else{
+        this.panier = responseData
       }
     },
   },

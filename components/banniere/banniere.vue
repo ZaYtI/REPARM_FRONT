@@ -32,7 +32,7 @@
   });
 </script>
 <template>
-<div class="mt-0 banniere" :class="{'default-height': props.img, 'bottom-border': props.bottomBorder}"  :style="{backgroundImage : `url(${props.img})`,paddingTop: props.underBanniere ? '40px':'80px',paddingBottom: props.paddingBottom ? '80px':'0px'}">
+<div class="mt-0 banniere" :class="{'default-height': props.img, 'bottom-border': props.bottomBorder,'image':props.img}"  :style="{paddingTop: props.underBanniere ? '40px':'80px',paddingBottom: props.paddingBottom ? '80px':'0px'}">
     <div class="title container">
       <div class="top-title">
         <h1 class="banniere_title" :style="{color: props.titleColor}">
@@ -62,6 +62,9 @@
   }
   &.default-height{
     height: 35vh;
+  }
+  &.image{
+    background-image: url('../../assets/img/banniere_accueil.jpg');
   }
 }
 .banniere_title{
