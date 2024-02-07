@@ -1,12 +1,15 @@
 <script setup>
   import { personSvg , basketSvg} from '../svg/svgComponents';
+  import { useAuthStore } from '@/stores/auth';
   import { useSelectedCatStore } from '@/stores/selectedCat';
 
-  const store = useSelectedCatStore();
+  const authStore = useAuthStore();
+  const selectedStore = useSelectedCatStore
 
-  function handleClickOnNuxtLinkCat(cat){
-    store.setSelectedCat(cat);
+  async function LoadBasket(){
+    await authStore.userPanier()
   }
+
 </script>
 <template>
   <nav class="navbar navbar-expand-lg w-100">
@@ -18,10 +21,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent" v-bs-collapse>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <NuxtLink class="nav-link" to="/product" @click="store.setSelectedCat('Tous les fusils')">FUSILS</NuxtLink>
+          <NuxtLink class="nav-link" to="/product" @click="selectedStore.setSelectedCat('Tous les fusils')">FUSILS</NuxtLink>
         </li>
         <li class="nav-item">
-          <NuxtLink class="nav-link" to="/product" @click="store.setSelectedCat('carabines')">CARABINES</NuxtLink>
+          <NuxtLink class="nav-link" to="/product" @click="selectedStore.setSelectedCat('carabines')">CARABINES</NuxtLink>
         </li>
         <li class="nav-item">
           <NuxtLink class="nav-link " to="/crosse">CROSS-SUR-MESURE</NuxtLink>
@@ -36,7 +39,7 @@
               <NuxtLink to="login">
                 <component class="svg-container-navbar" :is="personSvg" />
               </NuxtLink>
-              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-theme class="basket_button">
+              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-theme class="basket_button" @click="LoadBasket">
                 <component class="svg-container-navbar" :is="basketSvg" />
               </button>
             </div>
@@ -46,7 +49,7 @@
     </div>
   </div>
 </nav>
-<NavOffCanva />
+<NavOffCanva :list-of-product="authStore.getPanier"/>
 </template>
 
 
