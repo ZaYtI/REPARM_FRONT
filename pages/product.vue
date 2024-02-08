@@ -26,8 +26,6 @@
     }
   ]
 
-  const divideListOfProduct = ref([]);
-
   async function handleClickOnCategorie(cat){
     await store.setSelectedCat(cat);
   }
