@@ -1,3 +1,25 @@
+<script setup>
+import { useAuthStore } from '@/stores/auth';
+const authStore = useAuthStore();
+
+onMounted(() => {
+  if (localStorage.getItem('token')) {
+    authStore.isLoggedIn();
+  }
+});
+
+watch(
+  () => authStore.getIsLoggedIn,
+  async (newgetIsLoggedIn, oldgetIsLoggedIn) => {
+    console.log('in the watch');
+    if (newgetIsLoggedIn) {
+      await authStore.profile();
+      await authStore.userPanier();
+    }
+  }
+)
+</script>
+
 <template>
   <div class="d-flex flex-column default-layout">
       <NavAppNavbar/>

@@ -36,13 +36,13 @@ interface RegisterUser{
 
 export const useAuthStore = defineStore('auth',{
   state: () => ({
-    authenticated: localStorage.getItem('token') ? true : false,
+    authenticated: false as boolean,
     token: localStorage.getItem('token') || null,
-    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '{}') : null,
+    user: null as UserProfile | null,
     panier : null as  any,
   }),
   getters: {
-    isLoggedIn(): boolean {
+    getIsLoggedIn(): boolean {
       return this.authenticated;
     },
     getProfile(): UserProfile | null {
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore('auth',{
   },
   actions: {
     async login(email: string, password: string): Promise<void> {
-      const response = await fetch('https://reparm-api.onrender.com/auth/login', {
+      const response = await fetch('http://localhost:8000/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export const useAuthStore = defineStore('auth',{
     },
 
     async profile(): Promise<void> {
-      const response = await fetch('https://reparm-api.onrender.com/auth/profile', {
+      const response = await fetch('http://localhost:8000/auth/profile', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -88,14 +88,13 @@ export const useAuthStore = defineStore('auth',{
         throw new Error(responseData.message || 'Failed to get profile');
       } else {
         this.user = responseData;
-        localStorage.setItem('user', JSON.stringify(responseData));
       }
     },
 
     async register(formData: RegisterUser): Promise<void> {
       formData.postalCode = "62620";
       formData.nick = "test";
-      const response = await fetch('https://reparm-api.onrender.com/auth/register', {
+      const response = await fetch('http://localhost:8000/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +113,7 @@ export const useAuthStore = defineStore('auth',{
     },
 
     async userPanier(): Promise<void> {
-      const response = await fetch('https://reparm-api.onrender.com/panier-item/', {
+      const response = await fetch('http://localhost:8000/panier-item/', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -128,5 +127,9 @@ export const useAuthStore = defineStore('auth',{
         this.panier = responseData
       }
     },
+
+    async isLoggedIn(): Promise<void>{
+      this.authenticated = localStorage.getItem('token') ? true : false;
+    }
   },
 });

@@ -1,4 +1,5 @@
 <script setup>
+import BanniereImagePath from '~/assets/img/banniere_accueil.jpg';
 const element = [
   {
     title: "NETTOYAGE",
@@ -23,14 +24,16 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="d-flex pose_container">
-    <CheckSlide />
-    <CheckListContainer title="POSE ET RÉGLAGES" :element="element" subtitle="Prestations mécaniques de tout type sur fusil ou carabine avec devis gratuit:" />
+  <div>
+    <Banniere title="SOUCHEZ REPARM" subtitle="Armurier & artisant crossier" :img="BanniereImagePath"/>
+  </div>
+  <div class="d-flex conform_container d-flex flex-column container-xl mt-5 mb-5">
+    <CheckElement v-for="(el,index) in element" :title="el.title" :text="el.text" :reverse="index%2 ==0" />
   </div>
 </template>
 
 <style scoped>
-  .pose_container{
-    min-height: 100vh;
+  .container-xl{
+    transition: all 0.2s ease-in-out;
   }
 </style>

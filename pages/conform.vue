@@ -1,7 +1,8 @@
 <script setup>
+import BanniereImagePath from '~/assets/img/banniere_accueil.jpg';
 const element = [
   {
-    title: "les avantages de la crosse sur mesure",
+    title: "Les avantages de la crosse sur mesure",
     text: "Une crosse adaptée est cruciale pour une expérience de tir optimale. Nos crosses sur mesure offrent une ergonomie supérieure, un alignement parfait avec votre œil pour une visée précise et une réduction de recul pour plus de confort lors du tir."
   },
   {
@@ -24,14 +25,16 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="d-flex conform_container">
-    <CheckSlide />
-    <CheckListContainer title="MISE EN CONFORMITÉ" :element="element" color="#B54A29" subtitle="Optez pour le confort et la performance:" />
+  <div>
+    <Banniere title="SOUCHEZ REPARM" subtitle="Armurier & artisant crossier" :img="BanniereImagePath"/>
+  </div>
+  <div class="d-flex conform_container d-flex flex-column container-xl mt-5 mb-5">
+    <CheckElement v-for="(el,index) in element" :title="el.title" :text="el.text" :reverse="index%2 ==0" />
   </div>
 </template>
 
 <style scoped>
-  .conform_container{
-    min-height: 100vh;
-  }
+  .container-xl{
+  transition: all 0.2s ease-in-out;
+}
 </style>

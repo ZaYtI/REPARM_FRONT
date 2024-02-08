@@ -11,6 +11,7 @@
   const totalPrice = ref(0)
 
   const calculateTotalPrice = () => {
+    totalPrice.value = 0
     for ( const product of props.listOfProduct){
       totalPrice.value = totalPrice.value + (product.produit.price * product.quantity)
     }
