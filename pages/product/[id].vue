@@ -1,0 +1,43 @@
+<script setup>
+  import { useSelectedCatStore } from '@/stores/selectedCat';
+import { onMounted } from 'vue';
+  import { useRoute } from 'vue-router'
+  const store = useSelectedCatStore();
+  const router = useRoute()
+
+  const product = ref(store.getListOfProducts[router.params.id - 1])
+
+  const allCategorie = [
+    {
+      name: "Tous les fusils",
+      url: 'http://localhost:8000/product/getall'
+    },
+    {
+      name: "Fusils de chasse",
+      url: 'http://localhost:8000/product/chasse'
+    },
+    {
+      name: "Fusils de tir",
+      url: 'http://localhost:8000/product/tir'
+    },
+    {
+      name: "carabines",
+      url: 'http://localhost:8000/product/carabine'
+    },
+    {
+      name: "marques",
+      url: 'http://localhost:8000/product/marque'
+    }
+  ]
+
+  async function handleClickOnCategorie(cat){
+    await store.setSelectedCat(cat);
+    router.push("/products")
+  }
+</script>
+
+<template>
+  <Banniere title="NOS FUSILS & CARABINES" subtitle="Notre spécialité chez Souchez Reparm est la vente de fusils d’occasion mais nous vendons également des armes neuves à la demande." title-color="#B54A29" bottom-border/>
+  <ProductCategorieSelect :allCategorie="allCategorie" :handle-click-on-categorie="handleClickOnCategorie" :selected-cat="useSelectedCatStore.getSelectedCat" />
+  <h1>Product: {{ product.name}}</h1>
+</template>

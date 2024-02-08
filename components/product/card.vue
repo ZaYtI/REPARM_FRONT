@@ -4,19 +4,18 @@
     product: Object
   });
 
-  function handleClickOnCard(){
-    console.log('click')
+  function handleClickOnCard(id) {
+    console.log('Product id:', id);
   }
-
 </script>
 
 <template>
-  <button class="card" :onclick="handleClickOnCard(props.product.id)">
+  <NuxtLink :to="'/product/' + props.product.id" class="card" @click="handleClickOnCard(props.product.id)">
     <img :src="BanniereImage" class="card-img-top" alt="test_image">
     <div class="card-body">
       <h5 class="card-title">{{ props.product.name }}</h5>
     </div>
-  </button>
+  </NuxtLink>
 </template>
 
 <style scoped>

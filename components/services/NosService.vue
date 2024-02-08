@@ -11,7 +11,7 @@ const element = [
   },{
     svg:<secondSvg />,
     title: "VENTE DE FUSILS D’OCCASION & NEUFS SUR DEMANDE",
-    path:"/product",
+    path:"/products",
     click: () => store.setSelectedCat('Tous les fusils')
   },
   {
