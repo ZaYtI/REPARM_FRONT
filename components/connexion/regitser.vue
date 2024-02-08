@@ -128,14 +128,13 @@
     await isMajor();
     await checkIsPhone();
     await useAuthStore().register(formData.value);
-    if (useAuthStore().isLoggedIn) {
-      await useAuthStore().profile();
+    if (useAuthStore().getIsLoggedIn) {
       router.push('/profile');
     }
   }
 
   onMounted(() => {
-    if(useAuthStore().isLoggedIn){
+    if(useAuthStore().getIsLoggedIn){
       router.push('/profile');
     }
   })

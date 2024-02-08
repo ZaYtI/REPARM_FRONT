@@ -7,15 +7,13 @@ async function handleLogin(event){
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
   await useAuthStore().login(email, password);
-  if (useAuthStore().isLoggedIn) {
-    console.log("is logged")
-    await useAuthStore().profile();
+  if (useAuthStore().getIsLoggedIn) {
     router.push('/profile');
   }
 }
 
 onMounted(() => {
-  if (useAuthStore().isLoggedIn) {
+  if (useAuthStore().getIsLoggedIn) {
     router.push('/profile');
   }
 });

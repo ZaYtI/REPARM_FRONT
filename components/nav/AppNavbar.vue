@@ -4,10 +4,14 @@
   import { useSelectedCatStore } from '@/stores/selectedCat';
 
   const authStore = useAuthStore();
-  const selectedStore = useSelectedCatStore
+  const selectedStore = useSelectedCatStore();
 
   async function LoadBasket(){
     await authStore.userPanier()
+  }
+
+  async function handleClickOnCategorie(cat){
+    await selectedStore.setSelectedCat(cat);
   }
 
 </script>
@@ -21,10 +25,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent" v-bs-collapse>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <NuxtLink class="nav-link" to="/product" @click="selectedStore.setSelectedCat('Tous les fusils')">FUSILS</NuxtLink>
+          <NuxtLink class="nav-link" to="/product" @click="handleClickOnCategorie('Tous les fusils')">FUSILS</NuxtLink>
         </li>
         <li class="nav-item">
-          <NuxtLink class="nav-link" to="/product" @click="selectedStore.setSelectedCat('carabines')">CARABINES</NuxtLink>
+          <NuxtLink class="nav-link" to="/product" @click="handleClickOnCategorie('carabines')">CARABINES</NuxtLink>
         </li>
         <li class="nav-item">
           <NuxtLink class="nav-link " to="/crosse">CROSS-SUR-MESURE</NuxtLink>
