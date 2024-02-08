@@ -5,6 +5,7 @@
 
   const authStore = useAuthStore();
   const selectedStore = useSelectedCatStore();
+  const { canDisplayNavbarBackground } = useNavbarBackground()
 
   async function LoadBasket(){
     await authStore.userPanier()
@@ -14,15 +15,55 @@
     await selectedStore.setSelectedCat(cat);
   }
 
+  const navbar = ref(null)
+  const navbarCollapse = ref(null)
+  const isMobile = ref(false)
+
+  function closeCollapseNavbar() {
+    if (isMobile.value) {
+        setTimeout(() => {
+            Collapse.getInstance(navbarCollapse.value).hide()
+            if (window.scrollY === 0) {
+                navbar.value.classList.remove('-shown')
+            } else {
+                navbar.value.classList.add('-shown')
+            }
+        }, 150)
+    }
+  }
+
+  function checkIsMobile() {
+    if (window.innerWidth > 992) {
+        isMobile.value = false
+    } else {
+        isMobile.value = true
+    }
+  }
+
+  function addBackground() {
+    if (navbar.value.classList.contains('-shown') && window.scrollY === 0 && !navbarCollapse.value.classList.contains('show')) {
+        navbar.value.classList.remove('-shown')
+    } else {
+        navbar.value.classList.add('-shown')
+    }
+}
+
+  onMounted(() => {
+      checkIsMobile()
+      navbarCollapse.value.addEventListener('hidden.bs.collapse', unsetSubItem)
+      window.addEventListener('resize', checkIsMobile)
+      window.addEventListener('scroll', addBackground)
+  })
+
 </script>
 <template>
-  <nav class="navbar navbar-expand-lg w-100">
+  <nav class="navbar navbar-expand-lg bg-transparent w-100" :class="{ 'can-background-display': canDisplayNavbarBackground }" ref="navbar" data-bs-theme="dark">
   <div class="container-fluid">
     <NuxtLink class="navbar-brand" to="/">Logo</NuxtLink>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" @click="addBackground()" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" data-bs-theme="dark">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent" v-bs-collapse>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" ref="navbarCollapse" v-bs-collapse data-bs-toggle="false">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <NuxtLink class="nav-link" to="/product" @click="handleClickOnCategorie('Tous les fusils')">FUSILS</NuxtLink>
@@ -57,8 +98,7 @@
 </template>
 
 
-<style scoped>
-
+<style lang="scss" scoped>
 .nav-link{
   color: white;
 }
@@ -68,7 +108,6 @@
 }
 .navbar{
   position: fixed ;
-  z-index: 100;
 }
 
 .basket_button{
@@ -85,5 +124,27 @@
 
 .svg-container-navbar:hover{
   fill: #B54A29;
+}
+.navbar::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #3A483B;
+    transform: translateY(-100%);
+    transition: transform 0.25s ease-in-out;
+}
+.navbar .container-fluid{
+    position: relative;
+}
+.navbar.-shown.can-background-display::before{
+    transform: translateY(0);
+}
+
+.nav-link.with-icon{
+    display: flex;
+    align-items: center;
 }
 </style>
