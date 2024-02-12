@@ -19,7 +19,7 @@ interface Product {
 
 export const useSelectedCatStore = defineStore('selectedCat',{
   state: () => ({
-    selectedCat: null as string | null,
+    selectedCat: "Tous les fusils",
     listOfProducts: [] as any[],
   }),
   getters: {
