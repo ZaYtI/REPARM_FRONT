@@ -1,5 +1,5 @@
 <template>
-  <Banniere class="banniere_title" title="VENTE D’ACCESSOIRES SUR DEMANDE" title-color="#B54A29" under-banniere :padding-bottom="false" />
+  <Banniere class="banniere_title" title="VENTE D’ACCESSOIRES" title-color="#B54A29" under-banniere :padding-bottom="false" />
   <div class="container-fluid container-accessoire mt-3">
     <p class="sub-title-accessoire">
       Pour toute commande d’accessoire merci de nous contacter directement.
@@ -32,7 +32,7 @@
 }
 
 .sub-title-accessoire{
-  font-size: 50px;
+  font-size: 20px;
   text-align:center;
   color:white;
   font-weight:bold;

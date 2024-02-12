@@ -19,19 +19,6 @@
   const navbarCollapse = ref(null)
   const isMobile = ref(false)
 
-  function closeCollapseNavbar() {
-    if (isMobile.value) {
-        setTimeout(() => {
-            Collapse.getInstance(navbarCollapse.value).hide()
-            if (window.scrollY === 0) {
-                navbar.value.classList.remove('-shown')
-            } else {
-                navbar.value.classList.add('-shown')
-            }
-        }, 150)
-    }
-  }
-
   function checkIsMobile() {
     if (window.innerWidth > 992) {
         isMobile.value = false
@@ -50,9 +37,7 @@
 
   onMounted(() => {
       checkIsMobile()
-      navbarCollapse.value.addEventListener('hidden.bs.collapse', unsetSubItem)
       window.addEventListener('resize', checkIsMobile)
-      window.addEventListener('scroll', addBackground)
   })
 
 </script>
@@ -66,10 +51,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent" ref="navbarCollapse" v-bs-collapse data-bs-toggle="false">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <NuxtLink class="nav-link" to="/product" @click="handleClickOnCategorie('Tous les fusils')">FUSILS</NuxtLink>
+          <NuxtLink class="nav-link" to="/products" @click="handleClickOnCategorie('Tous les fusils')">FUSILS</NuxtLink>
         </li>
         <li class="nav-item">
-          <NuxtLink class="nav-link" to="/product" @click="handleClickOnCategorie('carabines')">CARABINES</NuxtLink>
+          <NuxtLink class="nav-link" to="/products" @click="handleClickOnCategorie('carabines')">CARABINES</NuxtLink>
         </li>
         <li class="nav-item">
           <NuxtLink class="nav-link " to="/crosse">CROSS-SUR-MESURE</NuxtLink>

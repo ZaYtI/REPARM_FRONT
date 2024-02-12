@@ -29,6 +29,12 @@
   async function handleClickOnCategorie(cat){
     await store.setSelectedCat(cat);
   }
+
+  onMounted(() => {
+    if(store.getListOfProducts === null || store.getListOfProducts === undefined || store.getListOfProducts.length === 0){
+      store.setSelectedCat("Tous les fusils")
+    }
+  })
 </script>
 
 <template>
