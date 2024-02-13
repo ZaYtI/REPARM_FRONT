@@ -9,7 +9,7 @@
   const product = ref(null)
 
   async function getProoductById(){
-    const response = await fetch('http://localhost:8000/product/getById/'+router.params.id, {
+    const response = await fetch('https://reparm-api.onrender.com/product/getById/'+router.params.id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -24,7 +24,7 @@
   }
 
   async function addProductToBasket(){
-    const response = await fetch('http://localhost:8000/panier-item',{
+    const response = await fetch('https://reparm-api.onrender.com/panier-item',{
       method : 'POST',
       headers:{
         'Content-Type':'application/json',
