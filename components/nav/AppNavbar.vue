@@ -38,11 +38,12 @@
   onMounted(() => {
       checkIsMobile()
       window.addEventListener('resize', checkIsMobile)
+      window.addEventListener('scroll',addBackground)
   })
 
 </script>
 <template>
-  <nav class="navbar navbar-expand-lg bg-transparent w-100" :class="{ 'can-background-display': canDisplayNavbarBackground }" ref="navbar" data-bs-theme="dark">
+  <nav class="navbar navbar-expand-lg  w-100" :class="{ 'can-background-display': canDisplayNavbarBackground }" ref="navbar" data-bs-theme="dark">
   <div class="container-fluid">
     <NuxtLink class="navbar-brand" to="/">Logo</NuxtLink>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" @click="addBackground()" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" data-bs-theme="dark">
@@ -93,6 +94,7 @@
 }
 .navbar{
   position: fixed ;
+  z-index: 100;
 }
 
 .basket_button{
