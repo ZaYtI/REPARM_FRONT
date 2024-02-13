@@ -6,23 +6,23 @@
   const allCategorie = [
     {
       name: "Tous les fusils",
-      url: 'http://localhost:8000/product/getall'
+      url: 'https://reparm-api.onrender.com/product/getall'
     },
     {
       name: "Fusils de chasse",
-      url: 'http://localhost:8000/product/chasse'
+      url: 'https://reparm-api.onrender.com/product/chasse'
     },
     {
       name: "Fusils de tir",
-      url: 'http://localhost:8000/product/tir'
+      url: 'https://reparm-api.onrender.com/product/tir'
     },
     {
       name: "carabines",
-      url: 'http://localhost:8000/product/carabine'
+      url: 'https://reparm-api.onrender.com/product/carabine'
     },
     {
       name: "marques",
-      url: 'http://localhost:8000/product/marque'
+      url: 'https://reparm-api.onrender.com/product/marque'
     }
   ]
 

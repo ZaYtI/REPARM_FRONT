@@ -57,7 +57,7 @@ export const useAuthStore = defineStore('auth',{
   },
   actions: {
     async login(email: string, password: string): Promise<void> {
-      const response = await fetch('http://localhost:8000/auth/login', {
+      const response = await fetch('https://reparm-api.onrender.com/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export const useAuthStore = defineStore('auth',{
     },
 
     async profile(): Promise<void> {
-      const response = await fetch('http://localhost:8000/auth/profile', {
+      const response = await fetch('https://reparm-api.onrender.com/auth/profile', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -94,7 +94,7 @@ export const useAuthStore = defineStore('auth',{
     async register(formData: RegisterUser): Promise<void> {
       formData.postalCode = "62620";
       formData.nick = "test";
-      const response = await fetch('http://localhost:8000/auth/register', {
+      const response = await fetch('https://reparm-api.onrender.com/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ export const useAuthStore = defineStore('auth',{
     },
 
     async userPanier(): Promise<void> {
-      const response = await fetch('http://localhost:8000/panier-item/', {
+      const response = await fetch('https://reparm-api.onrender.com/panier-item/', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
