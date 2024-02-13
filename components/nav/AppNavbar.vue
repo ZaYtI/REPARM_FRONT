@@ -70,7 +70,7 @@
               <NuxtLink to="login">
                 <component class="svg-container-navbar" :is="personSvg" />
               </NuxtLink>
-              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-theme class="basket_button" @click="LoadBasket">
+              <button v-if="authStore.getIsLoggedIn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-theme class="basket_button" @click="LoadBasket">
                 <component class="svg-container-navbar" :is="basketSvg" />
               </button>
             </div>

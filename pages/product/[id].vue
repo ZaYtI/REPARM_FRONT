@@ -3,7 +3,9 @@
   import banniereImage from '~/assets/img/banniere_accueil.jpg';
   import { useRoute } from 'vue-router'
   const store = useSelectedCatStore();
+  const authStore = useAuthStore();
   const router = useRoute()
+  const redirection = useRouter();
   const product = ref(null)
 
   async function getProoductById(){
@@ -21,12 +23,36 @@
       }
   }
 
+  async function addProductToBasket(){
+    const response = await fetch('http://localhost:8000/panier-item',{
+      method : 'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization': `Bearer ${authStore.getToken}`
+      },
+      body: JSON.stringify({ produitId:parseInt(router.params.id),quantity:1}),
+    })
+    const responseData = await response.json()
+    if(response.status !== 201){
+      throw new Error(responseData.message || 'Failed to add product to basket')
+    }
+    else{
+      await authStore.userPanier();
+    }
+  }
+
+  async function clickOnAddToBasket(){
+    if(authStore.getIsLoggedIn){
+      addProductToBasket()
+    }else{
+      redirection.replace('/login')
+    }
+  }
+
   onMounted(async ()=>{
     if(store.getListOfProducts === null || store.getListOfProducts === undefined || store.getListOfProducts.length === 0){
-      console.log("the list of product is null")
       await getProoductById()
     }else{
-      console.log("the list of product is not null")
       product.value = store.getListOfProducts[router.params.id - 1]
     }
   })
@@ -78,7 +104,7 @@
             </h4>
           </div>
           <div class="d-flex justify-content-center">
-            <button class="btn btn-lg add_basket_button">Ajouter au panier</button>
+            <button class="btn btn-lg add_basket_button" @click="clickOnAddToBasket">Ajouter au panier</button>
           </div>
         </div>
       </div>
