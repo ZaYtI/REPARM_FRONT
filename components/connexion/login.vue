@@ -8,13 +8,13 @@ async function handleLogin(event){
   const password = document.getElementById('password').value;
   await useAuthStore().login(email, password);
   if (useAuthStore().getIsLoggedIn) {
-    router.push('/profile');
+    router.push('/');
   }
 }
 
 onMounted(() => {
   if (useAuthStore().getIsLoggedIn) {
-    router.push('/profile');
+    router.push('/');
   }
 });
 </script>
