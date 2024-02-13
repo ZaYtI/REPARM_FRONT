@@ -4,12 +4,37 @@
   import { useRoute } from 'vue-router'
   const store = useSelectedCatStore();
   const router = useRoute()
-  const product = ref(store.getListOfProducts[router.params.id - 1])
+  const product = ref(null)
+
+  async function getProoductById(){
+    const response = await fetch('http://localhost:8000/product/getById/'+router.params.id, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+    const responseData = await response.json()
+    if (response.status !== 200) {
+        throw new Error(responseData.message || 'Failed to get the product');
+      } else {
+        product.value = responseData
+      }
+  }
+
+  onMounted(async ()=>{
+    if(store.getListOfProducts === null || store.getListOfProducts === undefined || store.getListOfProducts.length === 0){
+      console.log("the list of product is null")
+      await getProoductById()
+    }else{
+      console.log("the list of product is not null")
+      product.value = store.getListOfProducts[router.params.id - 1]
+    }
+  })
 </script>
 
 <template>
   <Banniere title="NOS FUSILS & CARABINES" subtitle="Notre spécialité chez Souchez Reparm est la vente de fusils d’occasion mais nous vendons également des armes neuves à la demande." title-color="#B54A29" bottom-border/>
-  <div class="container-xl mt-4">
+  <div class="container-xl mt-4" v-if="product">
     <h1 class="product_title mt-5">{{ product.name}}</h1>
     <div class="weapon_container">
       <div class="caroussel_container p-3">

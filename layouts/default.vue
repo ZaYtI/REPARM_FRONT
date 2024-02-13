@@ -11,7 +11,6 @@ onMounted(() => {
 watch(
   () => authStore.getIsLoggedIn,
   async (newgetIsLoggedIn, oldgetIsLoggedIn) => {
-    console.log('in the watch');
     if (newgetIsLoggedIn) {
       await authStore.profile();
       await authStore.userPanier();
@@ -24,7 +23,7 @@ watch(
   <div class="d-flex flex-column default-layout">
       <NavAppNavbar/>
 
-      <main class="default-layout-content overflow-hidden bg-color-primary">
+      <main class="default-layout-content overflow-hidden bg-color-primary pb-5">
           <slot />
       </main>
 

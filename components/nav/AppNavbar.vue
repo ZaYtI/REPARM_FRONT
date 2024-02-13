@@ -119,7 +119,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #3A483B;
+    background-color: #242d24;
     transform: translateY(-100%);
     transition: transform 0.25s ease-in-out;
 }
