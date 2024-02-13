@@ -29,6 +29,7 @@ onMounted(() => {
       <label class="connexion_form_label ms-4" for="password">Mot de passe</label>
       <input type="password" name="password" id="password" class="form-control input_login text-white" placeholder="Mot de passe">
     </div>
+    <NuxtLink class="link ms-4 register_link" to="/register">Créer un compte</NuxtLink>
     <div class="form-group text-center mt-4">
       <button class="btn btn-lg button_login mx-auto" type="submit">SE CONNECTER</button>
     </div>
@@ -38,6 +39,14 @@ onMounted(() => {
 <style scoped>
 .connexion_form {
   width: 100%;
+}
+
+.register_link{
+  color: #B54A29;
+}
+
+.register_link:hover{
+  color: black;
 }
 
 .form-control:focus {

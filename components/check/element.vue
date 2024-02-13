@@ -75,6 +75,7 @@
     max-width: 600px;
     color: white;
     position: relative;
+    transform-style: preserve-3d;
   }
 
   .element_text_container::before{
@@ -85,11 +86,13 @@
     width: 5px;
     height: 100%;
     background-color: #B54A29;
+    transform: translateZ(-1px);
   }
 
   .element_text_container.reverse::before{
     left: auto;
     right: 5px;
+    transform: translateZ(-1px);
   }
 
   @media screen and (max-width: 900px){

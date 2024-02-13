@@ -38,11 +38,12 @@
   onMounted(() => {
       checkIsMobile()
       window.addEventListener('resize', checkIsMobile)
+      window.addEventListener('scroll',addBackground)
   })
 
 </script>
 <template>
-  <nav class="navbar navbar-expand-lg bg-transparent w-100" :class="{ 'can-background-display': canDisplayNavbarBackground }" ref="navbar" data-bs-theme="dark">
+  <nav class="navbar navbar-expand-lg  w-100" :class="{ 'can-background-display': canDisplayNavbarBackground }" ref="navbar" data-bs-theme="dark">
   <div class="container-fluid">
     <NuxtLink class="navbar-brand" to="/">Logo</NuxtLink>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" @click="addBackground()" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" data-bs-theme="dark">
@@ -69,7 +70,7 @@
               <NuxtLink to="login">
                 <component class="svg-container-navbar" :is="personSvg" />
               </NuxtLink>
-              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-theme class="basket_button" @click="LoadBasket">
+              <button v-if="authStore.getIsLoggedIn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-theme class="basket_button" @click="LoadBasket">
                 <component class="svg-container-navbar" :is="basketSvg" />
               </button>
             </div>
@@ -93,6 +94,7 @@
 }
 .navbar{
   position: fixed ;
+  z-index: 100;
 }
 
 .basket_button{
@@ -117,7 +119,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #3A483B;
+    background-color: #242d24;
     transform: translateY(-100%);
     transition: transform 0.25s ease-in-out;
 }

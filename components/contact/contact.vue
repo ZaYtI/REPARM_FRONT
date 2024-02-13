@@ -1,11 +1,17 @@
 <script setup>
 import {phoneSvg , homeSvg , mailSvg , mapSvg} from '../svg/svgComponents';
+const props = defineProps({
+    title:{
+      type:Boolean,
+      default:true
+    }
+  })
 </script>
 
 <template>
-  <div class="container-fluid contact-container">
+  <div class="contact-container">
     <div class="contact-content">
-      <Banniere title="CONTACTS" title-color="#B54A29" under-banniere :padding-bottom="false" />
+      <Banniere v-if="title" title="CONTACTS" title-color="#B54A29" under-banniere :padding-bottom="false" />
       <div class="contact-information-wrapper">
         <div class="information">
           <component class="svg-container-contact" :is="mailSvg" />
@@ -62,7 +68,6 @@ import {phoneSvg , homeSvg , mailSvg , mapSvg} from '../svg/svgComponents';
 
 .information a {
   color: white;
-  font-size: 32px;
   text-decoration: none;
   margin-left: 10px ;
 }
@@ -70,12 +75,6 @@ import {phoneSvg , homeSvg , mailSvg , mapSvg} from '../svg/svgComponents';
 @media screen and (max-width: 670px) {
   .contact-information-wrapper {
     margin-left: 0;
-  }
-}
-
-@media screen and (max-width: 450px) {
-  .svg-container-contact {
-    display: none;
   }
 }
 </style>

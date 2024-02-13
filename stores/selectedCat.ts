@@ -34,7 +34,7 @@ export const useSelectedCatStore = defineStore('selectedCat',{
     async setSelectedCat(value: string): Promise<void>{
       this.selectedCat = value;
       if( value === "Tous les fusils"){
-        const data = await fetch('https://reparm-api.onrender.com/product/getall')
+        const data = await fetch('http://localhost:8000/product/getall')
         const products = await data.json()
         this.setListOfProducts(products)
       }

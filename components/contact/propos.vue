@@ -2,7 +2,7 @@
   import BanniereImagePath from '~/assets/img/banniere_accueil.jpg';
 </script>
 <template>
-  <div class="container-fluid">
+  <div class="container-xl">
     <Banniere title="A PROPOS" title-color="#B54A29" under-banniere />
     <div class="a-propos px-5">
       <div class="image">
@@ -22,14 +22,32 @@
   display: flex ;
   align-items: center;
 }
-
+.image{
+  min-width: 50%;
+}
 .image>img{
-  min-width: 520px;
   max-width: 500px;
+  width: 100%;
 }
 
 .description-text{
-  font-size: 32px;
+  font-size: 20px;
   color: white;
+}
+
+@media screen and (max-width:1000px){
+  .a-propos{
+    flex-direction: column;
+  }
+
+  .description-text{
+    text-align: center;
+  }
+
+  .image{
+    width: 100%;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
 }
 </style>
