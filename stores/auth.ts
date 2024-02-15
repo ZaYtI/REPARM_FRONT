@@ -66,6 +66,8 @@ export const useAuthStore = defineStore('auth',{
       });
       const responseData = await response.json();
       if (response.status !== 200) {
+        this.authenticated =false;
+        localStorage.removeItem('token')
         throw new Error(responseData.message || 'Failed to authenticate');
       } else {
         this.token = responseData.access_token;
@@ -85,6 +87,8 @@ export const useAuthStore = defineStore('auth',{
       const responseData = await response.json();
 
       if (response.status !== 200) {
+        this.authenticated =false;
+        localStorage.removeItem('token')
         throw new Error(responseData.message || 'Failed to get profile');
       } else {
         this.user = responseData;
@@ -108,6 +112,8 @@ export const useAuthStore = defineStore('auth',{
         this.authenticated = true;
         localStorage.setItem('token', responseData.access_token);
       }else{
+        this.authenticated =false;
+        localStorage.removeItem('token')
         throw new Error(responseData.message || 'Failed to register');
       }
     },
@@ -122,6 +128,8 @@ export const useAuthStore = defineStore('auth',{
       const responseData = await response.json()
 
       if(response.status !== 200){
+        this.authenticated =false;
+        localStorage.removeItem('token')
         throw new Error(responseData.message || 'Failed to get the basket');
       }else{
         this.panier = responseData

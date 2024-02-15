@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth';
 </script>
 
 <template>
-  <div>
+  <div class="form_current_user">
+
   </div>
 </template>

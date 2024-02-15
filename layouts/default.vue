@@ -2,6 +2,8 @@
 import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 
+const router = useRouter();
+
 onMounted(() => {
   if (localStorage.getItem('token')) {
     authStore.isLoggedIn();
@@ -14,6 +16,8 @@ watch(
     if (newgetIsLoggedIn) {
       await authStore.profile();
       await authStore.userPanier();
+    }else{
+      router.replace('/')
     }
   }
 )
