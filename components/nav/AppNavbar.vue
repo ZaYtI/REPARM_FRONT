@@ -6,6 +6,7 @@
   const authStore = useAuthStore();
   const selectedStore = useSelectedCatStore();
   const { canDisplayNavbarBackground } = useNavbarBackground()
+  const personLink = ref('/login')
 
   async function LoadBasket(){
     await authStore.userPanier()
@@ -41,6 +42,17 @@
       window.addEventListener('scroll',addBackground)
   })
 
+  watch(
+  () => authStore.getIsLoggedIn,
+  async (newgetIsLoggedIn, oldgetIsLoggedIn) => {
+    if (newgetIsLoggedIn) {
+      personLink.value = "/profile"
+    }else{
+      personLink.value = "/login"
+    }
+  }
+)
+
 </script>
 <template>
   <nav class="navbar navbar-expand-lg  w-100" :class="{ 'can-background-display': canDisplayNavbarBackground }" ref="navbar" data-bs-theme="dark">
@@ -67,7 +79,7 @@
         <div class="account-icons d-flex">
           <div class="icon-panier px-3">
             <div class="nav-link">
-              <NuxtLink to="/login">
+              <NuxtLink :to="personLink">
                 <component class="svg-container-navbar" :is="personSvg" />
               </NuxtLink>
               <button v-if="authStore.getIsLoggedIn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-theme class="basket_button" @click="LoadBasket">
@@ -104,8 +116,8 @@
 }
 
 .svg-container-navbar{
-  width: 30px;
-  height: 30px;
+  max-width: 25px;
+  max-height: 25px;
   fill: white;
 }
 
@@ -130,6 +142,9 @@
     transform: translateY(0);
 }
 
+.nav-link{
+  margin: auto auto;
+}
 .nav-link.with-icon{
     display: flex;
     align-items: center;

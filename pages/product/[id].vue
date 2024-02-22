@@ -62,7 +62,7 @@
   <Banniere title="NOS FUSILS & CARABINES" subtitle="Notre spécialité chez Souchez Reparm est la vente de fusils d’occasion mais nous vendons également des armes neuves à la demande." title-color="#B54A29" bottom-border/>
   <div class="container-xl mt-4" v-if="product">
     <h1 class="product_title mt-5">{{ product.name}}</h1>
-    <div class="weapon_container">
+    <div class="weapon_container mt-3">
       <div class="caroussel_container p-3">
         <div id="carouselExampleIndicators" class="carousel slide">
           <div class="carousel-indicators">
