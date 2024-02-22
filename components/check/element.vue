@@ -26,7 +26,7 @@
   .element_container{
     padding: 20px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     transition: all 0.2s ease-in-out;
   }
 

@@ -66,8 +66,8 @@
         <NuxtLink class="nav-link px-2" to="/propos">A PROPOS</NuxtLink>
         <div class="account-icons d-flex">
           <div class="icon-panier px-3">
-            <div class="nav-link" to="/login">
-              <NuxtLink to="login">
+            <div class="nav-link">
+              <NuxtLink to="/login">
                 <component class="svg-container-navbar" :is="personSvg" />
               </NuxtLink>
               <button v-if="authStore.getIsLoggedIn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" data-bs-theme class="basket_button" @click="LoadBasket">
