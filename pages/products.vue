@@ -31,7 +31,7 @@
   }
 
   onMounted(() => {
-    if(store.getListOfProducts === null || store.getListOfProducts === undefined || store.getListOfProducts.length === 0){
+    if(store.getListOfProducts == null || store.getListOfProducts == undefined || store.getListOfProducts.length == 0){
       store.setSelectedCat("Tous les fusils")
     }
   })

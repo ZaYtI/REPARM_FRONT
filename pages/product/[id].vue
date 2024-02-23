@@ -7,6 +7,7 @@
   const router = useRoute()
   const redirection = useRouter();
   const product = ref(null)
+  const basketStore = useBasketStore();
 
   async function getProoductById(){
     const response = await fetch('https://reparm-api.onrender.com/product/getById/'+router.params.id, {
@@ -43,14 +44,15 @@
 
   async function clickOnAddToBasket(){
     if(authStore.getIsLoggedIn){
-      addProductToBasket()
+      await addProductToBasket()
+      basketStore.setShow()
     }else{
       redirection.replace('/login')
     }
   }
 
   onMounted(async ()=>{
-    if(store.getListOfProducts === null || store.getListOfProducts === undefined || store.getListOfProducts.length === 0){
+    if(store.getListOfProducts == null || store.getListOfProducts == undefined || store.getListOfProducts.length == 0){
       await getProoductById()
     }else{
       product.value = store.getListOfProducts[router.params.id - 1]

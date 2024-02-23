@@ -5,11 +5,14 @@
 
   const authStore = useAuthStore();
   const selectedStore = useSelectedCatStore();
+  const basketStore = useBasketStore();
   const { canDisplayNavbarBackground } = useNavbarBackground()
   const personLink = ref('/login')
 
   async function LoadBasket(){
-    await authStore.userPanier()
+    if(authStore.getPanier == undefined){
+      await authStore.userPanier();
+    }
   }
 
   async function handleClickOnCategorie(cat){
