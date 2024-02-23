@@ -5,7 +5,6 @@
 
   const authStore = useAuthStore();
   const selectedStore = useSelectedCatStore();
-  const basketStore = useBasketStore();
   const { canDisplayNavbarBackground } = useNavbarBackground()
   const personLink = ref('/login')
 
