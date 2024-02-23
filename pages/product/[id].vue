@@ -7,7 +7,6 @@
   const router = useRoute()
   const redirection = useRouter();
   const product = ref(null)
-  const basketStore = useBasketStore();
 
   async function getProoductById(){
     const response = await fetch('https://reparm-api.onrender.com/product/getById/'+router.params.id, {
@@ -45,7 +44,6 @@
   async function clickOnAddToBasket(){
     if(authStore.getIsLoggedIn){
       await addProductToBasket()
-      basketStore.setShow()
     }else{
       redirection.replace('/login')
     }

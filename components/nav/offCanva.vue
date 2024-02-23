@@ -1,10 +1,6 @@
 <script setup>
   import { ref } from 'vue'
 
-  const store = useBasketStore();
-
-  const canva = ref(null)
-
   const props = defineProps({
     listOfProduct:{
       type: Array,
@@ -22,17 +18,6 @@
   }
 
   watch(
-    () => store.getShow(),
-    async(newValue,oldValue) => {
-      if(newValue){
-        console.log("open")
-      }else{
-        console.log("close")
-      }
-    }
-  );
-
-  watch(
   () => props.listOfProduct,
   async (newListOfProduct, oldListOfProduct) => {
     if (newListOfProduct != null || newListOfProduct != undefined) {
@@ -44,10 +29,10 @@
 </script>
 
 <template>
-  <div class="offcanvas offcanvas-end" ref="canva" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title panier_title" id="offcanvasRightLabel">Votre panier</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" @click="store.setShow"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
     <div>
