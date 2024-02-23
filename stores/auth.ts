@@ -136,6 +136,40 @@ export const useAuthStore = defineStore('auth',{
       }
     },
 
+    async createOrder():Promise<void>{
+      const response = await fetch('https://reparm-api.onrender.com/commande_produit/createWithPanier',{
+        method : 'POST',
+        headers:{
+          'Authorization': `Bearer ${this.token}`,
+        }
+      })
+      const responseData = await response.json();
+      if(response.status !== 200){
+        this.authenticated =false;
+        localStorage.removeItem('token')
+        throw new Error(responseData.message || 'Failed to get the basket');
+      }else{
+        this.panier = responseData
+      }
+    },
+
+    async logout():Promise<void>{
+      const response = await fetch('https://reparm-api.onrender.com/auth/register',{
+        method : 'POST',
+        headers:{
+          'Authorization': `Bearer ${this.token}`,
+        }
+      })
+      const responseData = await response.json();
+      if(response.status !== 200){
+        this.authenticated =false;
+        localStorage.removeItem('token')
+        throw new Error(responseData.message || 'Failed to get the basket');
+      }else{
+        this.panier = responseData
+      }
+    },
+
     async isLoggedIn(): Promise<void>{
       this.authenticated = localStorage.getItem('token') ? true : false;
     }
