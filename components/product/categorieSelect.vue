@@ -22,9 +22,9 @@ const props = defineProps({
       <div class="button-container" v-for="cat in props.allCategorie" :key="cat">
         <button
           class="btn mx-3 text-uppercase"
-          @click="() => props.handleClickOnCategorie(cat.name)"
-          :class="{ 'active': store.getSelectedCat === cat.name }"
-        >{{ cat.name }}</button>
+          @click="() => props.handleClickOnCategorie(cat)"
+          :class="{ 'active': store.getSelectedCat === cat }"
+        >{{ cat }}</button>
       </div>
     </div>
     <div>
