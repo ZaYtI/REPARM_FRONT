@@ -1,6 +1,7 @@
 <script setup>
   import { useSelectedCatStore } from '@/stores/selectedCat';
   import banniereImage from '~/assets/img/banniere_accueil.jpg';
+  import cerf from '~/assets/img/cerf.jpg';
   import { useRoute } from 'vue-router'
   const store = useSelectedCatStore();
   const authStore = useAuthStore();
@@ -72,7 +73,7 @@
           </div>
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img :src="banniereImage" class="d-block w-100" alt="...">
+              <img :src="cerf" class="d-block w-100" alt="...">
             </div>
             <div class="carousel-item">
               <img :src="banniereImage" class="d-block w-100" alt="...">

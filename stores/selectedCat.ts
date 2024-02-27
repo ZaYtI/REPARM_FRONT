@@ -30,7 +30,8 @@ export const useSelectedCatStore = defineStore('selectedCat',{
     getListOfProducts(): Product[] {
       return this.listOfProducts;
     },
-    getListOfCateforie():string[]{
+    getListOfCategorie():string[]{
+      console.log("get cat")
       return this.listOfCategorie;
     }
   },
@@ -47,8 +48,10 @@ export const useSelectedCatStore = defineStore('selectedCat',{
     async setListOfCategorie(): Promise<void>{
       const data = await fetch('https://reparm-api-without-docker.onrender.com/categorie/getall')
       const categorie = await data.json();
-      for ( const cat of categorie)
-        this.listOfCategorie.push(cat.name)
+      for ( const cat of categorie){
+        this.listOfCategorie.push(cat);
+      }
+      console.log(this.listOfCategorie);
       }
   },
 });

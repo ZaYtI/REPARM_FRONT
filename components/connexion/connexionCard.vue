@@ -15,7 +15,6 @@
   <div class="connexion_card mx-4">
     <h3 class="account_title">{{ connexionCardProps.title }}</h3>
     <div class="component_container mb-3 mx-auto">
-      <ConnexionButton v-if="connexionCardProps.pages === 'account'" />
       <ConnexionLogin v-if="connexionCardProps.pages === 'login'" />
       <ConnexionRegitser v-if="connexionCardProps.pages === 'register'" />
     </div>
