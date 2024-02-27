@@ -6,10 +6,6 @@ const props = defineProps({
     type: Array,
     required: true
   },
-  handleClickOnCategorie: {
-    type: Function,
-    required: true
-  },
   selectedCat:{
     type: String,
     required: true
@@ -19,10 +15,17 @@ const props = defineProps({
 <template>
   <div class="container-fluid  px-0 pt-3 selected-cat-container">
     <div class="d-flex justify-content-center button-wrapper">
+      <div class="button-container">
+        <button
+          class="btn mx-3 text-uppercase"
+          @click="() => store.setSelectedCat(0,'Tous les fusils')"
+          :class="{ 'active': store.getSelectedCat === 'Tous les fusils' }"
+        >Tous les fusils</button>
+      </div>
       <div class="button-container" v-for="cat in props.allCategorie" :key="cat">
         <button
           class="btn mx-3 text-uppercase"
-          @click="() => props.handleClickOnCategorie(cat.name)"
+          @click="() => store.setSelectedCat(cat.id,cat.name)"
           :class="{ 'active': store.getSelectedCat === cat.name }"
         >{{ cat.name }}</button>
       </div>

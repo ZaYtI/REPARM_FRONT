@@ -3,40 +3,20 @@
 
   const store = useSelectedCatStore();
 
-  const allCategorie = [
-    {
-      name: "Tous les fusils",
-      url: 'https://reparm-api.onrender.com/product/getall'
-    },
-    {
-      name: "Fusils de chasse",
-      url: 'https://reparm-api.onrender.com/product/chasse'
-    },
-    {
-      name: "Fusils de tir",
-      url: 'https://reparm-api.onrender.com/product/tir'
-    },
-    {
-      name: "carabines",
-      url: 'https://reparm-api.onrender.com/product/carabine'
-    },
-    {
-      name: "marques",
-      url: 'https://reparm-api.onrender.com/product/marque'
-    }
-  ]
-
   async function handleClickOnCategorie(cat){
-    await store.setSelectedCat(cat);
+    if(cat == "Tous les fusils"){
+      await store.setSelectedCat(0,"Tous les fusils")
+    }
+    await store.setSelectedCat(cat.id,cat.name);
   }
 
   onMounted(async () => {
-    if(store.getListOfCategorie == null || store.getListOfCategorie == undefined || store.getListOfCategorie.length == 0){
+    if(store.getListOfCategorie == '' || store.getListOfCategorie == undefined || store.getListOfCategorie.length == 0){
       await store.setListOfCategorie();
     }
-    if(store.getListOfProducts == null || store.getListOfProducts == undefined || store.getListOfProducts.length == 0){
-      store.setSelectedCat("Test")
-    }
+     if(store.getListOfProducts == null || store.getListOfProducts == undefined || store.getSelectedCat == null || store.getSelectedCat == undefined){
+      await store.setSelectedCat(0,'Tous les fusils');  
+     }
   })
 </script>
 

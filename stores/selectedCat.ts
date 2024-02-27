@@ -20,11 +20,11 @@ interface Product {
 export const useSelectedCatStore = defineStore('selectedCat',{
   state: () => ({
     listOfCategorie: [] as any[],
-    selectedCat: "Tous les fusils",
+    selectedCat: 'Tous les fusils' as string ,
     listOfProducts: [] as any[],
   }),
   getters: {
-    getSelectedCat(): string | null {
+    getSelectedCat():any{
       return this.selectedCat;
     },
     getListOfProducts(): Product[] {
@@ -36,13 +36,19 @@ export const useSelectedCatStore = defineStore('selectedCat',{
     }
   },
   actions: {
-    async setSelectedCat(value: string): Promise<void>{
+    async setSelectedCat(id:number,value:string): Promise<void>{
       this.selectedCat = value;
-      if( value === "Tous les fusils"){
-        const data = await fetch('https://reparm-api-without-docker.onrender.com/product/getall')
-        const products = await data.json()
-        this.listOfProducts = products;
+      let data;
+      console.log(id,"and",value)
+      if(id != 0 && value != "Tous les fusils"){
+        console.log("la nouvelle valeur n'est pas tous les fusils")
+        data = await fetch('http://localhost:8000/product/getByCat/'+id)
+      }else{
+        console.log("la nouvelle valeur est tout les fusils")
+        data = await fetch('http://localhost:8000/product/getall')
       }
+      const products = await data.json()
+      this.listOfProducts = products;
     },
 
     async setListOfCategorie(): Promise<void>{
@@ -51,7 +57,6 @@ export const useSelectedCatStore = defineStore('selectedCat',{
       for ( const cat of categorie){
         this.listOfCategorie.push(cat);
       }
-      console.log(this.listOfCategorie);
       }
   },
 });

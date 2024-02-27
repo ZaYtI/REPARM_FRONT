@@ -18,11 +18,8 @@ async function fetchWeapons(){
 onMounted(async () => {
     if(selectCatStore.getListOfCategorie == null || selectCatStore.getListOfCategorie == undefined || selectCatStore.getListOfCategorie.length == 0){
       await selectCatStore.setListOfCategorie();
-      console.log(selectCatStore.getListOfCategorie)
     }
-    if(selectCatStore.getListOfProducts == null || selectCatStore.getListOfProducts == undefined || selectCatStore.getListOfProducts.length == 0){
-      selectCatStore.setSelectedCat("Tous les fusils")
-    }
+    selectCatStore.setSelectedCat(0,"Tous les fusils")
   })
 
 </script>

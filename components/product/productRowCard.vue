@@ -4,7 +4,7 @@ const products = ref([null])
 const loader = ref(true)
 const loadImages = ref(0);
 const props = defineProps({
-  product: Array
+  product: Object
 });
 
 function waitLoadImages(){
@@ -12,15 +12,9 @@ function waitLoadImages(){
   console.log(loadImages.value)
   if(loadImages.value == props.product.length){
     loader.value = false;
+    loadImages.value = 0;
   }
-  console.log(loader.value)
 }
-
-onMounted(()=>{
-  console.log(props.product)
-  console.log(props.product)
-  console.log(products)
-})
 </script>
 
 <template>
