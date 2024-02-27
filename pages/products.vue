@@ -31,17 +31,17 @@
   }
 
   onMounted(async () => {
-    if(store.getListOfCateforie == null || store.getListOfCateforie == undefined || store.getListOfCateforie.length == 0){
+    if(store.getListOfCategorie == null || store.getListOfCategorie == undefined || store.getListOfCategorie.length == 0){
       await store.setListOfCategorie();
     }
     if(store.getListOfProducts == null || store.getListOfProducts == undefined || store.getListOfProducts.length == 0){
-      store.setSelectedCat("Tous les fusils")
+      store.setSelectedCat("Test")
     }
   })
 </script>
 
 <template>
   <Banniere title="NOS FUSILS & CARABINES" subtitle="Notre spécialité chez Souchez Reparm est la vente de fusils d’occasion mais nous vendons également des armes neuves à la demande." title-color="#B54A29" bottom-border/>
-  <ProductCategorieSelect :allCategorie="store.getListOfCateforie" :handle-click-on-categorie="handleClickOnCategorie" :selected-cat="useSelectedCatStore.getSelectedCat" />
+  <ProductCategorieSelect :allCategorie="store.getListOfCategorie" :handle-click-on-categorie="handleClickOnCategorie" :selected-cat="useSelectedCatStore.getSelectedCat" />
   <ProductRowCard :product="store.getListOfProducts" />
 </template>
