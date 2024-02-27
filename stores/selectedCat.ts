@@ -19,6 +19,7 @@ interface Product {
 
 export const useSelectedCatStore = defineStore('selectedCat',{
   state: () => ({
+    listOfCategorie: [] as any[],
     selectedCat: "Tous les fusils",
     listOfProducts: [] as any[],
   }),
@@ -29,18 +30,25 @@ export const useSelectedCatStore = defineStore('selectedCat',{
     getListOfProducts(): Product[] {
       return this.listOfProducts;
     },
+    getListOfCateforie():string[]{
+      return this.listOfCategorie;
+    }
   },
   actions: {
     async setSelectedCat(value: string): Promise<void>{
       this.selectedCat = value;
       if( value === "Tous les fusils"){
-        const data = await fetch('https://reparm-api.onrender.com/product/getall')
+        const data = await fetch('https://reparm-api-without-docker.onrender.com/product/getall')
         const products = await data.json()
-        this.setListOfProducts(products)
+        this.listOfProducts = products;
       }
     },
-    setListOfProducts(value: Product[]): void {
-      this.listOfProducts = value;
-    },
+
+    async setListOfCategorie(): Promise<void>{
+      const data = await fetch('https://reparm-api-without-docker.onrender.com/categorie/getall')
+      const categorie = await data.json();
+      for ( const cat of categorie)
+        this.listOfCategorie.push(cat.name)
+      }
   },
 });

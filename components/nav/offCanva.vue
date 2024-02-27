@@ -20,11 +20,11 @@
   watch(
   () => props.listOfProduct,
   async (newListOfProduct, oldListOfProduct) => {
-    if (newListOfProduct !== null || newListOfProduct !== undefined) {
+    if (newListOfProduct != null || newListOfProduct != undefined) {
       calculateTotalPrice();
     }
   }
-);
+);  
 
 </script>
 

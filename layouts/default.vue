@@ -4,9 +4,9 @@ const authStore = useAuthStore();
 
 const router = useRouter();
 
-onMounted(() => {
+onMounted(async () => {
   if (localStorage.getItem('token')) {
-    authStore.isLoggedIn();
+    await authStore.profile();
   }
 });
 
