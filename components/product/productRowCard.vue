@@ -4,28 +4,21 @@ const products = ref([null])
 const loader = ref(true)
 const loadImages = ref(0);
 const props = defineProps({
-  product: Array
+  product: Object
 });
 
 function waitLoadImages(){
   loadImages.value = loadImages.value + 1
-  console.log(loadImages.value)
   if(loadImages.value == props.product.length){
     loader.value = false;
+    loadImages.value = 0;
   }
-  console.log(loader.value)
 }
-
-onMounted(()=>{
-  console.log(props.product)
-  console.log(props.product)
-  console.log(products)
-})
 </script>
 
 <template>
   <div class="container products-card-container">
-    <div class="row_card d-flex justify-content-around" :class="{'d-none':loader}">
+    <div class="row_card d-flex justify-content-evenly" :class="{'d-none':loader}">
     <ProductCard v-for="product in props.product" :product="product" :key="product.id" :wait-load="waitLoadImages" />
     </div>
     <div class="d-flex justify-content-center spinner-container" :class="{'d-none':!loader}">

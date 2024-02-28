@@ -14,10 +14,6 @@
     }
   }
 
-  async function handleClickOnCategorie(cat){
-    await selectedStore.setSelectedCat(cat);
-  }
-
   const navbar = ref(null)
   const navbarCollapse = ref(null)
   const isMobile = ref(false)
@@ -66,10 +62,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent" ref="navbarCollapse" v-bs-collapse data-bs-toggle="false">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <NuxtLink class="nav-link" to="/products" @click="handleClickOnCategorie('Tous les fusils')">FUSILS</NuxtLink>
-        </li>
-        <li class="nav-item">
-          <NuxtLink class="nav-link" to="/products" @click="handleClickOnCategorie('carabines')">CARABINES</NuxtLink>
+          <NuxtLink class="nav-link" to="/products" @click="selectedStore.setSelectedCat(0,'Tous les fusils')">FUSILS</NuxtLink>
         </li>
         <li class="nav-item">
           <NuxtLink class="nav-link " to="/crosse">CROSS-SUR-MESURE</NuxtLink>

@@ -12,7 +12,7 @@ const element = [
     svg:<secondSvg />,
     title: "VENTE DE FUSILS D’OCCASION & NEUFS SUR DEMANDE",
     path:"/products",
-    click: () => store.setSelectedCat('Tous les fusils')
+    click: () => store.setSelectedCat(0,'Tous les fusils')
   },
   {
     svg:<thirdSvg/>,

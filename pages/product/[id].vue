@@ -8,8 +8,9 @@
   const redirection = useRouter();
   const product = ref(null)
 
-  async function getProoductById(){
-    const response = await fetch('https://reparm-api.onrender.com/product/getById/'+router.params.id, {
+  async function getProductById(){
+    if(store.getlistOfSelectedProducts == null || store.getlistOfSelectedProducts == undefined || store.getlistOfSelectedProducts.length == 0){
+      const response = await fetch('http://localhost:8000/product/getById/'+router.params.id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -20,11 +21,19 @@
         throw new Error(responseData.message || 'Failed to get the product');
       } else {
         product.value = responseData
+      } 
+    }else{
+      for(const prod of store.getlistOfSelectedProducts){
+        if(prod.id == router.params.id){
+          product.value = prod
+          console.log(product.value)
+        }
       }
+    }
   }
 
   async function addProductToBasket(){
-    const response = await fetch('https://reparm-api.onrender.com/panier-item',{
+    const response = await fetch('http://localhost:8000/panier-item',{
       method : 'POST',
       headers:{
         'Content-Type':'application/json',
@@ -50,11 +59,7 @@
   }
 
   onMounted(async ()=>{
-    if(store.getListOfProducts == null || store.getListOfProducts == undefined || store.getListOfProducts.length == 0){
-      await getProoductById()
-    }else{
-      product.value = store.getListOfProducts[router.params.id - 1]
-    }
+    await getProductById()
   })
 </script>
 
@@ -65,11 +70,6 @@
     <div class="weapon_container mt-3">
       <div class="caroussel_container p-3">
         <div id="carouselExampleIndicators" class="carousel slide">
-          <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-          </div>
           <div class="carousel-inner">
             <div class="carousel-item active">
               <img :src="banniereImage" class="d-block w-100" alt="...">
@@ -150,6 +150,14 @@
 .desc_wrapper{
   border: 1px solid white;
   border-radius: 2rem;
+}
+
+img{
+  aspect-ratio: 16/11;
+}
+
+.carousel-item{
+  transition: all 0.5s ease-in-out;
 }
 
 .carousel{

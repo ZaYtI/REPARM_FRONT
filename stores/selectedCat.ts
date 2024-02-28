@@ -19,36 +19,50 @@ interface Product {
 
 export const useSelectedCatStore = defineStore('selectedCat',{
   state: () => ({
+    allProduct: [] as any[],
     listOfCategorie: [] as any[],
-    selectedCat: "Tous les fusils",
-    listOfProducts: [] as any[],
+    selectedCat: 'Tous les fusils' as string ,
+    listOfSelectedProducts: [] as any[],
   }),
   getters: {
-    getSelectedCat(): string | null {
+    getSelectedCat():any{
       return this.selectedCat;
     },
-    getListOfProducts(): Product[] {
-      return this.listOfProducts;
+    getlistOfSelectedProducts(): Product[] {
+      return this.listOfSelectedProducts;
     },
-    getListOfCateforie():string[]{
+    getListOfCategorie():string[]{
       return this.listOfCategorie;
+    },
+    getAllProducts():Product[]{
+      return this.allProduct;
     }
   },
   actions: {
-    async setSelectedCat(value: string): Promise<void>{
+    async setSelectedCat(id:number,value:string): Promise<void>{
       this.selectedCat = value;
-      if( value === "Tous les fusils"){
-        const data = await fetch('https://reparm-api-without-docker.onrender.com/product/getall')
-        const products = await data.json()
-        this.listOfProducts = products;
+      let data;
+      if(id != 0 && value != "Tous les fusils"){
+        data = this.allProduct.filter((element) => element.categorieId = 1)
+        console.log(data)
+      }else{
+        data = this.allProduct
       }
+      this.listOfSelectedProducts = data;
+    },
+
+    async setAllProduct(){
+      const data = await fetch('http://localhost:8000/product/getall')
+      const products = await data.json()
+      this.allProduct = products
     },
 
     async setListOfCategorie(): Promise<void>{
-      const data = await fetch('https://reparm-api-without-docker.onrender.com/categorie/getall')
+      const data = await fetch('http://localhost:8000/categorie/getall')
       const categorie = await data.json();
-      for ( const cat of categorie)
-        this.listOfCategorie.push(cat.name)
+      for ( const cat of categorie){
+        this.listOfCategorie.push(cat);
+      }
       }
   },
 });

@@ -1,34 +1,33 @@
 <script setup>
 import { useSelectedCatStore } from '@/stores/selectedCat';
 const store = useSelectedCatStore();
-const props = defineProps({
-  allCategorie: {
-    type: Array,
-    required: true
-  },
-  handleClickOnCategorie: {
-    type: Function,
-    required: true
-  },
-  selectedCat:{
-    type: String,
-    required: true
+
+onMounted(async ()=>{
+  if(store.getListOfCategorie == null || store.getListOfCategorie == undefined || store.getListOfCategorie.length == 0){
+    await store.setListOfCategorie();
   }
 })
 </script>
 <template>
   <div class="container-fluid  px-0 pt-3 selected-cat-container">
     <div class="d-flex justify-content-center button-wrapper">
-      <div class="button-container" v-for="cat in props.allCategorie" :key="cat">
+      <div class="button-container">
         <button
           class="btn mx-3 text-uppercase"
-          @click="() => props.handleClickOnCategorie(cat)"
-          :class="{ 'active': store.getSelectedCat === cat }"
-        >{{ cat }}</button>
+          @click="() => store.setSelectedCat(0,'Tous les fusils')"
+          :class="{ 'active': store.getSelectedCat === 'Tous les fusils' }"
+        >Tous les fusils</button>
+      </div>
+      <div class="button-container" v-for="cat in store.getListOfCategorie" :key="cat">
+        <button
+          class="btn mx-3 text-uppercase"
+          @click="() => store.setSelectedCat(cat.id,cat.name)"
+          :class="{ 'active': store.getSelectedCat === cat.name }"
+        >{{ cat.name }}</button>
       </div>
     </div>
     <div>
-      <h3 class="selected-cat-title text-center py-2 mt-4">{{ props.selectedCat }}</h3>
+      <h3 class="selected-cat-title text-center py-2 mt-4">{{ store.getSelectedCat }}</h3>
     </div>
   </div>
 </template>
