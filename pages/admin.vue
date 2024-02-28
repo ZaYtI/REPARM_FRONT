@@ -6,7 +6,7 @@ const selectCatStore = useSelectedCatStore();
 const weapons = ref(null)
 
 async function fetchWeapons(){
-    const response = await fetch('http://localhost:8000/auth/register',{
+    const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/register',{
         method : 'POST',
         headers:{
           'Authorization': `Bearer ${authStore.getToken}`,
@@ -17,7 +17,7 @@ async function fetchWeapons(){
 
 async function deleteProduct(productId){
   try{
-    const response = await fetch(`http://localhost:8000/product/delete/${productId}`,{
+    const response = await fetch(`https://reparm-api-without-docker.onrender.com/product/delete/${productId}`,{
       headers:{
         'Authorization': `Bearer ${authStore.getToken}`,
       },
