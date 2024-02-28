@@ -39,16 +39,19 @@ export const useSelectedCatStore = defineStore('selectedCat',{
     async setSelectedCat(id:number,value:string): Promise<void>{
       this.selectedCat = value;
       let data;
-      console.log(id,"and",value)
       if(id != 0 && value != "Tous les fusils"){
-        console.log("la nouvelle valeur n'est pas tous les fusils")
-        data = await fetch('http://localhost:8000/product/getByCat/'+id)
+        data = await fetch('https://reparm-api-without-docker.onrender.com/product/getByCat/'+id)
       }else{
-        console.log("la nouvelle valeur est tout les fusils")
-        data = await fetch('http://localhost:8000/product/getall')
+        data = await fetch('https://reparm-api-without-docker.onrender.com/product/getall')
       }
       const products = await data.json()
       this.listOfProducts = products;
+    },
+
+    async setAllProduct(){
+      const data = await fetch('https://reparm-api-without-docker.onrender.com/product/getall')
+      const products = await data.json()
+      this.listOfProducts = products
     },
 
     async setListOfCategorie(): Promise<void>{

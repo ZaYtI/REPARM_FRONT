@@ -4,6 +4,13 @@ const catStore = useSelectedCatStore();
 
 const authStore = useAuthStore();
 
+const props = defineProps({
+  product:{
+    type:Object,
+    required:false,
+  }
+})
+
 const naturaBuyId = ref('');
 const name = ref('');
 const price = ref(0);
@@ -51,20 +58,16 @@ async function uploadImages(productId) {
   });
 
   try {
-    const response = await fetch(`http://localhost:8000/product/uploadImages/${productId}`, {
+    const response = await fetch(`https://reparm-api-without-docker.onrender.com/product/uploadImages/${productId}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${authStore.getToken}`,
       },
       body: formData,
     });
-
     if (!response.ok) {
       throw new Error('Erreur lors de la requête HTTP');
     }
-
-    const responseData = await response.json();
-    console.log(responseData);
   } catch (error) {
     console.error(error);
   }
@@ -88,10 +91,8 @@ const submitForm = async (event) => {
     categorieId: parseInt(categorieId.value, 10)
   };
 
-  console.log(data);
-
   try {
-    const response = await fetch('http://localhost:8000/product/create', {
+    const response = await fetch('https://reparm-api-without-docker.onrender.com/product/create', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${authStore.getToken}`,

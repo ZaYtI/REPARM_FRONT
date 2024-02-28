@@ -1,5 +1,5 @@
 <script setup>
-const authselectCatStore = useAuthStore();
+const authStore = useAuthStore();
 
 const selectCatStore = useSelectedCatStore();
 
@@ -9,10 +9,29 @@ async function fetchWeapons(){
     const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/register',{
         method : 'POST',
         headers:{
-          'Authorization': `Bearer ${authselectCatStore.getToken}`,
+          'Authorization': `Bearer ${authStore.getToken}`,
         }
       });
     weapons.value = response.json();
+}
+
+async function deleteProduct(productId){
+  try{
+    const response = await fetch(`http://localhost:8000/product/delete/${productId}`,{
+      headers:{
+        'Authorization': `Bearer ${authStore.getToken}`,
+      },
+      method:"DELETE"
+    })
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de la requête HTTP');
+    }
+
+    await selectCatStore.setAllProduct();
+  } catch(error){
+    console.error(error)
+  }
 }
 
 onMounted(async () => {
@@ -43,6 +62,7 @@ onMounted(async () => {
                         <th class="text-center">Prix</th>
                         <th class="text-center">Quantiter</th>
                         <th class="text-center">Id categorie</th>
+                        <th class="text-center">NaturabuyId</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -54,11 +74,12 @@ onMounted(async () => {
                         <td class="text-center">{{ product.price }}</td>
                         <td class="text-center">{{ product.quantity }}</td>
                         <td class="text-center">{{ product.categorieId }}</td>
+                        <td class="text-center">{{ product.naturaBuyId }}</td>
                         <td class="text-center">
                             <button class="btn btn-primary">Modifier</button>
                         </td>
                         <td class="text-center">
-                            <button class="btn btn-danger">Supprimer</button>
+                            <button class="btn btn-danger" @click="deleteProduct(product.id)">Supprimer</button>
                         </td>
                     </tr>
                 </tbody>

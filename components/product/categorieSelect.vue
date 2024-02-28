@@ -1,16 +1,6 @@
 <script setup>
 import { useSelectedCatStore } from '@/stores/selectedCat';
 const store = useSelectedCatStore();
-const props = defineProps({
-  allCategorie: {
-    type: Array,
-    required: true
-  },
-  selectedCat:{
-    type: String,
-    required: true
-  }
-})
 </script>
 <template>
   <div class="container-fluid  px-0 pt-3 selected-cat-container">
@@ -22,7 +12,7 @@ const props = defineProps({
           :class="{ 'active': store.getSelectedCat === 'Tous les fusils' }"
         >Tous les fusils</button>
       </div>
-      <div class="button-container" v-for="cat in props.allCategorie" :key="cat">
+      <div class="button-container" v-for="cat in store.getListOfCategorie" :key="cat">
         <button
           class="btn mx-3 text-uppercase"
           @click="() => store.setSelectedCat(cat.id,cat.name)"
@@ -31,7 +21,7 @@ const props = defineProps({
       </div>
     </div>
     <div>
-      <h3 class="selected-cat-title text-center py-2 mt-4">{{ props.selectedCat }}</h3>
+      <h3 class="selected-cat-title text-center py-2 mt-4">{{ store.getSelectedCat }}</h3>
     </div>
   </div>
 </template>
