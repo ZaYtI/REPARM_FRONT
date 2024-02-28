@@ -25,12 +25,11 @@ async function deleteProduct(productId){
   }
 }
 
-onMounted(async () => {
-    if(selectCatStore.getListOfCategorie == null || selectCatStore.getListOfCategorie == undefined || selectCatStore.getListOfCategorie.length == 0){
-      await selectCatStore.setListOfCategorie();
+onMounted(async() => {
+    if(selectCatStore.getAllProducts == null || selectCatStore.getAllProducts == undefined || selectCatStore.getAllProducts.length == 0){
+        selectCatStore.setAllProduct();
     }
-    selectCatStore.setSelectedCat(0,"Tous les fusils")
-  })
+})
 
 </script>
 
@@ -59,7 +58,7 @@ onMounted(async () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="product in selectCatStore.getlistOfSelectedProducts" :key="product.id">
+                    <tr v-for="product in selectCatStore.getAllProducts" :key="product.id">
                         <td class="text-center">{{ product.id }}</td>
                         <td class="text-center">{{ product.name }}</td>
                         <td class="text-center">{{ product.price }}</td>
