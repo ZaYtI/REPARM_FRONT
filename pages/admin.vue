@@ -5,15 +5,6 @@ const selectCatStore = useSelectedCatStore();
 
 const weapons = ref(null)
 
-async function fetchWeapons(){
-    const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/register',{
-        method : 'POST',
-        headers:{
-          'Authorization': `Bearer ${authStore.getToken}`,
-        }
-      });
-    weapons.value = response.json();
-}
 
 async function deleteProduct(productId){
   try{
