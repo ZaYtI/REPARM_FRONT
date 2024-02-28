@@ -1,6 +1,12 @@
 <script setup>
 import { useSelectedCatStore } from '@/stores/selectedCat';
 const store = useSelectedCatStore();
+
+onMounted(async ()=>{
+  if(store.getListOfCategorie == null || store.getListOfCategorie == undefined || store.getListOfCategorie.length == 0){
+    await store.setListOfCategorie();
+  }
+})
 </script>
 <template>
   <div class="container-fluid  px-0 pt-3 selected-cat-container">

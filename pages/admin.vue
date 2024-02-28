@@ -6,7 +6,7 @@ const selectCatStore = useSelectedCatStore();
 const weapons = ref(null)
 
 async function fetchWeapons(){
-    const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/register',{
+    const response = await fetch('http://localhost:8000/auth/register',{
         method : 'POST',
         headers:{
           'Authorization': `Bearer ${authStore.getToken}`,
@@ -54,7 +54,7 @@ onMounted(async () => {
                 <h2 class="text-white">Vos produits :</h2>
                 <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Ajouter</button>
             </div>
-            <table class="table table-striped">
+            <table class="table table-striped" aria-describedby="table of product">
                 <thead class="head">
                     <tr>
                         <th class="text-center">Id</th>
@@ -68,7 +68,7 @@ onMounted(async () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="product in selectCatStore.getListOfProducts" :key="product.id">
+                    <tr v-for="product in selectCatStore.getlistOfSelectedProducts" :key="product.id">
                         <td class="text-center">{{ product.id }}</td>
                         <td class="text-center">{{ product.name }}</td>
                         <td class="text-center">{{ product.price }}</td>
@@ -90,7 +90,7 @@ onMounted(async () => {
                 <h2 class="text-white">Vos produits :</h2>
                 <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Ajouter</button>
             </div>
-            <table class="table table-striped">
+            <table class="table table-striped" aria-describedby="table of categorie">
                 <thead class="head">
                     <tr>
                         <th class="text-center">Id</th>

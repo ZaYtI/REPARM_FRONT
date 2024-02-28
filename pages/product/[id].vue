@@ -9,8 +9,8 @@
   const product = ref(null)
 
   async function getProductById(){
-    if(store.getListOfProducts == null || store.getListOfProducts == undefined || store.getListOfProducts.length == 0){
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/product/getById/'+router.params.id, {
+    if(store.getlistOfSelectedProducts == null || store.getlistOfSelectedProducts == undefined || store.getlistOfSelectedProducts.length == 0){
+      const response = await fetch('http://localhost:8000/product/getById/'+router.params.id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -23,7 +23,7 @@
         product.value = responseData
       } 
     }else{
-      for(const prod of store.getListOfProducts){
+      for(const prod of store.getlistOfSelectedProducts){
         if(prod.id == router.params.id){
           product.value = prod
           console.log(product.value)
@@ -33,7 +33,7 @@
   }
 
   async function addProductToBasket(){
-    const response = await fetch('https://reparm-api-without-docker.onrender.com/panier-item',{
+    const response = await fetch('http://localhost:8000/panier-item',{
       method : 'POST',
       headers:{
         'Content-Type':'application/json',

@@ -19,20 +19,23 @@ interface Product {
 
 export const useSelectedCatStore = defineStore('selectedCat',{
   state: () => ({
+    allProduct: [] as any[],
     listOfCategorie: [] as any[],
     selectedCat: 'Tous les fusils' as string ,
-    listOfProducts: [] as any[],
+    listOfSelectedProducts: [] as any[],
   }),
   getters: {
     getSelectedCat():any{
       return this.selectedCat;
     },
-    getListOfProducts(): Product[] {
-      return this.listOfProducts;
+    getlistOfSelectedProducts(): Product[] {
+      return this.listOfSelectedProducts;
     },
     getListOfCategorie():string[]{
-      console.log("get cat")
       return this.listOfCategorie;
+    },
+    getAllProducts():Product[]{
+      return this.allProduct;
     }
   },
   actions: {
@@ -40,22 +43,22 @@ export const useSelectedCatStore = defineStore('selectedCat',{
       this.selectedCat = value;
       let data;
       if(id != 0 && value != "Tous les fusils"){
-        data = await fetch('https://reparm-api-without-docker.onrender.com/product/getByCat/'+id)
+        data = this.allProduct.filter((element) => element.categorieId = 1)
+        console.log(data)
       }else{
-        data = await fetch('https://reparm-api-without-docker.onrender.com/product/getall')
+        data = this.allProduct
       }
-      const products = await data.json()
-      this.listOfProducts = products;
+      this.listOfSelectedProducts = data;
     },
 
     async setAllProduct(){
-      const data = await fetch('https://reparm-api-without-docker.onrender.com/product/getall')
+      const data = await fetch('http://localhost:8000/product/getall')
       const products = await data.json()
-      this.listOfProducts = products
+      this.allProduct = products
     },
 
     async setListOfCategorie(): Promise<void>{
-      const data = await fetch('https://reparm-api-without-docker.onrender.com/categorie/getall')
+      const data = await fetch('http://localhost:8000/categorie/getall')
       const categorie = await data.json();
       for ( const cat of categorie){
         this.listOfCategorie.push(cat);
