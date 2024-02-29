@@ -1,0 +1,78 @@
+[Debug] [vite] connecting... (client, line 229)
+[Debug] [vite] connected. (client, line 324)
+[Info] <Suspense> is an experimental feature and its API will likely change. (chunk-77RB3ZRK.js, line 2766)
+[Log] ✨ Nuxt DevTools  Press Shift + Option + D to open DevTools – "" (devtools.client.mjs, line 51)
+[Error] Failed to load resource: the server responded with a status of 401 (Unauthorized) (profile, line 0)
+[Warning] [Vue warn]: Unhandled error during execution of mounted hook (29) (chunk-77RB3ZRK.js, line 1436)
+"
+"
+" at <Default"
+"ref=Ref<"
+Proxy {__v_skip: true}
+">"
+">"
+"
+"
+" at <LayoutLoader"
+"key=\"default\""
+"layoutProps="
+{ref: RefImpl}
+"name=\"default\""
+">"
+"
+"
+" at <NuxtLayoutProvider"
+"layoutProps="
+{ref: RefImpl}
+"key=\"default\""
+"name=\"default\""
+" ..."
+">"
+"
+"
+" at <NuxtLayout>"
+"
+"
+" at <App"
+"key=3"
+">"
+"
+"
+" at <NuxtRoot>"
+[Error] Unhandled Promise Rejection: Error: Token invalide
+	logError (chunk-77RB3ZRK.js:1615)
+	handleError (chunk-77RB3ZRK.js:1602)
+	(fonction anonyme) (chunk-77RB3ZRK.js:1563)
+[Log] Proxy (admin.vue, line 69)
+
+handler: MutableReactiveHandler {_isReadonly: false, _shallow: false}
+
+target: Array (3)
+0 Array (1)
+0 Proxy
+
+handler: MutableReactiveHandler {_isReadonly: false, _shallow: false}
+
+target: {id: 20, naturaBuyId: "add-test-5", name: "fefzefezf", price: 0, barrePrice: 0, …}
+
+Prototype Array
+1 Array (1)
+0 Proxy
+
+handler: MutableReactiveHandler {_isReadonly: false, _shallow: false}
+
+target: {id: 21, naturaBuyId: "souchezReparm-15", name: "new", price: 900, barrePrice: 1900, …}
+
+Prototype Array
+2 Array (1)
+0 Proxy
+
+handler: MutableReactiveHandler {_isReadonly: false, _shallow: false}
+
+target: {id: 22, naturaBuyId: "last", name: "test-Third", price: 90000, barrePrice: 900000, …}
+
+Prototype Array
+
+Prototype Array
+
+[Debug] [vite] hot updated: /pages/admin.vue (client, line 603)

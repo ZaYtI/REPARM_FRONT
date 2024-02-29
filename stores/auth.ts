@@ -20,7 +20,7 @@ interface UserProfile {
   updatedAt: string;
 }
 
-interface RegisterUser{
+interface RegisterUser {
   civility: string,
   lastName: string,
   firstName: string,
@@ -34,12 +34,12 @@ interface RegisterUser{
   nick: string,
 }
 
-export const useAuthStore = defineStore('auth',{
+export const useAuthStore = defineStore('auth', {
   state: () => ({
     authenticated: false as boolean,
     token: localStorage.getItem('token') || null,
     user: null as UserProfile | null,
-    panier : null as  any,
+    panier: null as any,
   }),
   getters: {
     getIsLoggedIn(): boolean {
@@ -51,9 +51,12 @@ export const useAuthStore = defineStore('auth',{
     getToken(): string | null {
       return this.token;
     },
-    getPanier(): any{
+    getPanier(): any {
       return this.panier
-    }
+    },
+    getIsAdmin(): boolean {
+      return this.user?.roleId == 2
+    },
   },
   actions: {
     async login(email: string, password: string): Promise<void> {
@@ -66,7 +69,7 @@ export const useAuthStore = defineStore('auth',{
       });
       const responseData = await response.json();
       if (response.status !== 200) {
-        this.authenticated =false;
+        this.authenticated = false;
         localStorage.removeItem('token')
         throw new Error(responseData.message || 'Failed to authenticate');
       } else {
@@ -87,7 +90,7 @@ export const useAuthStore = defineStore('auth',{
       const responseData = await response.json();
 
       if (response.status !== 200) {
-        this.authenticated =false;
+        this.authenticated = false;
         localStorage.removeItem('token')
         throw new Error(responseData.message || 'Failed to get profile');
       } else {
@@ -108,12 +111,12 @@ export const useAuthStore = defineStore('auth',{
       });
 
       const responseData = await response.json();
-      if(responseData.access_token !== undefined || responseData.access_token !== null){
+      if (responseData.access_token !== undefined || responseData.access_token !== null) {
         this.token = responseData.access_token;
         this.authenticated = true;
         localStorage.setItem('token', responseData.access_token);
-      }else{
-        this.authenticated =false;
+      } else {
+        this.authenticated = false;
         localStorage.removeItem('token')
         throw new Error(responseData.message || 'Failed to register');
       }
@@ -128,50 +131,50 @@ export const useAuthStore = defineStore('auth',{
       });
       const responseData = await response.json()
 
-      if(response.status !== 200 && response.status !== 304){
-        this.authenticated =false;
+      if (response.status !== 200 && response.status !== 304) {
+        this.authenticated = false;
         localStorage.removeItem('token')
         throw new Error(responseData.message || 'Failed to get the basket');
-      }else{
+      } else {
         this.panier = responseData
       }
     },
 
-    async createOrder():Promise<void>{
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/commande_produit/createWithPanier',{
-        method : 'POST',
-        headers:{
+    async createOrder(): Promise<void> {
+      const response = await fetch('https://reparm-api-without-docker.onrender.com/commande_produit/createWithPanier', {
+        method: 'POST',
+        headers: {
           'Authorization': `Bearer ${this.token}`,
         }
       })
       const responseData = await response.json();
-      if(response.status !== 200){
-        this.authenticated =false;
+      if (response.status !== 200) {
+        this.authenticated = false;
         localStorage.removeItem('token')
         throw new Error(responseData.message || 'Failed to get the basket');
-      }else{
+      } else {
         this.panier = responseData
       }
     },
 
-    async logout():Promise<void>{
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/register',{
-        method : 'POST',
-        headers:{
+    async logout(): Promise<void> {
+      const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/register', {
+        method: 'POST',
+        headers: {
           'Authorization': `Bearer ${this.token}`,
         }
       })
       const responseData = await response.json();
-      if(response.status !== 200){
-        this.authenticated =false;
+      if (response.status !== 200) {
+        this.authenticated = false;
         localStorage.removeItem('token')
         throw new Error(responseData.message || 'Failed to get the basket');
-      }else{
+      } else {
         this.panier = responseData
       }
     },
 
-    async isLoggedIn(): Promise<void>{
+    async isLoggedIn(): Promise<void> {
       this.authenticated = localStorage.getItem('token') ? true : false;
     }
   },

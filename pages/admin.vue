@@ -5,116 +5,201 @@ const selectCatStore = useSelectedCatStore();
 
 const weapons = ref(null)
 
+async function deleteProduct(productId) {
+    try {
+        const response = await fetch(`https://reparm-api-without-docker.onrender.com/product/delete/${productId}`, {
+            headers: {
+                'Authorization': `Bearer ${authStore.getToken}`,
+            },
+            method: "DELETE"
+        })
 
-async function deleteProduct(productId){
-  try{
-    const response = await fetch(`https://reparm-api-without-docker.onrender.com/product/delete/${productId}`,{
-      headers:{
-        'Authorization': `Bearer ${authStore.getToken}`,
-      },
-      method:"DELETE"
-    })
+        if (!response.ok) {
+            throw new Error('Erreur lors de la requête HTTP');
+        }
 
-    if (!response.ok) {
-      throw new Error('Erreur lors de la requête HTTP');
+        await selectCatStore.setAllProduct();
+    } catch (error) {
+        console.error(error)
     }
-
-    await selectCatStore.setAllProduct();
-  } catch(error){
-    console.error(error)
-  }
 }
 
-onMounted(async() => {
-    if(selectCatStore.getAllProducts == null || selectCatStore.getAllProducts == undefined || selectCatStore.getAllProducts.length == 0){
-        selectCatStore.setAllProduct();
+const productIsLoaded = ref(false)
+const categorieIsLoaded = ref(false)
+const isAdmin = ref(false)
+const allIsLoad = ref(false)
+const currentPaginationIndex = ref(0)
+const currentPaginationProduct = ref(null)
+const paginateProduct = ref([])
+
+
+async function paginateProducts() {
+    let products = selectCatStore.getAllProducts;
+    for (let i = 0; i < products.length; i += 10) {
+        const productSliced = products.slice(i, i + 10)
+        paginateProduct.value.push(productSliced)
+    }
+}
+
+onMounted(async () => {
+    let categorie = selectCatStore.getListOfCategorie;
+    let products = selectCatStore.getAllProducts;
+    if (products == null || products == undefined || products.length == 0) {
+        await selectCatStore.setAllProduct();
+        productIsLoaded.value = true
+        paginateProducts();
+    }
+    if (categorie == null || categorie == undefined || categorie.length == 0) {
+        await selectCatStore.setListOfCategorie();
+        categorieIsLoaded.value = true
+    }
+    if (localStorage.getItem('token') == null || localStorage.getItem('token') == undefined) {
+        navigateTo('/login')
     }
 })
+
+watch(
+    () => authStore.getIsLoggedIn,
+    async (newgetIsLoggedIn, oldgetIsLoggedIn) => {
+        if (newgetIsLoggedIn) {
+            if (authStore.getProfile.roleId == 2) {
+                isAdmin.value = true
+                if (productIsLoaded.value && categorieIsLoaded.value) {
+                    allIsLoad.value = true;
+                }
+            } else {
+                navigateTo('/')
+            }
+        }
+    }
+)
+
+watch(
+    categorieIsLoaded,
+    async (newValue, oldValue) => {
+        if (newValue) {
+            if (isAdmin.value && productIsLoaded.value) {
+                allIsLoad.value = true
+            }
+        }
+    }
+)
+
+watch(
+    productIsLoaded,
+    async (newValue, oldValue) => {
+        if (newValue) {
+            if (isAdmin.value && categorieIsLoaded) {
+                allIsLoad.value = true
+            }
+        }
+    }
+)
 
 </script>
 
 
 <template>
-    <div>
-    <Banniere title="ESPACES CLIENT" title-color="#B54A29" bottom-border/>
-  </div>
-    <div class="container-xl admin-container">
-        <div class="container-weapons-table">
-            <div class="d-flex justify-content-between px-3 pb-3">
-                <h2 class="text-white">Vos produits :</h2>
-                <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Ajouter</button>
-            </div>
-            <table class="table table-striped" aria-describedby="table of product">
-                <thead class="head">
-                    <tr>
-                        <th class="text-center">Id</th>
-                        <th class="text-center">Nom</th>
-                        <th class="text-center">Prix</th>
-                        <th class="text-center">Quantiter</th>
-                        <th class="text-center">Id categorie</th>
-                        <th class="text-center">NaturabuyId</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="product in selectCatStore.getAllProducts" :key="product.id">
-                        <td class="text-center">{{ product.id }}</td>
-                        <td class="text-center">{{ product.name }}</td>
-                        <td class="text-center">{{ product.price }}</td>
-                        <td class="text-center">{{ product.quantity }}</td>
-                        <td class="text-center">{{ product.categorieId }}</td>
-                        <td class="text-center">{{ product.naturaBuyId }}</td>
-                        <td class="text-center">
-                            <button class="btn btn-primary">Modifier</button>
-                        </td>
-                        <td class="text-center">
-                            <button class="btn btn-danger" @click="deleteProduct(product.id)">Supprimer</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <div :class="{ 'd-none': !allIsLoad }">
+        <div>
+            <Banniere title="ESPACES CLIENT" title-color="#B54A29" bottom-border />
         </div>
-        <div class="container-categorie-table mt-5">
-            <div class="d-flex justify-content-between px-3 pb-3">
-                <h2 class="text-white">Vos produits :</h2>
-                <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Ajouter</button>
+        <div class="container-xl admin-container">
+            <div class="container-weapons-table">
+                <div class="d-flex justify-content-between px-3 pb-3">
+                    <h2 class="text-white">Vos produits :</h2>
+                    <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Ajouter</button>
+                </div>
+                <table class="table table-striped" aria-describedby="table of product">
+                    <thead class="head">
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Nom</th>
+                            <th class="text-center">Prix</th>
+                            <th class="text-center">Quantiter</th>
+                            <th class="text-center">Id categorie</th>
+                            <th class="text-center">NaturabuyId</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="product in paginateProduct[currentPaginationIndex]" :key="product.id">
+                            <td class="text-center">{{ product.id }}</td>
+                            <td class="text-center">{{ product.name }}</td>
+                            <td class="text-center">{{ product.price }}</td>
+                            <td class="text-center">{{ product.quantity }}</td>
+                            <td class="text-center">{{ product.categorieId }}</td>
+                            <td class="text-center">{{ product.naturaBuyId }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-primary">Modifier</button>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-danger" @click="deleteProduct(product.id)">Supprimer</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <table class="table table-striped" aria-describedby="table of categorie">
-                <thead class="head">
-                    <tr>
-                        <th class="text-center">Id</th>
-                        <th class="text-center">Nom</th>
-                        <th class="text_center">Naturabuy Id</th>
-                        <th class="text-center"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="categorie in selectCatStore.getListOfCategorie" :key="categorie.id">
-                        <td class="text-center">{{ categorie.id }}</td>
-                        <td class="text-center">{{ categorie.name }}</td>
-                        <td class="text-center">{{ categorie.naturabuyId }}</td>
-                        <td class="text-center">
-                            <button class="btn btn-danger">Supprimer</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="pagination-container" v-if="paginateProduct.length > 1">
+                <div class="shadow bg-body-tertiary rounded">
+                    <button class="pagination-btn" :disabled="currentPaginationIndex == 0"
+                        @click="currentPaginationIndex--">previous</button>
+                    <button class="pagination-btn" :class="{ 'active': currentPaginationIndex == index }"
+                        v-for="(item, index) in paginateProduct" :key="index" :id="index"
+                        @click="currentPaginationIndex = index">{{ index }}</button>
+                    <button class="pagination-btn" :disabled="currentPaginationIndex == paginateProduct.length - 1"
+                        @click="currentPaginationIndex++">next</button>
+                </div>
+            </div>
         </div>
+        <AdminModal />
     </div>
-    <AdminModal/>
+    <div class="d-flex justify-content-center spinner-container" :class="{ 'd-none': allIsLoad }">
+        <div class="spinner-border mx-auto" style="width: 10rem; height: 10rem;" role="status"></div>
+    </div>
 </template>
 
 <style scoped>
-    .admin-container{
-        margin-top: 80px;
-    }
+.container-weapons-table {
+    overflow-x: scroll;
+}
 
-    .table{
-        overflow-x: scroll;
-    }
+.pagination-btn {
+    border: 1px solid black;
+    background: white;
+}
 
-    .head{
-        background-color: white;
-    }
+.active {
+    background-color: #B54A29;
+    color: white;
+}
+
+.pagination-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.admin-container {
+    margin-top: 80px;
+}
+
+.table {
+    overflow-x: scroll;
+}
+
+.spinner-container {
+    align-items: center;
+    height: 100vh;
+}
+
+.spinner-border {
+    color: #B54A29;
+}
+
+.head {
+    background-color: white;
+}
 </style>

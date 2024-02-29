@@ -1,13 +1,9 @@
 <script setup>
-  import BanniereImage from '../assets/img/banniere_accueil.jpg';
-  const props = defineProps({
-    product: Object,
-    waitLoad : Function
-  });
-
-  function handleClickOnCard(id) {
-    console.log('Product id:', id);
-  }
+import BanniereImage from '../assets/img/banniere_accueil.jpg';
+const props = defineProps({
+  product: Object,
+  waitLoad: Function
+});
 </script>
 
 <template>
@@ -26,6 +22,11 @@
   padding: 1rem;
   background-color: white;
   transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+  cursor: pointer;
+  box-shadow: 0 1rem 1rem rgb(0, 0, 0, 0.5);
 }
 
 .card-img-top {
