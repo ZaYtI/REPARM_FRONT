@@ -1,6 +1,7 @@
 <script setup>
 import { useSelectedCatStore } from '@/stores/selectedCat';
 import banniereImage from '~/assets/img/banniere_accueil.jpg';
+import cerf from '~/assets/img/cerf.jpg';
 import { useRoute } from 'vue-router'
 const store = useSelectedCatStore();
 const authStore = useAuthStore();
@@ -89,7 +90,7 @@ watch(loadedImage, async (newValue, oldValue) => {
           <div id="carouselExampleIndicators" class="carousel slide">
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img :src="banniereImage" class="d-block w-100" alt="..." @load="handleLoadImage()">
+                <img :src="cerf" class="d-block w-100" alt="..." @load="handleLoadImage()">
               </div>
               <div class="carousel-item">
                 <img :src="banniereImage" class="d-block w-100" alt="..." @load="handleLoadImage()">
@@ -171,6 +172,7 @@ watch(loadedImage, async (newValue, oldValue) => {
 }
 
 .caroussel_container {
+  width: 100%;
   max-width: 50%;
   transition: all 0.2s ease-in-out;
 }
