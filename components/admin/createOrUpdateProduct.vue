@@ -74,6 +74,21 @@ async function uploadImages(productId) {
 }
 
 
+function initForm() {
+  naturaBuyId.value = null,
+    name.value = null,
+    price.value = null,
+    barrePrice.value = null,
+    quantity.value = null,
+    duree.value = null,
+    newProduct.value = null,
+    stock.value = null,
+    ean.value = null,
+    description.value = null,
+    categorieId.value = null,
+    selectedImages.value = []
+}
+
 const submitForm = async (event) => {
   event.preventDefault();
 
@@ -104,10 +119,11 @@ const submitForm = async (event) => {
     if (!response.ok) {
       throw new Error('Erreur lors de la requête HTTP');
     }
-
+    initForm()
     const responseData = await response.json();
     const productId = responseData.id;
-    uploadImages(productId)
+    await uploadImages(productId)
+    await catStore.setAllProduct()
   } catch (error) {
     console.error(error);
   }

@@ -13,6 +13,7 @@ interface Product {
   new: boolean;
   stock: number;
   ean: string;
+  images: any;
   createdAt: string;
   updatedAt: string;
 }
@@ -28,13 +29,13 @@ export const useSelectedCatStore = defineStore('selectedCat', {
     getSelectedCat(): any {
       return this.selectedCat;
     },
-    getlistOfSelectedProducts(): Product[] {
+    getlistOfSelectedProducts(): any {
       return this.listOfSelectedProducts;
     },
     getListOfCategorie(): string[] {
       return this.listOfCategorie;
     },
-    getAllProducts(): Product[] {
+    getAllProducts(): any {
       return this.allProduct;
     }
   },
@@ -54,6 +55,7 @@ export const useSelectedCatStore = defineStore('selectedCat', {
       const data = await fetch('https://reparm-api-without-docker.onrender.com/product/getall')
       const products = await data.json()
       this.allProduct = products
+      console.log(this.allProduct)
     },
 
     async setListOfCategorie(): Promise<void> {
