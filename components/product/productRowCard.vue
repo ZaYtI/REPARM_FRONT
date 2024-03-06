@@ -7,9 +7,9 @@ const props = defineProps({
   product: Object
 });
 
-function waitLoadImages(){
+function waitLoadImages() {
   loadImages.value = loadImages.value + 1
-  if(loadImages.value == props.product.length){
+  if (loadImages.value == props.product.length) {
     loader.value = false;
     loadImages.value = 0;
   }
@@ -18,31 +18,31 @@ function waitLoadImages(){
 
 <template>
   <div class="container products-card-container">
-    <div class="row_card d-flex justify-content-evenly" :class="{'d-none':loader}">
-    <ProductCard v-for="product in props.product" :product="product" :key="product.id" :wait-load="waitLoadImages" />
+    <div class="row_card d-flex justify-content-evenly" :class="{ 'd-none': loader }">
+      <ProductCard v-for="product in props.product" :product="product" :key="product.id" :wait-load="waitLoadImages" />
     </div>
-    <div class="d-flex justify-content-center spinner-container" :class="{'d-none':!loader}">
+    <div class="d-flex justify-content-center spinner-container" :class="{ 'd-none': !loader }">
       <div class="spinner-border mx-auto" style="width: 5rem; height: 5rem;" role="status"></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.row_card{
+.row_card {
   flex-wrap: wrap;
   transition: all 0.2s ease-in-out;
 }
 
-.products-card-container{
+.products-card-container {
   min-height: 50vh;
 }
 
-.spinner-container{
+.spinner-container {
   align-items: center;
   height: 100%;
 }
 
-.spinner-border{
+.spinner-border {
   color: #B54A29;
 }
 </style>

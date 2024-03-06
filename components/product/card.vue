@@ -7,8 +7,9 @@ const props = defineProps({
 </script>
 
 <template>
-  <NuxtLink :to="'/product/' + props.product.id" class="card" @click="handleClickOnCard(props.product.id)">
-    <img :src="BanniereImage" class="card-img-top" alt="test_image" @load="props.waitLoad">
+  <NuxtLink :to="'/product/' + props.product.id" class="card">
+    <img :src="'data:image/png;base64,' + props.product.images[0].url" class="card-img-top" alt="test_image"
+      @load="props.waitLoad">
     <div class="card-body">
       <h5 class="card-title">{{ props.product.name }}</h5>
     </div>

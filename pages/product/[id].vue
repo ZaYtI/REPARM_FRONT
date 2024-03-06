@@ -9,7 +9,6 @@ const router = useRoute()
 const redirection = useRouter();
 const product = ref(null)
 const loadedImage = ref(0)
-
 async function getProductById() {
   if (store.getlistOfSelectedProducts == null || store.getlistOfSelectedProducts == undefined || store.getlistOfSelectedProducts.length == 0) {
     const response = await fetch('https://reparm-api-without-docker.onrender.com/product/getById/' + router.params.id, {
@@ -89,14 +88,9 @@ watch(loadedImage, async (newValue, oldValue) => {
         <div class="caroussel_container p-3">
           <div id="carouselExampleIndicators" class="carousel slide">
             <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img :src="cerf" class="d-block w-100" alt="..." @load="handleLoadImage()">
-              </div>
-              <div class="carousel-item">
-                <img :src="banniereImage" class="d-block w-100" alt="..." @load="handleLoadImage()">
-              </div>
-              <div class="carousel-item">
-                <img :src="banniereImage" class="d-block w-100" alt="..." @load="handleLoadImage()">
+              <div v-for="(elt, index) in product.images" :key="elt.id" class="carousel-item"
+                :class="{ 'active': index == 1 }">
+                <img :src="'data:image/png;base64,' + elt.url" class="d-block w-100" alt="..." @load="handleLoadImage()">
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
