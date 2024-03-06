@@ -1,3 +1,8 @@
+<script setup>
+
+const emit = defineEmits(['sendToParent'])
+</script>
+
 <template>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
         ref="modal">
@@ -8,7 +13,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <AdminCreateOrUpdateProduct />
+                    <AdminCreateOrUpdateProduct @load-product="() => emit('sendToParent')" />
                 </div>
             </div>
         </div>

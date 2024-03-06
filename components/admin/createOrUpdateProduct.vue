@@ -4,12 +4,15 @@ const catStore = useSelectedCatStore();
 
 const authStore = useAuthStore();
 
+
 const props = defineProps({
   product: {
     type: Object,
     required: false,
   }
 })
+
+const emit = defineEmits(['loadProduct'])
 
 const naturaBuyId = ref('');
 const name = ref('');
@@ -21,7 +24,7 @@ const newProduct = ref(false);
 const stock = ref(false);
 const ean = ref('');
 const description = ref('');
-const categorieId = ref(null);
+const categorieId = ref('');
 const sendImages = ref([])
 const selectedImages = ref([]);
 const showError = ref(false);
@@ -68,6 +71,7 @@ async function uploadImages(productId) {
     if (!response.ok) {
       throw new Error('Erreur lors de la requête HTTP');
     }
+    await catStore.setAllProduct()
   } catch (error) {
     console.error(error);
   }
@@ -106,6 +110,7 @@ const submitForm = async (event) => {
     categorieId: parseInt(categorieId.value, 10)
   };
 
+
   try {
     const response = await fetch('https://reparm-api-without-docker.onrender.com/product/create', {
       method: 'POST',
@@ -119,11 +124,12 @@ const submitForm = async (event) => {
     if (!response.ok) {
       throw new Error('Erreur lors de la requête HTTP');
     }
-    initForm()
+    emit('loadProduct')
     const responseData = await response.json();
     const productId = responseData.id;
     await uploadImages(productId)
-    await catStore.setAllProduct()
+    initForm()
+    emit('loadProduct')
   } catch (error) {
     console.error(error);
   }
