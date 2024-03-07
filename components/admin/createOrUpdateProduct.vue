@@ -61,7 +61,7 @@ async function uploadImages(productId) {
   });
 
   try {
-    const response = await fetch(`https://reparm-api-without-docker.onrender.com/product/uploadImages/${productId}`, {
+    const response = await fetch(`http://localhost:8000/upload-images/uploadImages/${productId}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${authStore.getToken}`,
@@ -79,17 +79,17 @@ async function uploadImages(productId) {
 
 
 function initForm() {
-  naturaBuyId.value = null,
-    name.value = null,
-    price.value = null,
-    barrePrice.value = null,
-    quantity.value = null,
-    duree.value = null,
-    newProduct.value = null,
-    stock.value = null,
-    ean.value = null,
-    description.value = null,
-    categorieId.value = null,
+  naturaBuyId.value = '',
+    name.value = '',
+    price.value = 0,
+    barrePrice.value = 0,
+    quantity.value = 0,
+    duree.value = 0,
+    newProduct.value = false,
+    stock.value = true,
+    ean.value = '',
+    description.value = '',
+    categorieId.value = 0,
     selectedImages.value = []
 }
 
@@ -124,7 +124,6 @@ const submitForm = async (event) => {
     if (!response.ok) {
       throw new Error('Erreur lors de la requête HTTP');
     }
-    emit('loadProduct')
     const responseData = await response.json();
     const productId = responseData.id;
     await uploadImages(productId)

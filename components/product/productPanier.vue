@@ -6,7 +6,7 @@ const props = defineProps({
 
 <template>
   <div class="element_panier d-flex">
-    <img class="img_product" :src="'data:image/png;base64,' + product.produit.images[0].url" alt="test">
+    <img class="img_product" :src="product.produit.images[0].url" alt="test">
     <div class="element_panier_info ps-3">
       <h6 class="mb-0">{{ product.produit.name }}</h6>
       <p class="mb-0">prix: {{ product.produit.price }} €</p>
