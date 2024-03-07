@@ -1,5 +1,4 @@
 <script setup>
-import BanniereImage from '../assets/img/banniere_accueil.jpg';
 const props = defineProps({
   product: Object,
   waitLoad: Function
