@@ -108,11 +108,7 @@ watch(loadedImage, async (newValue, oldValue) => {
             <h4 class="weapon_title">{{ product.name }}</h4>
             <div class="description mt-4">
               <p>Description:</p>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Commodi pariatur eaque distinctio, vero ullam
-                incidunt! Laudantium corporis repellat tempora qui minima accusamus officia reiciendis perspiciatis ipsa
-                beatae illo praesentium voluptatibus nam eaque porro fugit, labore tempore itaque quos suscipit! Iusto
-                sint
-                velit dolorum eius! Quisquam labore eveniet autem quae dicta!</p>
+              <p>{{ product.description }}</p>
             </div>
             <div class="price">
               <h4>
