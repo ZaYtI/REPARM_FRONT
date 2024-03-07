@@ -88,7 +88,7 @@ watch(loadedImage, async (newValue, oldValue) => {
             <div class="carousel-inner">
               <div v-for="(elt, index) in product.images" :key="elt.id" class="carousel-item"
                 :class="{ 'active': index == 0 }">
-                <img :src="'data:image/png;base64, ' + elt.url" class="d-block w-100" alt="..." @load="handleLoadImage()">
+                <img :src="elt.url" class="d-block w-100" alt="..." @load="handleLoadImage()">
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"

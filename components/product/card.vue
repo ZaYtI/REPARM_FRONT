@@ -7,12 +7,11 @@ const props = defineProps({
 
 <template>
   <NuxtLink :to="'/product/' + props.product.id" class="card">
-    <img :src="'data:image/png;base64,' + props.product.images[0].url" class="card-img-top" alt="test_image"
-      @load="props.waitLoad">
+    <img :src="props.product.images[0].url" alt="Your Image Alt Text" @load="props.waitLoad"/>
     <div class="card-body">
       <h5 class="card-title">{{ props.product.name }}</h5>
     </div>
-  </NuxtLink>
+  </NuxtLink> 
 </template>
 
 <style scoped>
