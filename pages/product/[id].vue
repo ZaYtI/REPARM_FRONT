@@ -1,7 +1,5 @@
 <script setup>
 import { useSelectedCatStore } from '@/stores/selectedCat';
-import banniereImage from '~/assets/img/banniere_accueil.jpg';
-import cerf from '~/assets/img/cerf.jpg';
 import { useRoute } from 'vue-router'
 const store = useSelectedCatStore();
 const authStore = useAuthStore();
@@ -71,7 +69,7 @@ onMounted(async () => {
 const isLoaded = ref(false)
 
 watch(loadedImage, async (newValue, oldValue) => {
-  if (newValue == 3) {
+  if (newValue == product.value.images.length) {
     isLoaded.value = true;
   }
 })
@@ -89,8 +87,8 @@ watch(loadedImage, async (newValue, oldValue) => {
           <div id="carouselExampleIndicators" class="carousel slide">
             <div class="carousel-inner">
               <div v-for="(elt, index) in product.images" :key="elt.id" class="carousel-item"
-                :class="{ 'active': index == 1 }">
-                <img :src="'data:image/png;base64,' + elt.url" class="d-block w-100" alt="..." @load="handleLoadImage()">
+                :class="{ 'active': index == 0 }">
+                <img :src="'data:image/png;base64, ' + elt.url" class="d-block w-100" alt="..." @load="handleLoadImage()">
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
