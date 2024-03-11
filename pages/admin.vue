@@ -22,7 +22,6 @@ async function deleteProduct(productId) {
         }
         productIsLoaded.value = false
         await selectCatStore.setAllProduct();
-        paginateProduct.value = []
         await paginateProducts()
         productIsLoaded.value = true
     } catch (error) {
@@ -52,17 +51,7 @@ async function deleteOrder(orderId){
     }
 }
 
-
-function loadProduct() {
-    if (productIsLoaded.value) {
-        productIsLoaded.value = false
-    } else {
-        productIsLoaded.value = true
-    }
-}
-
 const productIsLoaded = ref(false)
-const categorieIsLoaded = ref(false)
 const isAdmin = ref(false)
 const allIsLoad = ref(false)
 const currentPaginationIndex = ref(0)
@@ -70,15 +59,18 @@ const paginateProduct = ref([])
 const paginateOrder = ref([])
 const currentPaginateOrderIndex = ref(0)
 const ordersIsLoad = ref(false)
+const categorieIsLoaded = ref(false)
 
 
 async function paginateProducts() {
-    let products = selectCatStore.getAllProducts;
+    productIsLoaded.value = false
+    let products = selectCatStore.getAllProducts
     paginateProduct.value = []
     for (let i = 0; i < products.length; i += 10) {
         const productSliced = products.slice(i, i + 10)
         paginateProduct.value.push(productSliced)
     }
+    productIsLoaded.value = true
 }
 
 async function paginateOrders() {
@@ -104,10 +96,12 @@ onMounted(async () => {
     }
     let orders = authStore.getAllOrder
     if(orders == null || orders == undefined || orders.length == 0){
+        console.log("all order")
         await authStore.setAllOrder();
         ordersIsLoad.value = true
     }
     await paginateOrders()
+    allIsLoad.value = true
     if (localStorage.getItem('token') == null || localStorage.getItem('token') == undefined) {
         navigateTo('/login')
     }
@@ -119,7 +113,7 @@ watch(
         if (newgetIsLoggedIn) {
             if (authStore.getProfile.roleId == 2) {
                 isAdmin.value = true
-                if (productIsLoaded.value && categorieIsLoaded.value && ordersIsLoad) {
+                if (productIsLoaded.value && ordersIsLoad.value) {
                     allIsLoad.value = true;
                 }
             } else {
@@ -129,30 +123,13 @@ watch(
     }
 )
 
-watch(
-    categorieIsLoaded,
-    async (newValue, oldValue) => {
-        if (newValue) {
-            if (isAdmin.value && productIsLoaded.value && ordersIsLoad) {
-                allIsLoad.value = true
-            }
-        }
-        else{
-            allIsLoad.value = false
-        }
-    }
-)
-
 watch(() =>
     ordersIsLoad,
     async (newValue, oldValue) => {
         if (newValue) {
-            if (isAdmin.value && categorieIsLoaded && productIsLoaded ) {
+            if (isAdmin.value && productIsLoaded.value ) {
                 allIsLoad.value = true
-                await paginateOrders()
             }
-        }else{
-            allIsLoad.value = false
         }
     }
 )
@@ -161,12 +138,9 @@ watch(() =>
     productIsLoaded,
     async (newValue, oldValue) => {
         if (newValue) {
-            if (isAdmin.value && categorieIsLoaded && ordersIsLoad) {
+            if (isAdmin.value  && ordersIsLoad.value) {
                 allIsLoad.value = true
-                await paginateProduct()
             }
-        }else{
-            allIsLoad.value = false
         }
     }
 )
@@ -251,7 +225,7 @@ watch(() =>
                             <tr v-for="order in paginateOrder[currentPaginateOrderIndex]" :key="order.id">
                                 <td class="text-center">{{ order.id }}</td>
                                 <td class="text-center">{{ order.userId }}</td>
-                                <td class="text-center">{{ order.user.email }}</td>
+                                <td class="text-center"><a :href="'mailto:'+order.user.email">{{ order.user.email }}</a></td>
                                 <td class="text-center">{{ order.user.phone }}</td>
                                 <td class="text-center">{{ order.payment }}</td>
                                 <td class="text-center">{{ order.received }}</td>
@@ -274,7 +248,7 @@ watch(() =>
                 </div>
             </div>
         </div>
-        <AdminModal @sendToParent="loadProduct" />
+        <AdminModal @sendToParent="paginateProducts" />
     </div>
     <div class="d-flex justify-content-center spinner-container" :class="{ 'd-none': allIsLoad }">
         <div class="spinner-border mx-auto" style="width: 10rem; height: 10rem;" role="status"></div>
