@@ -44,7 +44,7 @@ async function deleteOrder(orderId){
         }
         ordersIsLoad.value = false
         await authStore.setAllOrder();
-        paginateProduct.value = []
+        paginateOrder.value = []
         await paginateOrders()
         ordersIsLoad.value = true
     } catch (error) {
