@@ -1,18 +1,17 @@
 <script setup>
-import BanniereImage from '../assets/img/banniere_accueil.jpg';
 const props = defineProps({
-  product: Object,
-  waitLoad: Function
+  product: Object
 });
+const emit = defineEmits(['loadImages'])
 </script>
 
 <template>
-  <NuxtLink :to="'/product/' + props.product.id" class="card" @click="handleClickOnCard(props.product.id)">
-    <img :src="BanniereImage" class="card-img-top" alt="test_image" @load="props.waitLoad">
+  <NuxtLink :to="'/product/' + props.product.id" class="card">
+    <img :src="props.product.images[0].url" alt="Your Image Alt Text"/>
     <div class="card-body">
       <h5 class="card-title">{{ props.product.name }}</h5>
     </div>
-  </NuxtLink>
+  </NuxtLink> 
 </template>
 
 <style scoped>

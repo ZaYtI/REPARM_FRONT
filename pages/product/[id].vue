@@ -1,7 +1,5 @@
 <script setup>
 import { useSelectedCatStore } from '@/stores/selectedCat';
-import banniereImage from '~/assets/img/banniere_accueil.jpg';
-import cerf from '~/assets/img/cerf.jpg';
 import { useRoute } from 'vue-router'
 const store = useSelectedCatStore();
 const authStore = useAuthStore();
@@ -9,7 +7,6 @@ const router = useRoute()
 const redirection = useRouter();
 const product = ref(null)
 const loadedImage = ref(0)
-
 async function getProductById() {
   if (store.getlistOfSelectedProducts == null || store.getlistOfSelectedProducts == undefined || store.getlistOfSelectedProducts.length == 0) {
     const response = await fetch('https://reparm-api-without-docker.onrender.com/product/getById/' + router.params.id, {
@@ -72,7 +69,7 @@ onMounted(async () => {
 const isLoaded = ref(false)
 
 watch(loadedImage, async (newValue, oldValue) => {
-  if (newValue == 3) {
+  if (newValue == product.value.images.length) {
     isLoaded.value = true;
   }
 })
@@ -89,14 +86,9 @@ watch(loadedImage, async (newValue, oldValue) => {
         <div class="caroussel_container p-3">
           <div id="carouselExampleIndicators" class="carousel slide">
             <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img :src="cerf" class="d-block w-100" alt="..." @load="handleLoadImage()">
-              </div>
-              <div class="carousel-item">
-                <img :src="banniereImage" class="d-block w-100" alt="..." @load="handleLoadImage()">
-              </div>
-              <div class="carousel-item">
-                <img :src="banniereImage" class="d-block w-100" alt="..." @load="handleLoadImage()">
+              <div v-for="(elt, index) in product.images" :key="elt.id" class="carousel-item"
+                :class="{ 'active': index == 0 }">
+                <img :src="elt.url" class="d-block w-100" alt="..." @load="handleLoadImage()">
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
@@ -116,11 +108,7 @@ watch(loadedImage, async (newValue, oldValue) => {
             <h4 class="weapon_title">{{ product.name }}</h4>
             <div class="description mt-4">
               <p>Description:</p>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Commodi pariatur eaque distinctio, vero ullam
-                incidunt! Laudantium corporis repellat tempora qui minima accusamus officia reiciendis perspiciatis ipsa
-                beatae illo praesentium voluptatibus nam eaque porro fugit, labore tempore itaque quos suscipit! Iusto
-                sint
-                velit dolorum eius! Quisquam labore eveniet autem quae dicta!</p>
+              <p>{{ product.description }}</p>
             </div>
             <div class="price">
               <h4>

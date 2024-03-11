@@ -40,6 +40,7 @@ export const useAuthStore = defineStore('auth', {
     token: localStorage.getItem('token') || null,
     user: null as UserProfile | null,
     panier: null as any,
+    allOrder: [] as any[]
   }),
   getters: {
     getIsLoggedIn(): boolean {
@@ -57,6 +58,9 @@ export const useAuthStore = defineStore('auth', {
     getIsAdmin(): boolean {
       return this.user?.roleId == 2
     },
+    getAllOrder(): any[] {
+      return this.allOrder;
+    }
   },
   actions: {
     async login(email: string, password: string): Promise<void> {
@@ -176,6 +180,21 @@ export const useAuthStore = defineStore('auth', {
 
     async isLoggedIn(): Promise<void> {
       this.authenticated = localStorage.getItem('token') ? true : false;
+    },
+
+    async setAllOrder(): Promise<void> {
+      const data = await fetch('http://localhost:8000/commande/all', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.token}`,
+        }
+      })
+      if (data.status !== 200) {
+        throw new Error('Failed to get the order');
+      } else {
+        const order = await data.json()
+        this.allOrder = order
+      }
     }
   },
 });

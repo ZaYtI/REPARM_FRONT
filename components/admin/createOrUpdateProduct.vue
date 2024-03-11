@@ -4,12 +4,15 @@ const catStore = useSelectedCatStore();
 
 const authStore = useAuthStore();
 
+
 const props = defineProps({
   product: {
     type: Object,
     required: false,
   }
 })
+
+const emit = defineEmits(['loadProduct'])
 
 const naturaBuyId = ref('');
 const name = ref('');
@@ -21,7 +24,7 @@ const newProduct = ref(false);
 const stock = ref(false);
 const ean = ref('');
 const description = ref('');
-const categorieId = ref(null);
+const categorieId = ref('');
 const sendImages = ref([])
 const selectedImages = ref([]);
 const showError = ref(false);
@@ -58,7 +61,7 @@ async function uploadImages(productId) {
   });
 
   try {
-    const response = await fetch(`https://reparm-api-without-docker.onrender.com/product/uploadImages/${productId}`, {
+    const response = await fetch(`http://localhost:8000/upload-images/uploadImages/${productId}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${authStore.getToken}`,
@@ -68,11 +71,27 @@ async function uploadImages(productId) {
     if (!response.ok) {
       throw new Error('Erreur lors de la requête HTTP');
     }
+    await catStore.setAllProduct()
   } catch (error) {
     console.error(error);
   }
 }
 
+
+function initForm() {
+  naturaBuyId.value = '',
+    name.value = '',
+    price.value = 0,
+    barrePrice.value = 0,
+    quantity.value = 0,
+    duree.value = 0,
+    newProduct.value = false,
+    stock.value = true,
+    ean.value = '',
+    description.value = '',
+    categorieId.value = 0,
+    selectedImages.value = []
+}
 
 const submitForm = async (event) => {
   event.preventDefault();
@@ -91,6 +110,7 @@ const submitForm = async (event) => {
     categorieId: parseInt(categorieId.value, 10)
   };
 
+
   try {
     const response = await fetch('https://reparm-api-without-docker.onrender.com/product/create', {
       method: 'POST',
@@ -104,10 +124,11 @@ const submitForm = async (event) => {
     if (!response.ok) {
       throw new Error('Erreur lors de la requête HTTP');
     }
-
     const responseData = await response.json();
     const productId = responseData.id;
-    uploadImages(productId)
+    await uploadImages(productId)
+    initForm()
+    emit('loadProduct')
   } catch (error) {
     console.error(error);
   }

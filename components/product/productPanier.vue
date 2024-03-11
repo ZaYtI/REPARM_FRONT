@@ -1,24 +1,22 @@
 <script setup>
-  const props = defineProps({
-    product: Object
-  })
-
-  import carabines from '../../assets/img/trap.jpg'
+const props = defineProps({
+  product: Object
+})
 </script>
 
 <template>
   <div class="element_panier d-flex">
-    <img class="img_product" :src="carabines" alt="test">
+    <img class="img_product" :src="product.produit.images[0].url" alt="test">
     <div class="element_panier_info ps-3">
       <h6 class="mb-0">{{ product.produit.name }}</h6>
-      <p class="mb-0">{{ product.produit.price }} €</p>
-      <small> qt: {{ product.quantity }}</small>
+      <p class="mb-0">prix: {{ product.produit.price }} €</p>
+      <small> quantite: {{ product.quantity }}</small>
     </div>
   </div>
 </template>
 
 <style scoped>
-.element_panier{
+.element_panier {
   max-height: 150px;
   padding: 1rem;
   align-items: center;
@@ -26,11 +24,11 @@
   margin-top: 1rem;
 }
 
-.img_product{
+.img_product {
   max-height: 100px;
 }
 
-.element_panier_info{
+.element_panier_info {
   display: flex;
   flex-direction: column;
   justify-content: center;
