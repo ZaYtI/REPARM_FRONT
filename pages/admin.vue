@@ -30,6 +30,28 @@ async function deleteProduct(productId) {
     }
 }
 
+async function deleteOrder(orderId){
+    try {
+        const response = await fetch(`http://localhost:8000/commande/delete/${orderId}`, {
+            headers: {
+                'Authorization': `Bearer ${authStore.getToken}`,
+            },
+            method: "DELETE"
+        })
+
+        if (!response.ok) {
+            throw new Error('Erreur lors de la requête HTTP');
+        }
+        ordersIsLoad.value = false
+        await authStore.setAllOrder();
+        paginateProduct.value = []
+        await paginateOrders()
+        ordersIsLoad.value = true
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 
 function loadProduct() {
     if (productIsLoaded.value) {
@@ -44,8 +66,10 @@ const categorieIsLoaded = ref(false)
 const isAdmin = ref(false)
 const allIsLoad = ref(false)
 const currentPaginationIndex = ref(0)
-const currentPaginationProduct = ref(null)
 const paginateProduct = ref([])
+const paginateOrder = ref([])
+const currentPaginateOrderIndex = ref(0)
+const ordersIsLoad = ref(false)
 
 
 async function paginateProducts() {
@@ -57,18 +81,33 @@ async function paginateProducts() {
     }
 }
 
+async function paginateOrders() {
+    let orders = authStore.getAllOrder;
+    paginateOrder.value = []
+    for (let i = 0; i < orders.length; i += 10) {
+        const ordersliced = orders.slice(i, i + 10)
+        paginateOrder.value.push(ordersliced)
+    }
+}
+
 onMounted(async () => {
     let categorie = selectCatStore.getListOfCategorie;
     let products = selectCatStore.getAllProducts;
     if (products == null || products == undefined || products.length == 0) {
         await selectCatStore.setAllProduct();
         productIsLoaded.value = true
-        paginateProducts();
     }
+    await paginateProducts();
     if (categorie == null || categorie == undefined || categorie.length == 0) {
         await selectCatStore.setListOfCategorie();
         categorieIsLoaded.value = true
     }
+    let orders = authStore.getAllOrder
+    if(orders == null || orders == undefined || orders.length == 0){
+        await authStore.setAllOrder();
+        ordersIsLoad.value = true
+    }
+    await paginateOrders()
     if (localStorage.getItem('token') == null || localStorage.getItem('token') == undefined) {
         navigateTo('/login')
     }
@@ -80,7 +119,7 @@ watch(
         if (newgetIsLoggedIn) {
             if (authStore.getProfile.roleId == 2) {
                 isAdmin.value = true
-                if (productIsLoaded.value && categorieIsLoaded.value) {
+                if (productIsLoaded.value && categorieIsLoaded.value && ordersIsLoad) {
                     allIsLoad.value = true;
                 }
             } else {
@@ -94,9 +133,26 @@ watch(
     categorieIsLoaded,
     async (newValue, oldValue) => {
         if (newValue) {
-            if (isAdmin.value && productIsLoaded.value) {
+            if (isAdmin.value && productIsLoaded.value && ordersIsLoad) {
                 allIsLoad.value = true
             }
+        }
+        else{
+            allIsLoad.value = false
+        }
+    }
+)
+
+watch(() =>
+    ordersIsLoad,
+    async (newValue, oldValue) => {
+        if (newValue) {
+            if (isAdmin.value && categorieIsLoaded && productIsLoaded ) {
+                allIsLoad.value = true
+                await paginateOrders()
+            }
+        }else{
+            allIsLoad.value = false
         }
     }
 )
@@ -104,12 +160,13 @@ watch(
 watch(() =>
     productIsLoaded,
     async (newValue, oldValue) => {
-        console.log(newValue)
         if (newValue) {
-            if (isAdmin.value && categorieIsLoaded) {
-                await paginateProducts()
+            if (isAdmin.value && categorieIsLoaded && ordersIsLoad) {
                 allIsLoad.value = true
+                await paginateProduct()
             }
+        }else{
+            allIsLoad.value = false
         }
     }
 )
@@ -140,7 +197,6 @@ watch(() =>
                                 <th class="text-center">Id categorie</th>
                                 <th class="text-center">NaturabuyId</th>
                                 <th></th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -151,9 +207,6 @@ watch(() =>
                                 <td class="text-center">{{ product.quantity }}</td>
                                 <td class="text-center">{{ product.categorieId }}</td>
                                 <td class="text-center">{{ product.naturaBuyId }}</td>
-                                <td class="text-center">
-                                    <button class="btn btn-primary">Modifier</button>
-                                </td>
                                 <td class="text-center">
                                     <button class="btn btn-danger" @click="deleteProduct(product.id)">Supprimer</button>
                                 </td>
@@ -175,6 +228,46 @@ watch(() =>
                             </button>
                         </div>
                     </div>
+                </div>
+                <div :class="{ 'd-none': !ordersIsLoad }">
+                    <div class="d-flex justify-content-between px-3 pb-3 mt-4">
+                        <h2 class="text-white">Vos Commandes :</h2>
+                    </div>
+                    <table class="table table-striped" aria-describedby="table of order">
+                        <thead class="head">
+                            <tr>
+                                <th class="text-center">Id</th>
+                                <th class="text-center">userId</th>
+                                <th class="text-center">email</th>
+                                <th class="text-center">Phone</th>
+                                <th class="text-center">paiement</th>
+                                <th class="text-center">recue</th>
+                                <th class="text-center">NaturabuyOrder</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="order in paginateOrder[currentPaginateOrderIndex]" :key="order.id">
+                                <td class="text-center">{{ order.id }}</td>
+                                <td class="text-center">{{ order.userId }}</td>
+                                <td class="text-center">{{ order.user.email }}</td>
+                                <td class="text-center">{{ order.user.phone }}</td>
+                                <td class="text-center">{{ order.payment }}</td>
+                                <td class="text-center">{{ order.received }}</td>
+                                <td class="text-center">{{ order.isNaturaBuyOrder }}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-primary">Modifier</button>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-danger" @click="deleteOrder(order.id)">Supprimer</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table> 
+                </div>
+                <div class="d-flex justify-content-center spinner-container-tab" :class="{ 'd-none': ordersIsLoad }">
+                    <div class="spinner-border mx-auto" style="width: 10rem; height: 10rem;" role="status"></div>
                 </div>
                 <div class="d-flex justify-content-center spinner-container-tab" :class="{ 'd-none': productIsLoaded }">
                     <div class="spinner-border mx-auto" style="width: 10rem; height: 10rem;" role="status"></div>
