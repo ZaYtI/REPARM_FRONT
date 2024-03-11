@@ -29,10 +29,10 @@ const emit = defineEmits(['loadImages'])
   box-shadow: 0 1rem 1rem rgb(0, 0, 0, 0.5);
 }
 
-.card-img-top {
+.card img{
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  min-height: 200px;
+  aspect-ratio: 16/11;
 }
 
 .card-title {
