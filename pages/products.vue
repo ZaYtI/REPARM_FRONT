@@ -10,6 +10,8 @@ onMounted(async () => {
   if (store.getlistOfSelectedProducts == null || store.getlistOfSelectedProducts == undefined || store.getlistOfSelectedProducts.length == 0) {
     await store.setSelectedCat(0, 'Tous les fusils');
   }
+  console.log(store.getAllProducts)
+  console.log(store.getlistOfSelectedProducts)
 })
 </script>
 

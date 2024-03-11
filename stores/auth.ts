@@ -183,7 +183,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async setAllOrder(): Promise<void> {
-      const data = await fetch('http://localhost:8000/commande/all', {
+      const data = await fetch('https://reparm-api-without-docker.onrender.com/commande/all', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,

@@ -3,11 +3,12 @@ const props = defineProps({
   product: Object
 });
 const emit = defineEmits(['loadImages'])
+
 </script>
 
 <template>
   <NuxtLink :to="'/product/' + props.product.id" class="card">
-    <img :src="props.product.images[0].url" alt="Your Image Alt Text"/>
+    <img :src="props.product.images[0].url" alt="Your Image Alt Text" @load="emit('loadImages')"/>
     <div class="card-body">
       <h5 class="card-title">{{ props.product.name }}</h5>
     </div>
