@@ -4,7 +4,10 @@ const products = ref([null])
 const loader = ref(true)
 const loadImages = ref(0);
 const props = defineProps({
-  product: Object
+  product: {
+    type :  Object,
+    required : true
+  }
 });
 
 function waitLoadImages(){
@@ -14,6 +17,10 @@ function waitLoadImages(){
     loadImages.value = 0;
   }
 }
+
+onMounted(() => {
+  console.log('row',props.product)
+})
 </script>
 
 <template>
