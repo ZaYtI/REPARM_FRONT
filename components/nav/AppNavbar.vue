@@ -60,7 +60,7 @@ watch(
   <nav class="navbar navbar-expand-lg  w-100" :class="{ 'can-background-display': canDisplayNavbarBackground }"
     ref="navbar" data-bs-theme="dark">
     <div class="container-fluid">
-      <NuxtLink class="navbar-brand" to="/">Logo</NuxtLink>
+      <NuxtLink class="navbar-brand" to="/"><img class="logo"  src="../../assets/img/logo_blanc.png" alt="logo"/></NuxtLink>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" @click="addBackground()"
         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
         aria-label="Toggle navigation" data-bs-theme="dark">
@@ -83,7 +83,10 @@ watch(
           <div class="account-icons d-flex">
             <div class="icon-panier px-3">
               <div class="nav-link">
-                <NuxtLink :to="personLink">
+                <NuxtLink v-if="!authStore.getIsAdmin" :to="personLink">
+                  <component class="svg-container-navbar" :is="personSvg" />
+                </NuxtLink>
+                <NuxtLink v-else to="/admin">
                   <component class="svg-container-navbar" :is="personSvg" />
                 </NuxtLink>
                 <button v-if="authStore.getIsLoggedIn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
@@ -97,13 +100,17 @@ watch(
       </div>
     </div>
   </nav>
-  <NavOffCanva :list-of-product="authStore.getPanier" />
+  <NavOffCanva />
 </template>
 
 
 <style lang="scss" scoped>
 .nav-link {
   color: white;
+}
+
+.logo{
+  max-width: 60px;
 }
 
 .nav-link:hover {
