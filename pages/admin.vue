@@ -161,7 +161,7 @@ watch(() =>
                         <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Ajouter</button>
                     </div>
                     <div class="table-responsive rounded-3">
-                        <table class="table table-striped">
+                        <table class="table table-striped" aria-describedby="table of product">
                             <thead class="head">
                                 <tr>
                                     <th class="text-center">Id</th>
@@ -201,7 +201,7 @@ watch(() =>
                         <h2 class="text-white">Vos Commandes :</h2>
                     </div>
                     <div class="table-responsive rounded-3">
-                        <table class="table table-striped">
+                        <table class="table table-striped" aria-describedby="table of order">
                             <thead class="head">
                                 <tr>
                                     <th class="text-center">Id</th>
