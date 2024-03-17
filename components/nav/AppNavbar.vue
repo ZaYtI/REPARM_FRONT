@@ -83,7 +83,10 @@ watch(
           <div class="account-icons d-flex">
             <div class="icon-panier px-3">
               <div class="nav-link">
-                <NuxtLink :to="personLink">
+                <NuxtLink v-if="!authStore.getIsAdmin" :to="personLink">
+                  <component class="svg-container-navbar" :is="personSvg" />
+                </NuxtLink>
+                <NuxtLink v-else to="/admin">
                   <component class="svg-container-navbar" :is="personSvg" />
                 </NuxtLink>
                 <button v-if="authStore.getIsLoggedIn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
