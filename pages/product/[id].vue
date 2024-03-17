@@ -9,7 +9,7 @@ const product = ref(null)
 const loadedImage = ref(0)
 async function getProductById() {
   if (store.getlistOfSelectedProducts == null || store.getlistOfSelectedProducts == undefined || store.getlistOfSelectedProducts.length == 0) {
-    const response = await fetch('https://reparm-api-without-docker.onrender.com/product/getById/' + router.params.id, {
+    const response = await fetch('http://localhost:8000/product/getById/' + router.params.id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -33,13 +33,12 @@ async function getProductById() {
 }
 
 async function addProductToBasket() {
-  const response = await fetch('https://reparm-api-without-docker.onrender.com/panier-item', {
+  const response = await fetch('http://localhost:8000/panier-item/'+parseInt(router.params.id), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${authStore.getToken}`
-    },
-    body: JSON.stringify({ produitId: parseInt(router.params.id), quantity: 1 }),
+    }
   })
   const responseData = await response.json()
   if (response.status !== 201) {

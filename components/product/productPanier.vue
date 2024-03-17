@@ -2,15 +2,30 @@
 const props = defineProps({
   product: Object
 })
+
+
+onMounted(() => {
+  console.log(props.product)
+})
+
+const removeProduct = () => {
+  console.log("remove product")
+}
 </script>
 
 <template>
-  <div class="element_panier d-flex">
+  <div v-if="product" class="element_panier d-flex position-relative">
     <img class="img_product" :src="product.produit.images[0].url" alt="test">
     <div class="element_panier_info ps-3">
       <h6 class="mb-0">{{ product.produit.name }}</h6>
       <p class="mb-0">prix: {{ product.produit.price }} €</p>
       <small> quantite: {{ product.quantity }}</small>
+    </div>
+    <span class="close-btn text-muted" @click="removeProduct">X</span>
+  </div>
+  <div v-else class="element_panier d-flex">
+    <div class="element_panier_info ps-3">
+      <p class="mb-0 text-muted">Aucun produit disponible</p>
     </div>
   </div>
 </template>
@@ -22,6 +37,7 @@ const props = defineProps({
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-top: 1rem;
+  position: relative;
 }
 
 .img_product {
@@ -33,4 +49,17 @@ const props = defineProps({
   flex-direction: column;
   justify-content: center;
 }
+
+.close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.close-btn:hover{
+  cursor: pointer;
+}
 </style>
+

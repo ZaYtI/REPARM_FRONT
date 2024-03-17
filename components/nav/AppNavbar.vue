@@ -100,7 +100,7 @@ watch(
       </div>
     </div>
   </nav>
-  <NavOffCanva :list-of-product="authStore.getPanier" />
+  <NavOffCanva />
 </template>
 
 

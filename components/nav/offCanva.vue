@@ -1,27 +1,39 @@
 <script setup>
 import { ref } from 'vue'
 
-const props = defineProps({
-  listOfProduct: {
-    type: Array,
-    required: false
-  }
-})
+const authStore = useAuthStore();
 
 const totalPrice = ref(0)
 
+const noProduct = ref(true)
+
+
+onMounted(() => {
+  console.log(authStore.getPanier == null)
+  console.log(authStore.getPanier)
+  if(authStore.getPanier == null || authStore.getPanier.length > 0){
+    noProduct.value=true;
+  }else{
+    noProduct.value=false;
+  }
+  console.log(noProduct.value)
+})
+
 const calculateTotalPrice = () => {
   totalPrice.value = 0
-  for (const product of props.listOfProduct) {
+  for (const product of authStore.getPanier) {
     totalPrice.value = totalPrice.value + (product.produit.price * product.quantity)
   }
 }
 
 watch(
-  () => props.listOfProduct,
+  () => authStore.getPanier,
   async (newListOfProduct, oldListOfProduct) => {
     if (newListOfProduct != null || newListOfProduct != undefined) {
-      calculateTotalPrice();
+      if(newListOfProduct.length > 0){
+        noProduct.value = false
+      }
+        calculateTotalPrice();
     }
   }
 );
@@ -35,14 +47,21 @@ watch(
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      <div>
-        <ProductPanier v-for="product in props.listOfProduct" :key="product.id" :product="product" />
+      <div :class="{'d-none':noProduct}">
+        <ProductPanier v-for="product in authStore.getPanier" :key="product.id" :product="product" />
       </div>
-      <div class="mt-3 ms-2">
+      <div :class="{'d-none':!noProduct}" class="element_panier d-flex text-secondary">
+        <div class="element_panier_info ps-3">
+          <p class="mb-0 text-secondary">Aucun produit disponible</p>
+        </div>
+      </div>
+      <div :class="{'d-none':noProduct}">
+        <div class="mt-3 ms-2">
         <small class="text-secondary">Total : {{ totalPrice }} €</small>
       </div>
       <div class="mt-2 d-flex justify-content-center">
         <button class="btn btn-lg panier_button">Valider mon panier</button>
+      </div>
       </div>
     </div>
   </div>
