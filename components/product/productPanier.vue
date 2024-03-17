@@ -23,11 +23,7 @@ const removeProduct = () => {
     </div>
     <span class="close-btn text-muted" @click="removeProduct">X</span>
   </div>
-  <div v-else class="element_panier d-flex">
-    <div class="element_panier_info ps-3">
-      <p class="mb-0 text-muted">Aucun produit disponible</p>
-    </div>
-  </div>
+
 </template>
 
 <style scoped>
