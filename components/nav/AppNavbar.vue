@@ -60,7 +60,7 @@ watch(
   <nav class="navbar navbar-expand-lg  w-100" :class="{ 'can-background-display': canDisplayNavbarBackground }"
     ref="navbar" data-bs-theme="dark">
     <div class="container-fluid">
-      <NuxtLink class="navbar-brand" to="/">Logo</NuxtLink>
+      <NuxtLink class="navbar-brand" to="/"><img class="logo"  src="../../assets/img/logo_blanc.png" alt="logo"/></NuxtLink>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" @click="addBackground()"
         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
         aria-label="Toggle navigation" data-bs-theme="dark">
@@ -104,6 +104,10 @@ watch(
 <style lang="scss" scoped>
 .nav-link {
   color: white;
+}
+
+.logo{
+  max-width: 60px;
 }
 
 .nav-link:hover {
