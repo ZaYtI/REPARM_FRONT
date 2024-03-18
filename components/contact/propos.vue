@@ -1,12 +1,12 @@
 <script setup>
-  import BanniereImagePath from '~/assets/img/banniere_accueil.jpg';
+  import logo from '~/assets/img/logo_blanc.png';
 </script>
 <template>
   <div class="container-xl">
     <Banniere title="A PROPOS" title-color="#B54A29" under-banniere />
     <div class="a-propos px-5">
       <div class="image">
-        <img :src="BanniereImagePath" alt="image">
+        <img :src="logo" alt="logo">
       </div>
       <div class="description px-4">
         <p class="description-text">
