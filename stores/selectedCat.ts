@@ -43,8 +43,11 @@ export const useSelectedCatStore = defineStore('selectedCat', {
     async setSelectedCat(id: number, value: string): Promise<void> {
       this.selectedCat = value;
       let data;
+      console.log("categorie id", id)
       if (id != 0 && value != "Tous les fusils") {
-        data = this.allProduct.filter((element) => element.categorieId = 1)
+        data = this.allProduct.filter((element) => {
+          return element.categorieId === id;
+        });
       } else {
         if (this.allProduct == undefined || this.allProduct == null) {
           await this.setAllProduct()
