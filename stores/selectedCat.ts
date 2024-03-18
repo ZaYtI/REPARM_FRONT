@@ -58,13 +58,13 @@ export const useSelectedCatStore = defineStore('selectedCat', {
     },
 
     async setAllProduct() {
-      const data = await fetch('https://reparm-front.onrender.com/product/getall')
+      const data = await fetch('https://reparm-api-without-docker.onrender.com/product/getall')
       const products = await data.json()
       this.allProduct = products
     },
 
     async setListOfCategorie(): Promise<void> {
-      const data = await fetch('https://reparm-front.onrender.com/categorie/getall')
+      const data = await fetch('https://reparm-api-without-docker.onrender.com/categorie/getall')
       const categorie = await data.json();
       for (const cat of categorie) {
         this.listOfCategorie.push(cat);
