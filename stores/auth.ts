@@ -3,7 +3,6 @@ import { defineStore } from 'pinia';
 interface UserProfile {
   id: number;
   postalCode: string;
-  nick: string;
   civility: string;
   firstName: string;
   lastName: string;
@@ -31,7 +30,6 @@ interface RegisterUser {
   password: string,
   birthDate: string,
   postalCode: string,
-  nick: string,
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -64,7 +62,7 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     async login(email: string, password: string): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/login', {
+      const response = await fetch('https://reparm-front.onrender.com/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +82,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async profile(): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/profile', {
+      const response = await fetch('https://reparm-front.onrender.com/auth/profile', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -104,9 +102,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async register(formData: RegisterUser): Promise<void> {
-      formData.postalCode = "62620";
-      formData.nick = "test";
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/register', {
+      const response = await fetch('https://reparm-front.onrender.com/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +123,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async userPanier(): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/panier-item/', {
+      const response = await fetch('https://reparm-front.onrender.com/panier-item/', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -145,7 +141,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async createOrder(): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/commande_produit/createWithPanier', {
+      const response = await fetch('https://reparm-front.onrender.com/commande_produit/createWithPanier', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -162,7 +158,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async logout(): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/register', {
+      const response = await fetch('https://reparm-front.onrender.com/auth/register', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -183,7 +179,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async setAllOrder(): Promise<void> {
-      const data = await fetch('https://reparm-api-without-docker.onrender.com/commande/all', {
+      const data = await fetch('https://reparm-front.onrender.com/commande/all', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -194,6 +190,24 @@ export const useAuthStore = defineStore('auth', {
       } else {
         const order = await data.json()
         this.allOrder = order
+      }
+    },
+
+    async removeProduct(productId: number): Promise<void> {
+      const response = await fetch('https://reparm-front.onrender.com/panier-item/' + productId, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${this.token}`,
+        },
+      });
+      const data = await response.json()
+      console.log(data)
+      if (response.status !== 200) {
+        this.authenticated = false;
+        localStorage.removeItem('token')
+        throw new Error('Failed to get remove product from panier');
+      } else {
+        this.panier = data;
       }
     }
   },

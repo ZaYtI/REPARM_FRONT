@@ -127,9 +127,11 @@
     await checkPassword();
     await isMajor();
     await checkIsPhone();
-    await useAuthStore().register(formData.value);
-    if (useAuthStore().getIsLoggedIn) {
+    if(isFormValid.value){
+      await useAuthStore().register(formData.value);
+      if (useAuthStore().getIsLoggedIn) {
       router.push('/profile');
+      }
     }
   }
 
@@ -143,47 +145,49 @@
 
 <template>
   <form class="connexion_form px-3" @submit="handleSubmit">
-    <div class="d-flex">
-      <div class="form-group me-2">
-        <label class="ms-4" for="Homme">H </label>
-        <input class="radio_input" type="radio" name="sexe" id="Homme" @click="handleChangeCivility" value="Homme">
+    <div class="d-flex gender mb-3">
+      <div class="form-group">
+        <input class="radio_input btn-check" type="radio" name="sexe" id="Homme" @click="handleChangeCivility" value="Homme">
+        <label class="ms-4 btn label" for="Homme">Homme</label>
       </div>
-      <div>
-        <label class="ms-4" for="Femme">F </label>
-        <input class="radio_input" type="radio" name="sexe" id="Femme" @click="handleChangeCivility" value="Femme">
+      <div class="form-group me-2">
+        <input class="radio_input btn-check" type="radio" name="sexe" id="Femme" @click="handleChangeCivility" value="Femme">
+        <label class="ms-4 btn label" for="Femme">Femme</label>
       </div>
     </div>
     <div class="d-md-flex">
       <div class="form-group">
         <label class="connexion_form_label ms-4" for="name">Nom</label>
         <input type="text" name="name" id="name" class="form-control input_login" placeholder="Nom" v-model="formData.lastName">
-        <small class="ms-4 text-danger" id="lastName-alert">Veuillez entrer votre nom</small>
+        <small class="ms-4 text-danger" id="lastName-alert">Entrer votre nom</small>
       </div>
       <div class="form-group">
         <label class="connexion_form_label ms-4" for="firstname">Prénom</label>
         <input type="text" name="firstname" id="firstname" class="form-control input_login" placeholder="Prénom" v-model="formData.firstName">
-        <small class="ms-4 text-danger" id="firstName-alert">Veuillez entrer votre prénom</small>
+        <small class="ms-4 text-danger" id="firstName-alert">Entrer votre prénom</small>
       </div>
     </div>
-    <div class="form-group">
-      <label class="connexion_form_label ms-4" for="phone">Numéro de téléphone</label>
-      <input type="tel" name="phone" id="phone" class="form-control input_login" placeholder="Numéro de téléphone" v-model="formData.phone">
-      <small class="ms-4 text-danger" id="phone-alert">Veuillez entrer votre numéro de téléphone</small>
-    </div>
-    <div class="form-group">
-      <label class="connexion_form_label ms-4" for="date">Date de naissance :</label>
-      <input type="date" name="date" id="date" class="form-control input_login" placeholder="Date de naissance" v-model="formData.birthDate">
-      <small class=" ms-4 text-danger" id="birthDate-alert">Veuillez entrer votre date de naissance</small>
-    </div>
-    <div class="form-group">
-      <label class="connexion_form_label ms-4" for="country">Pays</label>
-      <input type="text" name="country" id="country" class="form-control input_login" placeholder="Pays" v-model="formData.country">
-      <small class=" ms-4 text-danger" id="country-alert">Veuillez entrer votre pays</small>
-    </div>
-    <div class="form-group">
-      <label class="connexion_form_label ms-4" for="city">Ville</label>
-      <input type="text" name="city" id="city" class="form-control input_login" placeholder="ville" v-model="formData.city">
-      <small class="ms-4 text-danger" id="city-alert">Veuillez entrer votre ville</small>
+      <div class="form-group">
+        <label class="connexion_form_label ms-4" for="phone">Téléphone</label>
+        <input type="tel" name="phone" id="phone" class="form-control input_login" placeholder="Numéro de téléphone" v-model="formData.phone">
+        <small class="ms-4 text-danger" id="phone-alert">Veuillez entrer votre numéro de téléphone</small>
+      </div>
+      <div class="form-group">
+        <label class="connexion_form_label ms-4" for="date">Date de naissance :</label>
+        <input type="date" name="date" id="date" class="form-control input_login" placeholder="Date de naissance" v-model="formData.birthDate">
+        <small class=" ms-4 text-danger" id="birthDate-alert">Veuillez entrer votre date de naissance</small>
+      </div>
+    <div class="d-md-flex">
+      <div class="form-group">
+        <label class="connexion_form_label ms-4" for="country">Pays</label>
+        <input type="text" name="country" id="country" class="form-control input_login" placeholder="Pays" v-model="formData.country">
+        <small class=" ms-4 text-danger" id="country-alert">Veuillez entrer votre pays</small>
+      </div>
+      <div class="form-group">
+        <label class="connexion_form_label ms-4" for="city">Ville</label>
+        <input type="text" name="city" id="city" class="form-control input_login" placeholder="ville" v-model="formData.city">
+        <small class="ms-4 text-danger" id="city-alert">Veuillez entrer votre ville</small>
+      </div>
     </div>
     <div class="form-group">
       <label class="connexion_form_label ms-4" for="address">Adresse</label>
@@ -217,6 +221,28 @@
 <style scoped>
 .connexion_form{
   width: 100%;
+}
+
+.gender{
+  align-items: center;
+  justify-content: center;
+}
+
+.label{
+  border: 2px solid black ; 
+}
+
+.label:hover{
+  border-color: #B54A29;
+}
+
+input[type="radio"]:checked+label{
+  background-color: #B54A29;
+  color: white;
+}
+
+.gender-text{
+  margin-bottom: 0;
 }
 
 .text-danger{

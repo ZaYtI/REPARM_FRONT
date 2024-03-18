@@ -10,7 +10,7 @@ const forward = ref('>>')
 
 async function deleteProduct(productId) {
     try {
-        const response = await fetch(`https://reparm-api-without-docker.onrender.com/product/delete/${productId}`, {
+        const response = await fetch(`https://reparm-front.onrender.com/product/delete/${productId}`, {
             headers: {
                 'Authorization': `Bearer ${authStore.getToken}`,
             },
@@ -31,7 +31,7 @@ async function deleteProduct(productId) {
 
 async function deleteOrder(orderId){
     try {
-        const response = await fetch(`https://reparm-api-without-docker.onrender.com/commande/delete/${orderId}`, {
+        const response = await fetch(`https://reparm-front.onrender.com/commande/delete/${orderId}`, {
             headers: {
                 'Authorization': `Bearer ${authStore.getToken}`,
             },
@@ -82,7 +82,12 @@ async function paginateOrders() {
     }
 }
 
+const router = useRouter();
+
 onMounted(async () => {
+    if(authStore.getProfile == null || authStore.getProfile == undefined){
+        router.replace('/')
+    }
     let categorie = selectCatStore.getListOfCategorie;
     let products = selectCatStore.getAllProducts;
     if (products == null || products == undefined || products.length == 0) {
@@ -96,7 +101,6 @@ onMounted(async () => {
     }
     let orders = authStore.getAllOrder
     if(orders == null || orders == undefined || orders.length == 0){
-        console.log("all order")
         await authStore.setAllOrder();
         ordersIsLoad.value = true
     }

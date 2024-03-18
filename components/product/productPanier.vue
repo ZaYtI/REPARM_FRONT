@@ -4,12 +4,10 @@ const props = defineProps({
 })
 
 
-onMounted(() => {
-  console.log(props.product)
-})
+const authStore = useAuthStore();
 
-const removeProduct = () => {
-  console.log("remove product")
+async function removeProduct (){
+  await authStore.removeProduct(parseInt(props.product.produit.id))
 }
 </script>
 
@@ -21,7 +19,7 @@ const removeProduct = () => {
       <p class="mb-0">prix: {{ product.produit.price }} €</p>
       <small> quantite: {{ product.quantity }}</small>
     </div>
-    <span class="close-btn text-muted" @click="removeProduct">X</span>
+    <span class="close-btn text-muted" @click="removeProduct()">X</span>
   </div>
 
 </template>

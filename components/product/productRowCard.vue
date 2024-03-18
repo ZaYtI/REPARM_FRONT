@@ -17,10 +17,6 @@ function waitLoadImages(){
     loadImages.value = 0;
   }
 }
-
-onMounted(() => {
-  console.log('row',props.product)
-})
 </script>
 
 <template>

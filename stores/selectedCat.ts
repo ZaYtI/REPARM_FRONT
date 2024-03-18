@@ -43,8 +43,11 @@ export const useSelectedCatStore = defineStore('selectedCat', {
     async setSelectedCat(id: number, value: string): Promise<void> {
       this.selectedCat = value;
       let data;
+      console.log("categorie id", id)
       if (id != 0 && value != "Tous les fusils") {
-        data = this.allProduct.filter((element) => element.categorieId = 1)
+        data = this.allProduct.filter((element) => {
+          return element.categorieId === id;
+        });
       } else {
         if (this.allProduct == undefined || this.allProduct == null) {
           await this.setAllProduct()
@@ -55,13 +58,13 @@ export const useSelectedCatStore = defineStore('selectedCat', {
     },
 
     async setAllProduct() {
-      const data = await fetch('https://reparm-api-without-docker.onrender.com/product/getall')
+      const data = await fetch('https://reparm-front.onrender.com/product/getall')
       const products = await data.json()
       this.allProduct = products
     },
 
     async setListOfCategorie(): Promise<void> {
-      const data = await fetch('https://reparm-api-without-docker.onrender.com/categorie/getall')
+      const data = await fetch('https://reparm-front.onrender.com/categorie/getall')
       const categorie = await data.json();
       for (const cat of categorie) {
         this.listOfCategorie.push(cat);
