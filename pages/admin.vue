@@ -82,7 +82,12 @@ async function paginateOrders() {
     }
 }
 
+const router = useRouter();
+
 onMounted(async () => {
+    if(authStore.getProfile == null || authStore.getProfile == undefined){
+        router.replace('/')
+    }
     let categorie = selectCatStore.getListOfCategorie;
     let products = selectCatStore.getAllProducts;
     if (products == null || products == undefined || products.length == 0) {
@@ -96,7 +101,6 @@ onMounted(async () => {
     }
     let orders = authStore.getAllOrder
     if(orders == null || orders == undefined || orders.length == 0){
-        console.log("all order")
         await authStore.setAllOrder();
         ordersIsLoad.value = true
     }
