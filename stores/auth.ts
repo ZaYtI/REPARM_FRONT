@@ -195,6 +195,24 @@ export const useAuthStore = defineStore('auth', {
         const order = await data.json()
         this.allOrder = order
       }
+    },
+
+    async removeProduct(productId: number): Promise<void> {
+      const response = await fetch('http://localhost:8000/panier-item/' + productId, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${this.token}`,
+        },
+      });
+      const data = await response.json()
+      console.log(data)
+      if (response.status !== 200) {
+        this.authenticated = false;
+        localStorage.removeItem('token')
+        throw new Error('Failed to get remove product from panier');
+      } else {
+        this.panier = data;
+      }
     }
   },
 });
