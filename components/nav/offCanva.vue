@@ -50,7 +50,7 @@ watch(
     </div>
     <div class="offcanvas-body">
       <div :class="{'d-none':noProduct}">
-        <small class="text-secondary text-center">La validation de votre panier n'engage pas de paiement celui sera effectuer a la réception en magasins.</small>
+        <small class="text-secondary text-center">La validation de votre panier n'engage pas de paiement celui ci sera effectuer a la réception en magasins.</small>
         <ProductPanier v-for="product in authStore.getPanier" :key="product.id" :product="product" />
       </div>
       <div :class="{'d-none':!noProduct}" class="element_panier d-flex text-secondary">
