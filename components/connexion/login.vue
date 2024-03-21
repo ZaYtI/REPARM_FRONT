@@ -1,8 +1,8 @@
 <script setup>
-import { reactive , toRaw } from 'vue';
+import { reactive, toRaw } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 const router = useRouter();
-async function handleLogin(event){
+async function handleLogin(event) {
   event.preventDefault();
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
@@ -27,7 +27,8 @@ onMounted(() => {
     </div>
     <div class="form-group">
       <label class="connexion_form_label ms-4" for="password">Mot de passe</label>
-      <input type="password" name="password" id="password" class="form-control input_login text-white" placeholder="Mot de passe">
+      <input type="password" name="password" id="password" class="form-control input_login text-white"
+        placeholder="Mot de passe">
     </div>
     <NuxtLink class="link ms-4 register_link" to="/register">Créer un compte</NuxtLink>
     <div class="form-group text-center mt-4">
@@ -41,11 +42,11 @@ onMounted(() => {
   width: 100%;
 }
 
-.register_link{
+.register_link {
   color: #B54A29;
 }
 
-.register_link:hover{
+.register_link:hover {
   color: black;
 }
 
