@@ -82,12 +82,9 @@ function initForm() {
   naturaBuyId.value = '',
     name.value = '',
     price.value = 0,
-    barrePrice.value = 0,
     quantity.value = 0,
     duree.value = 0,
-    newProduct.value = false,
     stock.value = true,
-    ean.value = '',
     description.value = '',
     categorieId.value = 0,
     selectedImages.value = []
@@ -100,12 +97,9 @@ const submitForm = async (event) => {
     naturaBuyId: naturaBuyId.value,
     name: name.value,
     price: parseFloat(price.value),
-    barrePrice: parseFloat(barrePrice.value),
     quantity: parseInt(quantity.value, 10),
     duree: parseInt(duree.value, 10),
-    new: newProduct.value,
     stock: stock.value,
-    ean: ean.value,
     description: description.value,
     categorieId: parseInt(categorieId.value, 10)
   };
@@ -162,13 +156,9 @@ const submitForm = async (event) => {
           <input class="form-control" type="number" id="price" v-model="price" />
         </div>
         <div>
-          <label class="form-label" for="barrePrice">Barre Price:</label>
-          <input class="form-control" type="number" id="barrePrice" v-model="barrePrice" />
+          <label class="form-label" for="quantity">Quantity:</label>
+          <input class="form-control" type="number" id="quantity" v-model="quantity" />
         </div>
-      </div>
-      <div>
-        <label class="form-label" for="quantity">Quantity:</label>
-        <input class="form-control" type="number" id="quantity" v-model="quantity" />
       </div>
       <div>
         <label class="form-label" for="description">Description:</label>
@@ -250,5 +240,3 @@ img {
   max-height: 280px;
 }
 </style>
-
-  

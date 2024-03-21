@@ -29,7 +29,7 @@ async function deleteProduct(productId) {
     }
 }
 
-async function deleteOrder(orderId){
+async function deleteOrder(orderId) {
     try {
         const response = await fetch(`https://reparm-api-without-docker.onrender.com/commande/delete/${orderId}`, {
             headers: {
@@ -85,7 +85,7 @@ async function paginateOrders() {
 const router = useRouter();
 
 onMounted(async () => {
-    if(authStore.getProfile == null || authStore.getProfile == undefined){
+    if (authStore.getProfile == null || authStore.getProfile == undefined) {
         router.replace('/')
     }
     let categorie = selectCatStore.getListOfCategorie;
@@ -100,7 +100,7 @@ onMounted(async () => {
         categorieIsLoaded.value = true
     }
     let orders = authStore.getAllOrder
-    if(orders == null || orders == undefined || orders.length == 0){
+    if (orders == null || orders == undefined || orders.length == 0) {
         await authStore.setAllOrder();
         ordersIsLoad.value = true
     }
@@ -131,7 +131,7 @@ watch(() =>
     ordersIsLoad,
     async (newValue, oldValue) => {
         if (newValue) {
-            if (isAdmin.value && productIsLoaded.value ) {
+            if (isAdmin.value && productIsLoaded.value) {
                 allIsLoad.value = true
             }
         }
@@ -142,7 +142,7 @@ watch(() =>
     productIsLoaded,
     async (newValue, oldValue) => {
         if (newValue) {
-            if (isAdmin.value  && ordersIsLoad.value) {
+            if (isAdmin.value && ordersIsLoad.value) {
                 allIsLoad.value = true
             }
         }
@@ -162,7 +162,8 @@ watch(() =>
                 <div :class="{ 'd-none': !productIsLoaded }">
                     <div class="d-flex justify-content-between px-3 pb-3">
                         <h2 class="text-white">Vos produits :</h2>
-                        <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Ajouter</button>
+                        <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">Ajouter</button>
                     </div>
                     <div class="table-responsive rounded-3">
                         <table class="table table-striped" aria-describedby="table of product">
@@ -186,7 +187,8 @@ watch(() =>
                                     <td class="text-center">{{ product.categorieId }}</td>
                                     <td class="text-center">{{ product.naturaBuyId }}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-danger" @click="deleteProduct(product.id)">Supprimer</button>
+                                        <button class="btn btn-danger"
+                                            @click="deleteProduct(product.id)">Supprimer</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -194,9 +196,14 @@ watch(() =>
                     </div>
                     <div class="pagination-container" v-if="paginateProduct.length > 1">
                         <div class="shadow bg-body-tertiary rounded">
-                            <button class="btn border-0" :disabled="currentPaginationIndex == 0" @click="currentPaginationIndex--">{{ backward }}</button>
-                            <button class="btn border-0" :class="{ 'active': currentPaginationIndex == index }" v-for="(item, index) in paginateProduct" :key="index" :id="index" @click="currentPaginationIndex = index">{{ index }}</button>
-                            <button class="btn border-0" :disabled="currentPaginationIndex == paginateProduct.length - 1" @click="currentPaginationIndex++">{{ forward }}</button>
+                            <button class="btn border-0" :disabled="currentPaginationIndex == 0"
+                                @click="currentPaginationIndex--">{{ backward }}</button>
+                            <button class="btn border-0" :class="{ 'active': currentPaginationIndex == index }"
+                                v-for="(item, index) in paginateProduct" :key="index" :id="index"
+                                @click="currentPaginationIndex = index">{{ index }}</button>
+                            <button class="btn border-0"
+                                :disabled="currentPaginationIndex == paginateProduct.length - 1"
+                                @click="currentPaginationIndex++">{{ forward }}</button>
                         </div>
                     </div>
                 </div>
@@ -223,7 +230,8 @@ watch(() =>
                                 <tr v-for="order in paginateOrder[currentPaginateOrderIndex]" :key="order.id">
                                     <td class="text-center">{{ order.id }}</td>
                                     <td class="text-center">{{ order.userId }}</td>
-                                    <td class="text-center"><a :href="'mailto:'+order.user.email">{{ order.user.email }}</a></td>
+                                    <td class="text-center"><a :href="'mailto:' + order.user.email">{{ order.user.email
+                                            }}</a></td>
                                     <td class="text-center">{{ order.user.phone }}</td>
                                     <td class="text-center">{{ order.payment }}</td>
                                     <td class="text-center">{{ order.received }}</td>
@@ -259,6 +267,7 @@ watch(() =>
 .container-weapons-table {
     overflow-x: scroll;
 }
+
 .active {
     background-color: #B54A29;
     color: white;

@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import {imagetools} from 'vite-imagetools'
+import { imagetools } from 'vite-imagetools'
 export default defineNuxtConfig({
     devtools: { enabled: true },
     css: [

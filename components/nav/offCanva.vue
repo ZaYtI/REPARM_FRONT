@@ -7,6 +7,8 @@ const totalPrice = ref(0)
 
 const noProduct = ref(true)
 
+const validatebasket = ref(false)
+
 
 onMounted(() => {
   console.log(authStore.getPanier == null)
@@ -48,6 +50,7 @@ watch(
     </div>
     <div class="offcanvas-body">
       <div :class="{'d-none':noProduct}">
+        <small class="text-secondary text-center">La validation de votre panier n'engage pas de paiement celui ci sera effectuer a la réception en magasins.</small>
         <ProductPanier v-for="product in authStore.getPanier" :key="product.id" :product="product" />
       </div>
       <div :class="{'d-none':!noProduct}" class="element_panier d-flex text-secondary">
@@ -59,8 +62,15 @@ watch(
         <div class="mt-3 ms-2">
         <small class="text-secondary">Total : {{ totalPrice }} €</small>
       </div>
-      <div class="mt-2 d-flex justify-content-center">
+      <div :class="{'d-none':validatebasket}" class="mt-2 d-flex justify-content-center" @click="() => validatebasket = true">
         <button class="btn btn-lg panier_button">Valider mon panier</button>
+      </div>
+      <div :class="{'d-none':!validatebasket}">
+        <p class="text-danger text-center">Voulez commandez ces produits?</p>
+        <div class="d-flex justify-content-around">
+          <button class="btn btn-lg btn-success" @click="async()=>await authStore.validatePanierToOrder()" >Valider</button>
+          <button class="btn btn-lg btn-danger" @click="() => validatebasket= false">Annuler</button>
+        </div>
       </div>
       </div>
     </div>

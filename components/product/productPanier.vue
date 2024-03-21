@@ -1,12 +1,15 @@
 <script setup>
 const props = defineProps({
-  product: Object
+  product: {
+    type:Object||null,
+    required:false
+  }
 })
 
 
 const authStore = useAuthStore();
 
-async function removeProduct (){
+async function removeProduct() {
   await authStore.removeProduct(parseInt(props.product.produit.id))
 }
 </script>
@@ -21,7 +24,6 @@ async function removeProduct (){
     </div>
     <span class="close-btn text-muted" @click="removeProduct()">X</span>
   </div>
-
 </template>
 
 <style scoped>
@@ -52,8 +54,7 @@ async function removeProduct (){
   padding: 0.5rem;
 }
 
-.close-btn:hover{
+.close-btn:hover {
   cursor: pointer;
 }
 </style>
-

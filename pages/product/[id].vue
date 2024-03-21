@@ -33,7 +33,7 @@ async function getProductById() {
 }
 
 async function addProductToBasket() {
-  const response = await fetch('https://reparm-api-without-docker.onrender.com/panier-item/'+parseInt(router.params.id), {
+  const response = await fetch('https://reparm-api-without-docker.onrender.com/panier-item/' + parseInt(router.params.id), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
