@@ -38,11 +38,19 @@ export const useAuthStore = defineStore('auth', {
     token: localStorage.getItem('token') || null,
     user: null as UserProfile | null,
     panier: null as any,
-    allOrder: [] as any[]
+    allOrder: [] as any[],
+    productOrderSelected: [] as any,
+    userOrder: [] as any[],
   }),
   getters: {
     getIsLoggedIn(): boolean {
       return this.authenticated;
+    },
+    getUserOrder(): any[] {
+      return this.userOrder;
+    },
+    getProductOrderSelected(): any[] {
+      return this.productOrderSelected;
     },
     getProfile(): UserProfile | null {
       return this.user;
@@ -80,6 +88,68 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('token', responseData.access_token);
       }
     },
+
+
+    async validatePanierToOrder(): Promise<void> {
+      const response = await fetch('http://localhost:8000/commande-produit/createWithPanier', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`,
+        }
+      });
+      const responseData = await response.json();
+      if (response.status !== 200) {
+        this.authenticated = false;
+        localStorage.removeItem('token')
+        throw new Error(responseData.message || 'Failed to authenticate');
+      } else {
+        this.panier = responseData
+      }
+    },
+
+    async setProductOrderSelected(newList: any[]): Promise<void> {
+      this.productOrderSelected = newList;
+    },
+
+    async setUserOrder(): Promise<void> {
+      const response = await fetch('http://localhost:8000/commande/user', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`,
+        }
+      });
+      let responseData = await response.json();
+      console.log(responseData);
+      if (response.status !== 200) {
+        this.authenticated = false;
+        localStorage.removeItem('token');
+        throw new Error(responseData.message || 'Failed to authenticate');
+      } else {
+        if (Array.isArray(responseData)) {
+          responseData = responseData.map(order => {
+            if (order.createdAt && order.updatedAt) {
+              order.createdAt = this.formatDate(order.createdAt);
+              order.updatedAt = this.formatDate(order.updatedAt);
+            }
+            return order;
+          });
+        } else if (responseData.createdAt && responseData.updatedAt) {
+          responseData.createdAt = this.formatDate(responseData.createdAt);
+          responseData.updatedAt = this.formatDate(responseData.updatedAt);
+        }
+
+        this.userOrder = responseData;
+        console.log(this.userOrder);
+      }
+    },
+
+    formatDate(dateString: string) {
+      const dateObject = new Date(dateString);
+      return dateObject.getDate().toString().padStart(2, '0') + '-' + (dateObject.getMonth() + 1).toString().padStart(2, '0') + '-' + dateObject.getFullYear();
+    },
+
 
     async profile(): Promise<void> {
       const response = await fetch('http://localhost:8000/auth/profile', {

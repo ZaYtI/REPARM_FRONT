@@ -98,10 +98,27 @@ onMounted(() => {
       formData.value.email = user.email;
       formData.value.birthDate = user.birthDate;
       formData.value.city = user.city;
-      console.log(formData.value)
     }
   }
 })
+
+
+watch(()=>authStore.getProfile,async(newValue,oldValue) => {
+  if(newValue){
+    const user = newValue;
+    if (user != null || user != undefined) {
+      formData.value.civility = user.civility;
+      formData.value.lastName = user.lastName;
+      formData.value.firstName = user.firstName;
+      formData.value.phone = user.phone;
+      formData.value.country = user.country;
+      formData.value.address = user.address;
+      formData.value.email = user.email;
+      formData.value.birthDate = user.birthDate;
+      formData.value.city = user.city;
+    }
+  }
+});
 </script>
 
 

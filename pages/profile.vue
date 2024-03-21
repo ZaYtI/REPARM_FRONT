@@ -4,10 +4,11 @@ import { useAuthStore } from '@/stores/auth';
 const router = useRouter()
 const authStore = useAuthStore();
 
-onMounted(() => {
+onMounted(async() => {
   if (authStore.getIsAdmin) {
     router.replace('/')
   }
+  await authStore.setUserOrder();
 })
 </script>
 
