@@ -103,8 +103,8 @@ onMounted(() => {
 })
 
 
-watch(()=>authStore.getProfile,async(newValue,oldValue) => {
-  if(newValue){
+watch(() => authStore.getProfile, async (newValue, oldValue) => {
+  if (newValue) {
     const user = newValue;
     if (user != null || user != undefined) {
       formData.value.civility = user.civility;
@@ -139,7 +139,7 @@ watch(()=>authStore.getProfile,async(newValue,oldValue) => {
         </div>
       </div>
       <div :class="{ 'd-md-flex': !props.profilPage, 'justify-content-center': !props.profilPage }">
-        <div class="form_part px-3" :class="{ 'w-50': !props.profilPage }">
+        <div class="form_part px-3">
           <div class="name">
             <div class="form-group">
               <label class="connexion_form_label ms-4" for="name">Nom</label>
@@ -188,7 +188,7 @@ watch(()=>authStore.getProfile,async(newValue,oldValue) => {
             </div>
           </div>
         </div>
-        <div class="form_part px-3" :class="{ 'w-50': !props.profilPage }">
+        <div class="form_part px-3">
           <div class="form-group w-100">
             <label class="connexion_form_label ms-4" for="address">Adresse</label>
             <input type="text" name="address" id="address" class="form-control input_login"
@@ -234,6 +234,10 @@ watch(()=>authStore.getProfile,async(newValue,oldValue) => {
 <style scoped>
 .connexion_form {
   width: 100%;
+}
+
+.form_part:first-child {
+  max-width: 50%;
 }
 
 small {
@@ -323,6 +327,12 @@ input[type="radio"]:checked+label {
   .form_part {
     width: 100%;
     padding-top: 0;
+  }
+}
+
+@media screen and (max-width:765px) {
+  .form_part:first-child {
+    max-width: 100%;
   }
 }
 </style>
