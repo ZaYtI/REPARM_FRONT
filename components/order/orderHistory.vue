@@ -9,7 +9,8 @@ const showProduct = ref(null);
 
 <template>
     <div class="orderList w-100 px-3">
-        <table v-for="order in authStore.getUserOrder" class="table table-borderless shadow" aria-describedby="order-info-table">
+        <div v-for="order in authStore.getUserOrder" class="p-1 mb-2 table-wrapper">
+            <table class="table table-borderless " aria-describedby="order-info-table">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -29,10 +30,16 @@ const showProduct = ref(null);
                 </tr>
             </tbody>
         </table>
+        </div>
     </div>
 </template>
 
 <style scoped>
+
+.table-wrapper{
+    background-color: white;
+}
+
 .orderList table {
     border-radius: 10px;
     overflow: hidden;

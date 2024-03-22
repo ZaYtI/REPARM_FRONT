@@ -5,20 +5,17 @@ const authStore = useAuthStore();
 
 const totalPrice = ref(0)
 
-const noProduct = ref(true)
+const noProduct = ref(false)
 
 const validatebasket = ref(false)
 
 
 onMounted(() => {
-  console.log(authStore.getPanier == null)
-  console.log(authStore.getPanier)
   if(authStore.getPanier == null || authStore.getPanier.length > 0){
     noProduct.value=true;
   }else{
     noProduct.value=false;
   }
-  console.log(noProduct.value)
 })
 
 const calculateTotalPrice = () => {
@@ -28,12 +25,16 @@ const calculateTotalPrice = () => {
   }
 }
 
+
+
 watch(
   () => authStore.getPanier,
   async (newListOfProduct, oldListOfProduct) => {
     if (newListOfProduct != null || newListOfProduct != undefined) {
       if(newListOfProduct.length > 0){
         noProduct.value = false
+      }else{
+        noProduct.value = true
       }
         calculateTotalPrice();
     }
@@ -51,7 +52,7 @@ watch(
     <div class="offcanvas-body">
       <div :class="{'d-none':noProduct}">
         <small class="text-secondary text-center">La validation de votre panier n'engage pas de paiement celui ci sera effectuer a la réception en magasins.</small>
-        <ProductPanier v-for="product in authStore.getPanier" :key="product.id" :product="product" />
+        <ProductPanier />
       </div>
       <div :class="{'d-none':!noProduct}" class="element_panier d-flex text-secondary">
         <div class="element_panier_info ps-3">
@@ -68,7 +69,7 @@ watch(
       <div :class="{'d-none':!validatebasket}">
         <p class="text-danger text-center">Voulez commandez ces produits?</p>
         <div class="d-flex justify-content-around">
-          <button class="btn btn-lg btn-success" @click="async()=>await authStore.validatePanierToOrder()" >Valider</button>
+          <button class="btn btn-lg btn-success" @click="authStore.validatePanierToOrder()" >Valider</button>
           <button class="btn btn-lg btn-danger" @click="() => validatebasket= false">Annuler</button>
         </div>
       </div>
