@@ -1,28 +1,20 @@
 <script setup>
-const props = defineProps({
-  product: {
-    type:Object||null,
-    required:false
-  }
-})
-
-
 const authStore = useAuthStore();
 
-async function removeProduct() {
-  await authStore.removeProduct(parseInt(props.product.produit.id))
+async function removeProduct(product) {
+  await authStore.removeProduct(parseInt(product.produit.id))
 }
 </script>
 
 <template>
-  <div v-if="product" class="element_panier d-flex position-relative">
+  <div v-for="product in authStore.getPanier" :key="product.id" class="element_panier d-flex position-relative">
     <img class="img_product" :src="product.produit.images[0].url" alt="test">
     <div class="element_panier_info ps-3">
       <h6 class="mb-0">{{ product.produit.name }}</h6>
       <p class="mb-0">prix: {{ product.produit.price }} €</p>
       <small> quantite: {{ product.quantity }}</small>
     </div>
-    <span class="close-btn text-muted" @click="removeProduct()">X</span>
+    <span class="close-btn text-muted" @click="removeProduct(product)">X</span>
   </div>
 </template>
 

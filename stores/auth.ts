@@ -70,7 +70,7 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     async login(email: string, password: string): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/login', {
+      const response = await fetch('http://localhost:8000/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,20 +91,20 @@ export const useAuthStore = defineStore('auth', {
 
 
     async validatePanierToOrder(): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/commande-produit/createWithPanier', {
+      const response = await fetch('http://localhost:8000/commande-produit/createWithPanier', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.token}`,
         }
       });
-      const responseData = await response.json();
-      if (response.status !== 200) {
+      console.log(response.ok)
+      if (!response.ok) {
         this.authenticated = false;
         localStorage.removeItem('token')
-        throw new Error(responseData.message || 'Failed to authenticate');
+        throw new Error('Failed to load your basket');
       } else {
-        this.panier = responseData
+        this.panier = []
       }
     },
 
@@ -113,7 +113,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async setUserOrder(): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/commande/user', {
+      const response = await fetch('http://localhost:8000/commande/user', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -152,7 +152,7 @@ export const useAuthStore = defineStore('auth', {
 
 
     async profile(): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/profile', {
+      const response = await fetch('http://localhost:8000/auth/profile', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -172,7 +172,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async register(formData: RegisterUser): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/register', {
+      const response = await fetch('http://localhost:8000/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -193,7 +193,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async userPanier(): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/panier-item/', {
+      const response = await fetch('http://localhost:8000/panier-item/', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -211,7 +211,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async createOrder(): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/commande_produit/createWithPanier', {
+      const response = await fetch('http://localhost:8000/commande_produit/createWithPanier', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -228,7 +228,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async logout(): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/auth/register', {
+      const response = await fetch('http://localhost:8000/auth/register', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -249,7 +249,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async setAllOrder(): Promise<void> {
-      const data = await fetch('https://reparm-api-without-docker.onrender.com/commande/all', {
+      const data = await fetch('http://localhost:8000/commande/all', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -264,7 +264,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async removeProduct(productId: number): Promise<void> {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/panier-item/' + productId, {
+      const response = await fetch('http://localhost:8000/panier-item/' + productId, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${this.token}`,
