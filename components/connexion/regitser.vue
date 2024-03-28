@@ -221,11 +221,8 @@ watch(() => authStore.getProfile, async (newValue, oldValue) => {
           </div>
         </div>
       </div>
-      <div v-if="!props.profilPage" class="form-group text-center mt-4">
+      <div class="form-group text-center mt-4">
         <button class="btn btn-lg button_login mx-auto">ENREGISTRER</button>
-      </div>
-      <div v-if="props.profilPage" class="form-group text-center mt-4">
-        <button class="btn btn-lg button_login mx-auto">Modifier</button>
       </div>
     </form>
   </div>
