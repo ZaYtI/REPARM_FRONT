@@ -10,7 +10,7 @@ const forward = ref('>>')
 
 async function deleteProduct(productId) {
     try {
-        const response = await fetch(`https://reparm-api-without-docker.onrender.com/product/delete/${productId}`, {
+        const response = await fetch(`http://localhost:8000/product/delete/${productId}`, {
             headers: {
                 'Authorization': `Bearer ${authStore.getToken}`,
             },
@@ -31,7 +31,7 @@ async function deleteProduct(productId) {
 
 async function deleteOrder(orderId) {
     try {
-        const response = await fetch(`https://reparm-api-without-docker.onrender.com/commande/delete/${orderId}`, {
+        const response = await fetch(`http://localhost:8000/commande/delete/${orderId}`, {
             headers: {
                 'Authorization': `Bearer ${authStore.getToken}`,
             },
@@ -85,8 +85,8 @@ async function paginateOrders() {
 const router = useRouter();
 
 onMounted(async () => {
-    if (authStore.getProfile == null || authStore.getProfile == undefined) {
-        router.replace('/')
+    if (localStorage.getItem('token') == null || localStorage.getItem('token') == undefined) {
+        router.replace('/');
     }
     let categorie = selectCatStore.getListOfCategorie;
     let products = selectCatStore.getAllProducts;
@@ -100,15 +100,12 @@ onMounted(async () => {
         categorieIsLoaded.value = true
     }
     let orders = authStore.getAllOrder
+    ordersIsLoad.value = true
     if (orders == null || orders == undefined || orders.length == 0) {
         await authStore.setAllOrder();
-        ordersIsLoad.value = true
     }
     await paginateOrders()
     allIsLoad.value = true
-    if (localStorage.getItem('token') == null || localStorage.getItem('token') == undefined) {
-        navigateTo('/login')
-    }
 })
 
 watch(
@@ -120,15 +117,15 @@ watch(
                 if (productIsLoaded.value && ordersIsLoad.value) {
                     allIsLoad.value = true;
                 }
-            } else {
-                navigateTo('/')
+            } else if (authStore.getProfile.roleId == 1) {
+                router.replace('/');
             }
         }
     }
 )
 
 watch(() =>
-    ordersIsLoad,
+    authStore.getAllOrder,
     async (newValue, oldValue) => {
         if (newValue) {
             if (isAdmin.value && productIsLoaded.value) {
@@ -139,7 +136,7 @@ watch(() =>
 )
 
 watch(() =>
-    productIsLoaded,
+    selectCatStore.getAllProducts,
     async (newValue, oldValue) => {
         if (newValue) {
             if (isAdmin.value && ordersIsLoad.value) {

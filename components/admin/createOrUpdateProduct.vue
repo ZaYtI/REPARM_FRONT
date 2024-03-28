@@ -17,17 +17,22 @@ const emit = defineEmits(['loadProduct'])
 const naturaBuyId = ref('');
 const name = ref('');
 const price = ref(0);
-const barrePrice = ref(0);
 const quantity = ref(0);
 const duree = ref(0);
-const newProduct = ref(false);
 const stock = ref(false);
-const ean = ref('');
 const description = ref('');
 const categorieId = ref('');
 const sendImages = ref([])
 const selectedImages = ref([]);
 const showError = ref(false);
+const naturaBuyIdError = ref(false);
+const priceError = ref(false);
+const quantityError = ref(false);
+const descriptionError = ref(false);
+const selectedImagesError = ref(false);
+const nameError = ref(false);
+const categorieIdError = ref(false);
+const formIsValid = ref(true);
 
 const handleSelectImage = (event) => {
   const input = event.target;
@@ -61,7 +66,7 @@ async function uploadImages(productId) {
   });
 
   try {
-    const response = await fetch(`https://reparm-api-without-docker.onrender.com/upload-images/uploadImages/${productId}`, {
+    const response = await fetch(`http://localhost:8000/upload-images/uploadImages/${productId}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${authStore.getToken}`,
@@ -84,47 +89,67 @@ function initForm() {
     price.value = 0,
     quantity.value = 0,
     duree.value = 0,
-    stock.value = true,
     description.value = '',
     categorieId.value = 0,
     selectedImages.value = []
 }
 
-const submitForm = async (event) => {
-  event.preventDefault();
 
-  const data = {
-    naturaBuyId: naturaBuyId.value,
-    name: name.value,
-    price: parseFloat(price.value),
-    quantity: parseInt(quantity.value, 10),
-    duree: parseInt(duree.value, 10),
-    stock: stock.value,
-    description: description.value,
-    categorieId: parseInt(categorieId.value, 10)
+
+async function checkForm() {
+  formIsValid.value = true;
+
+  const validateField = (fieldValue, errorField, condition = false) => {
+    const isValid = !condition;
+    errorField.value = !isValid;
+    if (!isValid) formIsValid.value = false;
+    return isValid;
   };
 
+  validateField(naturaBuyId.value, naturaBuyIdError, !naturaBuyId.value);
+  validateField(name.value, nameError, !name.value);
+  validateField(price.value, priceError, price.value <= 0 || price.value == null);
+  validateField(quantity.value, quantityError, quantity.value < 0 || quantity.value == null);
+  validateField(description.value, descriptionError, !description.value);
+  validateField(selectedImages.value, selectedImagesError, !selectedImages.value || selectedImages.value.length === 0);
+  validateField(categorieId.value, categorieIdError, !categorieId.value);
+}
 
-  try {
-    const response = await fetch('https://reparm-api-without-docker.onrender.com/product/create', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${authStore.getToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+const submitForm = async (event) => {
+  event.preventDefault();
+  await checkForm()
+  console.log(selectedImages.value)
+  if (formIsValid.value) {
+    const data = {
+      naturaBuyId: naturaBuyId.value,
+      name: name.value,
+      price: parseFloat(price.value),
+      quantity: parseInt(quantity.value, 10),
+      duree: parseInt(duree.value, 10),
+      description: description.value,
+      categorieId: parseInt(categorieId.value, 10)
+    };
+    try {
+      const response = await fetch('http://localhost:8000/product/create', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${authStore.getToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-    if (!response.ok) {
-      throw new Error('Erreur lors de la requête HTTP');
+      if (!response.ok) {
+        throw new Error('Erreur lors de la requête HTTP');
+      }
+      const responseData = await response.json();
+      const productId = responseData.id;
+      await uploadImages(productId)
+      initForm()
+      emit('loadProduct')
+    } catch (error) {
+      console.error(error);
     }
-    const responseData = await response.json();
-    const productId = responseData.id;
-    await uploadImages(productId)
-    initForm()
-    emit('loadProduct')
-  } catch (error) {
-    console.error(error);
   }
 };
 
@@ -137,6 +162,7 @@ const submitForm = async (event) => {
         <div class="pe-2">
           <label class="form-label" for="naturaBuyId">Natura Buy ID:</label>
           <input class="form-control" type="text" id="naturaBuyId" v-model="naturaBuyId" />
+          <small class="text-danger" v-if="naturaBuyIdError">Veuillez rentrer l'id de vente naturabuy</small>
         </div>
         <div>
           <label class="form-label" for="categorie">Categorie :</label>
@@ -144,25 +170,30 @@ const submitForm = async (event) => {
             <option selected :value="null">Open this select menu</option>
             <option v-for="elt in catStore.getListOfCategorie" :key="elt.id" :value="elt.id">{{ elt.name }}</option>
           </select>
+          <small class="text-danger" v-if="categorieIdError">Veuillez selectionner la categorie du produit</small>
         </div>
       </div>
       <div>
         <label class="form-label" for="name">Nom:</label>
         <input class="form-control" type="text" id="name" v-model="name" />
+        <small class="text-danger" v-if="nameError">Veuillez entrer le nom du produits</small>
       </div>
       <div class="d-flex">
         <div class="pe-2">
           <label class="form-label" for="price">Price:</label>
           <input class="form-control" type="number" id="price" v-model="price" />
+          <small class="text-danger" v-if="priceError">Veuillez entrer le prix du produit</small>
         </div>
         <div>
           <label class="form-label" for="quantity">Quantity:</label>
           <input class="form-control" type="number" id="quantity" v-model="quantity" />
+          <small class="text-danger" v-if="quantityError">Veuillez entrer la quantiter disponible du produit</small>
         </div>
       </div>
       <div>
         <label class="form-label" for="description">Description:</label>
         <textarea class="form-control" id="description" v-model="description"></textarea>
+        <small class="text-danger" v-if="descriptionError">Veuillez entrer la description du produit</small>
       </div>
 
 
@@ -189,6 +220,7 @@ const submitForm = async (event) => {
         <label class="input-group-text" for="inputGroupFile01">Select files</label>
         <input type="file" class="form-control" id="inputGroupFile01" @change="handleSelectImage" />
       </div>
+      <small v-if="selectedImagesError" class="text-danger">Veuillez entrer une image</small>
       <small v-if="showError" class="text-danger">Fichier invalide</small>
       <div class="d-flex justify-content-center">
         <button type="submit" class="btn btn-primary mx-auto">Enregistrer</button>

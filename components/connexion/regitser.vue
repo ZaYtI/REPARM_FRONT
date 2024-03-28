@@ -139,7 +139,7 @@ watch(() => authStore.getProfile, async (newValue, oldValue) => {
         </div>
       </div>
       <div :class="{ 'd-md-flex': !props.profilPage, 'justify-content-center': !props.profilPage }">
-        <div class="form_part px-3">
+        <div class="form_part px-3" :class="{ 'profil': props.profilPage }">
           <div class="name">
             <div class="form-group">
               <label class="connexion_form_label ms-4" for="name">Nom</label>
@@ -188,7 +188,7 @@ watch(() => authStore.getProfile, async (newValue, oldValue) => {
             </div>
           </div>
         </div>
-        <div class="form_part px-3">
+        <div class="form_part px-3" :class="{ 'profil': props.profilPage }">
           <div class="form-group w-100">
             <label class="connexion_form_label ms-4" for="address">Adresse</label>
             <input type="text" name="address" id="address" class="form-control input_login"
@@ -236,7 +236,7 @@ watch(() => authStore.getProfile, async (newValue, oldValue) => {
   width: 100%;
 }
 
-.form_part:first-child {
+.form_part:first-child:not(.profil) {
   max-width: 50%;
 }
 
@@ -331,8 +331,9 @@ input[type="radio"]:checked+label {
 }
 
 @media screen and (max-width:765px) {
-  .form_part:first-child {
-    max-width: 100%;
+  .form_part:first-child:not(.profil) {
+    max-width: none;
+    width: 100%;
   }
 }
 </style>
