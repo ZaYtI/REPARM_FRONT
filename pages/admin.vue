@@ -10,7 +10,7 @@ const forward = ref('>>')
 
 async function deleteProduct(productId) {
     try {
-        const response = await fetch(`http://localhost:8000/product/delete/${productId}`, {
+        const response = await fetch(`https://reparm-api-without-docker.onrender.com/product/delete/${productId}`, {
             headers: {
                 'Authorization': `Bearer ${authStore.getToken}`,
             },
@@ -31,7 +31,7 @@ async function deleteProduct(productId) {
 
 async function deleteOrder(orderId) {
     try {
-        const response = await fetch(`http://localhost:8000/commande/delete/${orderId}`, {
+        const response = await fetch(`https://reparm-api-without-docker.onrender.com/commande/delete/${orderId}`, {
             headers: {
                 'Authorization': `Bearer ${authStore.getToken}`,
             },
