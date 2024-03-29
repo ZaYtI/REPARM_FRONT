@@ -102,7 +102,7 @@ watch(loadedImage, async (newValue, oldValue) => {
             </button>
           </div>
         </div>
-        <div class="desc_container">
+        <div class="desc_container px-md-5">
           <div class="desc_wrapper p-3">
             <h4 class="weapon_title">{{ product.name }}</h4>
             <div class="description mt-4">
@@ -165,7 +165,6 @@ watch(loadedImage, async (newValue, oldValue) => {
 }
 
 .desc_container {
-  max-width: 40%;
   width: 100%;
   color: white;
   transition: all 0.2s ease-in-out;
