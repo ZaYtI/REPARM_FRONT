@@ -34,7 +34,7 @@ interface RegisterUser {
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    authenticated: false as boolean,
+    authenticated: null as null | boolean,
     token: localStorage.getItem('token') || null,
     user: null as UserProfile | null,
     panier: null as any,
@@ -43,7 +43,7 @@ export const useAuthStore = defineStore('auth', {
     userOrder: [] as any[],
   }),
   getters: {
-    getIsLoggedIn(): boolean {
+    getIsLoggedIn(): null | boolean {
       return this.authenticated;
     },
     getUserOrder(): any[] {
@@ -81,7 +81,7 @@ export const useAuthStore = defineStore('auth', {
       if (response.status !== 200) {
         this.authenticated = false;
         localStorage.removeItem('token')
-        throw new Error(responseData.message || 'Failed to authenticate');
+        return;
       } else {
         this.token = responseData.access_token;
         this.authenticated = true;
@@ -98,11 +98,10 @@ export const useAuthStore = defineStore('auth', {
           'Authorization': `Bearer ${this.token}`,
         }
       });
-      console.log(response.ok)
       if (!response.ok) {
         this.authenticated = false;
         localStorage.removeItem('token')
-        throw new Error('Failed to load your basket');
+        return;
       } else {
         this.panier = []
       }
@@ -121,11 +120,10 @@ export const useAuthStore = defineStore('auth', {
         }
       });
       let responseData = await response.json();
-      console.log(responseData);
       if (response.status !== 200) {
         this.authenticated = false;
         localStorage.removeItem('token');
-        throw new Error(responseData.message || 'Failed to authenticate');
+        return;
       } else {
         if (Array.isArray(responseData)) {
           responseData = responseData.map(order => {
@@ -141,7 +139,6 @@ export const useAuthStore = defineStore('auth', {
         }
 
         this.userOrder = responseData;
-        console.log(this.userOrder);
       }
     },
 
@@ -164,7 +161,7 @@ export const useAuthStore = defineStore('auth', {
       if (response.status !== 200) {
         this.authenticated = false;
         localStorage.removeItem('token')
-        throw new Error(responseData.message || 'Failed to get profile');
+        return;
       } else {
         this.user = responseData;
         this.authenticated = true;
@@ -191,7 +188,7 @@ export const useAuthStore = defineStore('auth', {
       } else {
         this.authenticated = false;
         localStorage.removeItem('token')
-        throw new Error(responseData.message || 'Failed to register');
+        return;
       }
     },
 
@@ -207,7 +204,7 @@ export const useAuthStore = defineStore('auth', {
       if (response.status !== 200 && response.status !== 304) {
         this.authenticated = false;
         localStorage.removeItem('token')
-        throw new Error(responseData.message || 'Failed to get the basket');
+        return;
       } else {
         this.panier = responseData
       }
@@ -224,7 +221,7 @@ export const useAuthStore = defineStore('auth', {
       if (response.status !== 200) {
         this.authenticated = false;
         localStorage.removeItem('token')
-        throw new Error(responseData.message || 'Failed to get the basket');
+        return;
       } else {
         this.panier = responseData
       }
@@ -241,7 +238,7 @@ export const useAuthStore = defineStore('auth', {
       if (response.status !== 200) {
         this.authenticated = false;
         localStorage.removeItem('token')
-        throw new Error(responseData.message || 'Failed to get the basket');
+        return;
       } else {
         this.panier = responseData
       }
@@ -259,7 +256,7 @@ export const useAuthStore = defineStore('auth', {
         }
       })
       if (data.status !== 200) {
-        throw new Error('Failed to get the order');
+        return;
       } else {
         const order = await data.json()
         this.allOrder = order
@@ -274,11 +271,10 @@ export const useAuthStore = defineStore('auth', {
         },
       });
       const data = await response.json()
-      console.log(data)
       if (response.status !== 200) {
         this.authenticated = false;
         localStorage.removeItem('token')
-        throw new Error('Failed to get remove product from panier');
+        return;
       } else {
         this.panier = data;
       }

@@ -5,10 +5,12 @@ const router = useRouter()
 const authStore = useAuthStore();
 
 onMounted(async () => {
-  if (authStore.getIsAdmin) {
-    router.replace('/')
+  if (localStorage.getItem('token') == null || localStorage.getItem('token') == undefined) {
+    router.replace('/login');
   }
-  await authStore.setUserOrder();
+  if (authStore.getIsAdmin) {
+    router.replace('/admin')
+  }
 })
 </script>
 

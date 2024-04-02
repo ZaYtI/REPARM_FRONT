@@ -52,99 +52,60 @@ async function deleteOrder(orderId) {
 }
 
 const productIsLoaded = ref(false)
-const isAdmin = ref(false)
 const allIsLoad = ref(false)
-const currentPaginationIndex = ref(0)
-const paginateProduct = ref([])
 const paginateOrder = ref([])
-const currentPaginateOrderIndex = ref(0)
+const currentPageIndexProduct = ref(1);
+const currentPageIndexOrder = ref(1);
 const ordersIsLoad = ref(false)
-const categorieIsLoaded = ref(false)
+const itemsPerPage = ref(10);
+
+const totalPagesProduct = computed(() => Math.ceil(selectCatStore.getAllProducts.length / itemsPerPage.value));
+
+const totalPagesOrder = computed(() => Math.ceil(authStore.getAllOrder.length / itemsPerPage.value));
 
 
-async function paginateProducts() {
-    productIsLoaded.value = false
-    let products = selectCatStore.getAllProducts
-    paginateProduct.value = []
-    for (let i = 0; i < products.length; i += 10) {
-        const productSliced = products.slice(i, i + 10)
-        paginateProduct.value.push(productSliced)
-    }
-    productIsLoaded.value = true
-}
+const previousOrderIsVisible = computed(() => {
+    return currentPageIndexOrder.value > 1;
+});
 
-async function paginateOrders() {
-    let orders = authStore.getAllOrder;
-    paginateOrder.value = []
-    for (let i = 0; i < orders.length; i += 10) {
-        const ordersliced = orders.slice(i, i + 10)
-        paginateOrder.value.push(ordersliced)
-    }
-}
+const nextOrderIsVisible = computed(() => {
+    return currentPageIndexOrder.value < totalPagesOrder.value;
+});
+
+const previousProductIsVisible = computed(() => {
+    return currentPageIndexProduct.value > 1;
+});
+
+const nextProductIsVisible = computed(() => {
+    return currentPageIndexProduct.value < totalPagesProduct.value;
+});
+
+const currentProducts = computed(() => {
+    const sortedProducts = selectCatStore.getAllProducts.toSorted((a, b) => a.id - b.id);
+    const startIndex = (currentPageIndexProduct.value - 1) * itemsPerPage.value;
+    const endIndex = startIndex + itemsPerPage.value;
+    return sortedProducts.slice(startIndex, endIndex);
+});
+
+const currentOrders = computed(() => {
+    const sortedOrders = authStore.getAllOrder.toSorted((a, b) => a.id - b.id);
+    const startIndex = (currentPageIndexOrder.value - 1) * itemsPerPage.value;
+    const endIndex = startIndex + itemsPerPage.value;
+    return sortedOrders.slice(startIndex, endIndex);
+});
 
 const router = useRouter();
 
 onMounted(async () => {
     if (localStorage.getItem('token') == null || localStorage.getItem('token') == undefined) {
-        router.replace('/');
+        router.replace('/login');
+    } else {
+        await authStore.profile();
     }
-    let categorie = selectCatStore.getListOfCategorie;
-    let products = selectCatStore.getAllProducts;
-    if (products == null || products == undefined || products.length == 0) {
-        await selectCatStore.setAllProduct();
-        productIsLoaded.value = true
-    }
-    await paginateProducts();
-    if (categorie == null || categorie == undefined || categorie.length == 0) {
-        await selectCatStore.setListOfCategorie();
-        categorieIsLoaded.value = true
-    }
-    let orders = authStore.getAllOrder
-    ordersIsLoad.value = true
-    if (orders == null || orders == undefined || orders.length == 0) {
-        await authStore.setAllOrder();
-    }
-    await paginateOrders()
-    allIsLoad.value = true
+    setTimeout(() => {
+        allIsLoad.value = true;
+    }, 1000);
 })
-
-watch(
-    () => authStore.getIsLoggedIn,
-    async (newgetIsLoggedIn, oldgetIsLoggedIn) => {
-        if (newgetIsLoggedIn) {
-            if (authStore.getProfile.roleId == 2) {
-                isAdmin.value = true
-                if (productIsLoaded.value && ordersIsLoad.value) {
-                    allIsLoad.value = true;
-                }
-            } else if (authStore.getProfile.roleId == 1) {
-                router.replace('/');
-            }
-        }
-    }
-)
-
-watch(() =>
-    authStore.getAllOrder,
-    async (newValue, oldValue) => {
-        if (newValue) {
-            if (isAdmin.value && productIsLoaded.value) {
-                allIsLoad.value = true
-            }
-        }
-    }
-)
-
-watch(() =>
-    selectCatStore.getAllProducts,
-    async (newValue, oldValue) => {
-        if (newValue) {
-            if (isAdmin.value && ordersIsLoad.value) {
-                allIsLoad.value = true
-            }
-        }
-    }
-)
 
 </script>
 
@@ -156,11 +117,23 @@ watch(() =>
         </div>
         <div class="container-xl admin-container">
             <div class="container-weapons-table">
-                <div :class="{ 'd-none': !productIsLoaded }">
+                <div :class="{ 'd-none': currentProducts == undefined }">
                     <div class="d-flex justify-content-between px-3 pb-3">
                         <h2 class="text-white">Vos produits :</h2>
-                        <button class="btn btn-success" type="button" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">Ajouter</button>
+                        <div class="d-flex">
+                            <div class=" d-flex align-items-center paginate">
+                                <button @click="currentPageIndexProduct--" class="btn border-0 btn-paginate"
+                                    :disabled="!previousProductIsVisible">
+                                    << </button>
+                                        <p class="p-0 m-0">{{ currentPageIndexProduct }}...{{ totalPagesProduct }}</p>
+                                        <button @click="currentPageIndexProduct++" class="btn border-0 btn-paginate"
+                                            :disabled="!nextProductIsVisible">
+                                            >>
+                                        </button>
+                            </div>
+                            <button class="btn btn-success" type="button" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">Ajouter</button>
+                        </div>
                     </div>
                     <div class="table-responsive rounded-3">
                         <table class="table table-striped" aria-describedby="table of product">
@@ -170,43 +143,43 @@ watch(() =>
                                     <th class="text-center">Nom</th>
                                     <th class="text-center">Prix</th>
                                     <th class="text-center">Quantiter</th>
-                                    <th class="text-center">Id categorie</th>
                                     <th class="text-center">NaturabuyId</th>
-                                    <th></th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="rounded-bottom">
-                                <tr v-for="product in paginateProduct[currentPaginationIndex]" :key="product.id">
+                                <tr v-for="product in currentProducts" :key="product.id">
                                     <td class="text-center">{{ product.id }}</td>
                                     <td class="text-center">{{ product.name }}</td>
                                     <td class="text-center">{{ product.price }}</td>
                                     <td class="text-center">{{ product.quantity }}</td>
-                                    <td class="text-center">{{ product.categorieId }}</td>
                                     <td class="text-center">{{ product.naturaBuyId }}</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-danger"
-                                            @click="deleteProduct(product.id)">Supprimer</button>
+                                    <td>
+                                        <div class="d-flex justify-content-around">
+                                            <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal">Modifier</button>
+                                            <button class="btn btn-danger ms-2"
+                                                @click="deleteProduct(product.id)">Supprimer</button>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="pagination-container" v-if="paginateProduct.length > 1">
-                        <div class="shadow bg-body-tertiary rounded">
-                            <button class="btn border-0" :disabled="currentPaginationIndex == 0"
-                                @click="currentPaginationIndex--">{{ backward }}</button>
-                            <button class="btn border-0" :class="{ 'active': currentPaginationIndex == index }"
-                                v-for="(item, index) in paginateProduct" :key="index" :id="index"
-                                @click="currentPaginationIndex = index">{{ index }}</button>
-                            <button class="btn border-0"
-                                :disabled="currentPaginationIndex == paginateProduct.length - 1"
-                                @click="currentPaginationIndex++">{{ forward }}</button>
-                        </div>
-                    </div>
                 </div>
-                <div :class="{ 'd-none': !ordersIsLoad }">
+                <div>
                     <div class="d-flex justify-content-between px-3 pb-3 mt-4">
                         <h2 class="text-white">Vos Commandes :</h2>
+                        <div class=" d-flex align-items-center paginate">
+                            <button @click="currentPageIndexOrder--" class="btn border-0 btn-paginate"
+                                :disabled="!previousOrderIsVisible">
+                                << </button>
+                                    <p class="p-0 m-0">{{ currentPageIndexOrder }}...{{ totalPagesOrder }}</p>
+                                    <button @click="currentPageIndexOrder++" class="btn border-0 btn-paginate"
+                                        :disabled="!nextOrderIsVisible">
+                                        >>
+                                    </button>
+                        </div>
                     </div>
                     <div class="table-responsive rounded-3">
                         <table class="table table-striped" aria-describedby="table of order">
@@ -217,42 +190,46 @@ watch(() =>
                                     <th class="text-center">email</th>
                                     <th class="text-center">Phone</th>
                                     <th class="text-center">paiement</th>
+                                    <th class="text-center">Prix</th>
                                     <th class="text-center">recue</th>
-                                    <th class="text-center">NaturabuyOrder</th>
-                                    <th></th>
-                                    <th></th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="order in paginateOrder[currentPaginateOrderIndex]" :key="order.id">
+                                <tr v-for="order in currentOrders" :key="order.id">
                                     <td class="text-center">{{ order.id }}</td>
                                     <td class="text-center">{{ order.userId }}</td>
                                     <td class="text-center"><a :href="'mailto:' + order.user.email">{{ order.user.email
                                             }}</a></td>
                                     <td class="text-center">{{ order.user.phone }}</td>
-                                    <td class="text-center">{{ order.payment }}</td>
-                                    <td class="text-center">{{ order.received }}</td>
-                                    <td class="text-center">{{ order.isNaturaBuyOrder }}</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-primary">Modifier</button>
+                                    <td v-if="order.payment">
+                                        <span class="success-order">Valider</span>
                                     </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-danger" @click="deleteOrder(order.id)">Supprimer</button>
+                                    <td v-else>
+                                        <span class="wait-order">En attente</span>
+                                    </td>
+                                    <td class="text-center">{{ order.price }}€</td>
+                                    <td v-if="order.received">
+                                        <span class="success-order">Recue</span>
+                                    </td>
+                                    <td v-else>
+                                        <span class="wait-order">En cours</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-around">
+                                            <button class="btn btn-primary">Modifier</button>
+                                            <button class="btn btn-danger ms-2"
+                                                @click="deleteOrder(order.id)">Supprimer</button>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center spinner-container-tab" :class="{ 'd-none': ordersIsLoad }">
-                    <div class="spinner-border mx-auto" style="width: 10rem; height: 10rem;" role="status"></div>
-                </div>
-                <div class="d-flex justify-content-center spinner-container-tab" :class="{ 'd-none': productIsLoaded }">
-                    <div class="spinner-border mx-auto" style="width: 10rem; height: 10rem;" role="status"></div>
-                </div>
             </div>
         </div>
-        <AdminModal @sendToParent="paginateProducts" />
+        <AdminModal />
     </div>
     <div class="d-flex justify-content-center spinner-container" :class="{ 'd-none': allIsLoad }">
         <div class="spinner-border mx-auto" style="width: 10rem; height: 10rem;" role="status"></div>
@@ -263,6 +240,22 @@ watch(() =>
 <style scoped>
 .container-weapons-table {
     overflow-x: scroll;
+}
+
+.wait-order {
+    background-color: rgb(251, 91, 32);
+    border-radius: 1rem;
+    text-align: center;
+    color: white;
+    padding: 5px;
+}
+
+.success-order {
+    background-color: green;
+    border-radius: 1rem;
+    text-align: center;
+    color: white;
+    padding: 5px;
 }
 
 .active {
@@ -300,5 +293,15 @@ watch(() =>
 
 .head {
     background-color: white;
+}
+
+.paginate {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.btn-paginate {
+    color: white;
+    font-size: 1.5rem;
 }
 </style>

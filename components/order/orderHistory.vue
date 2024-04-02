@@ -2,8 +2,6 @@
 
 const authStore = useAuthStore();
 
-const showProduct = ref(null);
-
 const currentPage = ref(1);
 const ordersPerPage = ref(5);
 const totalPages = ref(null)
@@ -44,18 +42,28 @@ const paginatedOrders = computed(() => {
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Prix</th>
-                        <th scope="col">Etat</th>
+                        <th scope="col">Paiment</th>
+                        <th scope="col">Recue</th>
                         <th scope="col">Création</th>
-                        <th scope="col">Modification</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>{{ order.id }}</td>
                         <td>{{ order.price }}€</td>
-                        <td>En cours</td>
+                        <td v-if="order.payment">
+                            <span class="success-order">Valider</span>
+                        </td>
+                        <td v-else>
+                            <span class="wait-order">En attente</span>
+                        </td>
+                        <td v-if="order.received">
+                            <span class="succes-order">Recue</span>
+                        </td>
+                        <td v-else>
+                            <span class="wait-order">En cours</span>
+                        </td>
                         <td>{{ order.createdAt }}</td>
-                        <td>{{ order.updatedAt }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -64,6 +72,22 @@ const paginatedOrders = computed(() => {
 </template>
 
 <style scoped>
+.wait-order {
+    background-color: rgb(251, 91, 32);
+    border-radius: 1rem;
+    text-align: center;
+    color: white;
+    padding: 5px;
+}
+
+.success-order {
+    background-color: green;
+    border-radius: 1rem;
+    text-align: center;
+    color: white;
+    padding: 5px;
+}
+
 .table-wrapper {
     background-color: white;
 }

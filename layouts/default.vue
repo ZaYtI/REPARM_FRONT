@@ -1,8 +1,10 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
+const selectCatStore = useSelectedCatStore();
 
 const router = useRouter();
+const route = useRoute();
 
 onMounted(async () => {
   if (localStorage.getItem('token')) {
@@ -13,11 +15,21 @@ onMounted(async () => {
 watch(
   () => authStore.getIsLoggedIn,
   async (newgetIsLoggedIn, oldgetIsLoggedIn) => {
+    console.log('default watch')
     if (newgetIsLoggedIn) {
       await authStore.profile();
       await authStore.userPanier();
-    }else{
-      router.replace('/')
+      if (!authStore.getIsAdmin) {
+        if (route.path == '/admin') {
+          router.replace('/profile')
+        }
+        if (router)
+          await authStore.setUserOrder();
+      } else {
+        await selectCatStore.setAllProduct();
+      }
+    } else if (!newgetIsLoggedIn) {
+      router.replace('/login')
     }
   }
 )
@@ -25,29 +37,31 @@ watch(
 
 <template>
   <div class="d-flex flex-column default-layout">
-      <NavAppNavbar/>
+    <NavAppNavbar />
 
-      <main class="default-layout-content overflow-hidden bg-color-primary pb-5">
-          <slot />
-      </main>
+    <main class="default-layout-content overflow-hidden bg-color-primary pb-5">
+      <slot />
+    </main>
 
-      <NavAppFooter class="bg-color-primary"/>
+    <NavAppFooter class="bg-color-primary" />
   </div>
 </template>
 
 <style>
-.default-layout{
-  display: flex ;
+.default-layout {
+  display: flex;
   flex-direction: column;
 }
-.default-layout-content{
-    flex-grow:1;
-}
-.default-layout{
-    min-height: 100vh;
+
+.default-layout-content {
+  flex-grow: 1;
 }
 
-.bg-color-primary{
+.default-layout {
+  min-height: 100vh;
+}
+
+.bg-color-primary {
   background-color: #3A483B;
 }
 </style>

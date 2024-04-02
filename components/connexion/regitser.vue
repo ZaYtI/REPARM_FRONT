@@ -35,7 +35,7 @@ const cityAlertVisible = ref(false);
 const addressAlertVisible = ref(false);
 const emailAlertVisible = ref(false);
 const passwordAlertVisible = ref(false);
-
+const formIsUpdate = ref(false);
 function handleChangeCivility(event) {
   formData.value.civility = event.target.value;
 }
@@ -85,19 +85,24 @@ function validateField(field, visibilityRef) {
   }
 }
 
+function initFormWithUserInformation(user) {
+  formData.value.civility = user.civility;
+  formData.value.lastName = user.lastName;
+  formData.value.firstName = user.firstName;
+  formData.value.phone = user.phone;
+  formData.value.country = user.country;
+  formData.value.address = user.address;
+  formData.value.email = user.email;
+  formData.value.birthDate = user.birthDate;
+  formData.value.city = user.city;
+}
+
+
 onMounted(() => {
   if (props.profilPage) {
     const user = authStore.getProfile;
     if (user != null || user != undefined) {
-      formData.value.civility = user.civility;
-      formData.value.lastName = user.lastName;
-      formData.value.firstName = user.firstName;
-      formData.value.phone = user.phone;
-      formData.value.country = user.country;
-      formData.value.address = user.address;
-      formData.value.email = user.email;
-      formData.value.birthDate = user.birthDate;
-      formData.value.city = user.city;
+      initFormWithUserInformation(user);
     }
   }
 })
@@ -107,15 +112,7 @@ watch(() => authStore.getProfile, async (newValue, oldValue) => {
   if (newValue) {
     const user = newValue;
     if (user != null || user != undefined) {
-      formData.value.civility = user.civility;
-      formData.value.lastName = user.lastName;
-      formData.value.firstName = user.firstName;
-      formData.value.phone = user.phone;
-      formData.value.country = user.country;
-      formData.value.address = user.address;
-      formData.value.email = user.email;
-      formData.value.birthDate = user.birthDate;
-      formData.value.city = user.city;
+      initFormWithUserInformation(user);
     }
   }
 });
@@ -125,7 +122,7 @@ watch(() => authStore.getProfile, async (newValue, oldValue) => {
 
 <template>
   <div>
-    <form class="connexion_form px-3" @submit.prevent="handleSubmit">
+    <form class="connexion_form p-3" @submit.prevent="handleSubmit">
       <div v-if="!props.profilPage" class="d-flex gender mb-3">
         <div class="form-group">
           <input class="radio_input btn-check" type="radio" name="sexe" id="Homme" @click="handleChangeCivility"
