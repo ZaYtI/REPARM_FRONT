@@ -15,7 +15,6 @@ onMounted(async () => {
 watch(
   () => authStore.getIsLoggedIn,
   async (newgetIsLoggedIn, oldgetIsLoggedIn) => {
-    console.log('default watch')
     if (newgetIsLoggedIn) {
       await authStore.profile();
       await authStore.userPanier();
@@ -29,7 +28,8 @@ watch(
         await selectCatStore.setAllProduct();
       }
     } else if (!newgetIsLoggedIn) {
-      router.replace('/login')
+      if (route.path == '/admin' || route.path == '/profile')
+        router.replace('/login')
     }
   }
 )
