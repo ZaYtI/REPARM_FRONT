@@ -66,7 +66,7 @@ async function uploadImages(productId) {
   });
 
   try {
-    const response = await fetch(`https://reparm-api-without-docker.onrender.com/upload-images/uploadImages/${productId}`, {
+    const response = await fetch(`https://reparm-front.onrender.com/upload-images/uploadImages/${productId}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${authStore.getToken}`,
@@ -92,6 +92,19 @@ function initForm() {
     description.value = '',
     categorieId.value = 0,
     selectedImages.value = []
+}
+
+function initFormWithProduct(product) {
+  naturaBuyId.value = product.naturaBuyId,
+    name.value = product.name,
+    price.value = product.price,
+    quantity.value = product.quantity,
+    duree.value = product.duree,
+    description.value = product.description,
+    categorieId.value = product.categorieId
+  for (const element of product.images) {
+    selectedImages.value.push(element);
+  }
 }
 
 
@@ -130,7 +143,7 @@ const submitForm = async (event) => {
       categorieId: parseInt(categorieId.value, 10)
     };
     try {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/product/create', {
+      const response = await fetch('https://reparm-front.onrender.com/product/create', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${authStore.getToken}`,
@@ -152,6 +165,17 @@ const submitForm = async (event) => {
     }
   }
 };
+
+watch(
+  () => authStore.getSelectedProductToUpdate,
+  (newValue, oldValue) => {
+    if (newValue != null) {
+      initFormWithProduct(newValue)
+    } else {
+      initForm()
+    }
+  }
+)
 
 </script>
 

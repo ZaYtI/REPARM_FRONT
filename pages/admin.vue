@@ -10,7 +10,7 @@ const forward = ref('>>')
 
 async function deleteProduct(productId) {
     try {
-        const response = await fetch(`https://reparm-api-without-docker.onrender.com/product/delete/${productId}`, {
+        const response = await fetch(`https://reparm-front.onrender.com/product/delete/${productId}`, {
             headers: {
                 'Authorization': `Bearer ${authStore.getToken}`,
             },
@@ -31,7 +31,7 @@ async function deleteProduct(productId) {
 
 async function deleteOrder(orderId) {
     try {
-        const response = await fetch(`https://reparm-api-without-docker.onrender.com/commande/delete/${orderId}`, {
+        const response = await fetch(`https://reparm-front.onrender.com/commande/delete/${orderId}`, {
             headers: {
                 'Authorization': `Bearer ${authStore.getToken}`,
             },
@@ -132,7 +132,8 @@ onMounted(async () => {
                                         </button>
                             </div>
                             <button class="btn btn-success" type="button" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">Ajouter</button>
+                                data-bs-target="#exampleModal"
+                                @click="authStore.setProductToUpdate(null)">Ajouter</button>
                         </div>
                     </div>
                     <div class="table-responsive rounded-3">
@@ -157,7 +158,8 @@ onMounted(async () => {
                                     <td>
                                         <div class="d-flex justify-content-around">
                                             <button class="btn btn-primary" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal">Modifier</button>
+                                                data-bs-target="#exampleModal"
+                                                @click="authStore.setProductToUpdate(product)">Modifier</button>
                                             <button class="btn btn-danger ms-2"
                                                 @click="deleteProduct(product.id)">Supprimer</button>
                                         </div>
@@ -202,17 +204,17 @@ onMounted(async () => {
                                     <td class="text-center"><a :href="'mailto:' + order.user.email">{{ order.user.email
                                             }}</a></td>
                                     <td class="text-center">{{ order.user.phone }}</td>
-                                    <td v-if="order.payment">
+                                    <td class="text-center span-order" v-if="order.payment">
                                         <span class="success-order">Valider</span>
                                     </td>
-                                    <td v-else>
+                                    <td class="text-center span-order" v-else>
                                         <span class="wait-order">En attente</span>
                                     </td>
-                                    <td class="text-center">{{ order.price }}€</td>
-                                    <td v-if="order.received">
+                                    <td class="text-center span-order">{{ order.price }}€</td>
+                                    <td class="text-center span-order" v-if="order.received">
                                         <span class="success-order">Recue</span>
                                     </td>
-                                    <td v-else>
+                                    <td class="text-center span-order" v-else>
                                         <span class="wait-order">En cours</span>
                                     </td>
                                     <td>
@@ -256,6 +258,10 @@ onMounted(async () => {
     text-align: center;
     color: white;
     padding: 5px;
+}
+
+.span-order {
+    min-width: 110px;
 }
 
 .active {

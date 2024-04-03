@@ -10,6 +10,8 @@ onMounted(async () => {
   if (localStorage.getItem('token')) {
     await authStore.profile();
   }
+  await selectCatStore.setListOfCategorie();
+  await selectCatStore.setAllProduct();
 });
 
 watch(
@@ -24,8 +26,6 @@ watch(
         }
         if (router)
           await authStore.setUserOrder();
-      } else {
-        await selectCatStore.setAllProduct();
       }
     } else if (!newgetIsLoggedIn) {
       if (route.path == '/admin' || route.path == '/profile')

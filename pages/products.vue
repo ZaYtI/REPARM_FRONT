@@ -2,15 +2,6 @@
 import { useSelectedCatStore } from '@/stores/selectedCat';
 
 const store = useSelectedCatStore();
-
-onMounted(async () => {
-  if (store.getAllProducts == null || store.getAllProducts == undefined || store.getAllProducts.length == 0) {
-    await store.setAllProduct();
-  }
-  if (store.getlistOfSelectedProducts == null || store.getlistOfSelectedProducts == undefined || store.getlistOfSelectedProducts.length == 0) {
-    await store.setSelectedCat(0, 'Tous les fusils');
-  }
-})
 </script>
 
 <template>
