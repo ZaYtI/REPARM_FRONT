@@ -66,7 +66,7 @@ async function uploadImages(productId) {
   });
 
   try {
-    const response = await fetch(`https://reparm-front.onrender.com/upload-images/uploadImages/${productId}`, {
+    const response = await fetch(`https://reparm-api-without-docker.onrender.com/upload-images/uploadImages/${productId}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${authStore.getToken}`,
@@ -143,7 +143,7 @@ const submitForm = async (event) => {
       categorieId: parseInt(categorieId.value, 10)
     };
     try {
-      const response = await fetch('https://reparm-front.onrender.com/product/create', {
+      const response = await fetch('https://reparm-api-without-docker.onrender.com/product/create', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${authStore.getToken}`,
