@@ -103,7 +103,7 @@ function initFormWithProduct(product) {
     description.value = product.description,
     categorieId.value = product.categorieId
   for (const element of product.images) {
-    selectedImages.value.push(element);
+    selectedImages.value.push(element.url);
   }
 }
 
