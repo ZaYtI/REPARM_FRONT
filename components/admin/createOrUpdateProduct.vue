@@ -33,6 +33,7 @@ const selectedImagesError = ref(false);
 const nameError = ref(false);
 const categorieIdError = ref(false);
 const formIsValid = ref(true);
+const imageToDeletedId = ref([])
 
 const handleSelectImage = (event) => {
   const input = event.target;
@@ -82,26 +83,63 @@ async function uploadImages(productId) {
   }
 }
 
+async function fetchDeleteImage(imageId) {
+  try {
+    const response = await fetch(`https://reparm-api-without-docker.onrender.com/upload-images/delete/${imageId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${authStore.getToken}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Erreur lors de la requête HTTP');
+    }
+    console.log('Image supprimée avec succès');
+  } catch (error) {
+    console.error('Erreur lors de la suppression de l\'image:', error);
+  }
+}
+
+async function deleteUnselectedImages(image) {
+  const product = authStore.getSelectedProductToUpdate;
+  let productMap = new Map();
+  product.images.forEach(image => {
+    productMap.set(image.url, image.id)
+  })
+  if (productMap.has(image)) {
+    const imageId = productMap.get(image);
+    imageToDeletedId.value.push(imageId)
+  }
+  selectedImages.value = selectedImages.value.filter(item => item !== image)
+}
+
+
 
 function initForm() {
-  naturaBuyId.value = '',
-    name.value = '',
-    price.value = 0,
-    quantity.value = 0,
-    duree.value = 0,
-    description.value = '',
-    categorieId.value = 0,
-    selectedImages.value = []
+  naturaBuyId.value = ''
+  name.value = ''
+  price.value = 0
+  quantity.value = 0
+  duree.value = 0
+  description.value = ''
+  categorieId.value = 0
+  if (selectedImages.value.length != 0) {
+    selectedImages.value = selectedImages.value.shift();
+  }
+  selectedImages.value = []
 }
 
 function initFormWithProduct(product) {
-  naturaBuyId.value = product.naturaBuyId,
-    name.value = product.name,
-    price.value = product.price,
-    quantity.value = product.quantity,
-    duree.value = product.duree,
-    description.value = product.description,
-    categorieId.value = product.categorieId
+  naturaBuyId.value = product.naturaBuyId
+  name.value = product.name
+  price.value = product.price
+  quantity.value = product.quantity
+  duree.value = product.duree
+  description.value = product.description
+  categorieId.value = product.categorieId
+  if (selectedImages.value.length != 0) {
+    selectedImages.value = [];
+  }
   for (const element of product.images) {
     selectedImages.value.push(element.url);
   }
@@ -131,7 +169,6 @@ async function checkForm() {
 const submitForm = async (event) => {
   event.preventDefault();
   await checkForm()
-  console.log(selectedImages.value)
   if (formIsValid.value) {
     const data = {
       naturaBuyId: naturaBuyId.value,
@@ -143,20 +180,41 @@ const submitForm = async (event) => {
       categorieId: parseInt(categorieId.value, 10)
     };
     try {
-      const response = await fetch('https://reparm-api-without-docker.onrender.com/product/create', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authStore.getToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
+      let response;
+      let productId;
+      if (authStore.getSelectedProductToUpdate == null) {
+        response = await fetch('https://reparm-api-without-docker.onrender.com/product/create', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authStore.getToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        const responseData = await response.json();
+        productId = responseData.id;
+      } else {
+        productId = authStore.getSelectedProductToUpdate.id;
+        response = await fetch('https://reparm-api-without-docker.onrender.com/product/update/' + productId, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${authStore.getToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        console.log(imageToDeletedId.value)
+        if (imageToDeletedId.value.length != 0) {
+          for (const imageId of imageToDeletedId.value) {
+            console.log(imageId)
+            fetchDeleteImage(imageId)
+          }
+          imageToDeletedId.value = [];
+        }
+      }
       if (!response.ok) {
         throw new Error('Erreur lors de la requête HTTP');
       }
-      const responseData = await response.json();
-      const productId = responseData.id;
       await uploadImages(productId)
       initForm()
       emit('loadProduct')
@@ -226,6 +284,7 @@ watch(
           <div class="carousel-inner">
             <div v-for="(image, index) in selectedImages" :key="index" class="carousel-item active">
               <img :src="image" class=" caroussel_images d-block w-100" alt="...">
+              <button type="button" @click="deleteUnselectedImages(image)" class="delete_image">X</button>
             </div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
@@ -268,6 +327,10 @@ watch(
   position: relative;
 }
 
+.carousel-item {
+  position: relative;
+}
+
 img {
   aspect-ratio: 16/11;
 }
@@ -294,5 +357,17 @@ img {
 .caroussel_container {
   width: 100%;
   max-height: 280px;
+}
+
+.delete_image {
+  position: absolute;
+  z-index: 3000000000000;
+  color: red;
+  top: 0;
+  left: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+  font-size: 1.25rem;
 }
 </style>

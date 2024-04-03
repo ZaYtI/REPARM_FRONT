@@ -1,5 +1,5 @@
 <script setup>
-
+const authStore = useAuthStore();
 const emit = defineEmits(['sendToParent'])
 </script>
 
@@ -10,7 +10,8 @@ const emit = defineEmits(['sendToParent'])
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Produit :</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        @click="authStore.setProductToUpdate(null)"></button>
                 </div>
                 <div class="modal-body">
                     <AdminCreateOrUpdateProduct @load-product="() => emit('sendToParent')" />
