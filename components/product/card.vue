@@ -8,9 +8,10 @@ const emit = defineEmits(['loadImages'])
 
 <template>
   <NuxtLink :to="'/product/' + props.product.id" class="card">
-    <img :src="props.product.images[0].url" alt="Your Image Alt Text" @load="emit('loadImages')"/>
+    <img :src="props.product.images[0].url" @load="emit('loadImages')" alt="alt"/>
     <div class="card-body">
       <h5 class="card-title">{{ props.product.name }}</h5>
+      <p class="text-center text-secondary">{{ props.product.price }}€</p>
     </div>
   </NuxtLink> 
 </template>
@@ -19,9 +20,10 @@ const emit = defineEmits(['loadImages'])
 .card {
   width: 350px;
   margin-bottom: 2rem;
-  padding: 1rem;
+  padding: 0.5rem;
   background-color: white;
   transition: all 0.2s ease-in-out;
+  text-decoration: none;
 }
 
 .card:hover {

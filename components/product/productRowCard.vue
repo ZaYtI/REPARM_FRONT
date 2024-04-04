@@ -1,18 +1,12 @@
 <script setup>
 
-const products = ref([null])
+const selectCatStore = useSelectedCatStore();
 const loader = ref(true)
 const loadImages = ref(0);
-const props = defineProps({
-  product: {
-    type: Object,
-    required: true
-  }
-});
 
 function waitLoadImages() {
   loadImages.value = loadImages.value + 1
-  if (loadImages.value == props.product.length) {
+  if (loadImages.value == selectCatStore.getAllProducts.length) {
     loader.value = false;
     loadImages.value = 0;
   }
@@ -22,7 +16,7 @@ function waitLoadImages() {
 <template>
   <div class="container products-card-container">
     <div class="row_card d-flex justify-content-evenly" :class="{ 'd-none': loader }">
-      <ProductCard v-for="product in props.product" :product="product" :key="product.id"
+      <ProductCard v-for="product in selectCatStore.getAllProducts" :product="product" :key="product.id"
         @load-images="waitLoadImages()" />
     </div>
     <div class="d-flex justify-content-center spinner-container" :class="{ 'd-none': !loader }">
