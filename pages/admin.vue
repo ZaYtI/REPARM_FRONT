@@ -22,7 +22,6 @@ async function deleteProduct(productId) {
         }
         productIsLoaded.value = false
         await selectCatStore.setAllProduct();
-        await paginateProducts()
         productIsLoaded.value = true
     } catch (error) {
         console.error(error)
@@ -44,7 +43,6 @@ async function deleteOrder(orderId) {
         ordersIsLoad.value = false
         await authStore.setAllOrder();
         paginateOrder.value = []
-        await paginateOrders()
         ordersIsLoad.value = true
     } catch (error) {
         console.error(error)
@@ -201,8 +199,8 @@ onMounted(async () => {
                                 <tr v-for="order in currentOrders" :key="order.id">
                                     <td class="text-center">{{ order.id }}</td>
                                     <td class="text-center">{{ order.userId }}</td>
-                                    <td class="text-center"><a :href="'mailto:' + order.user.email">{{ order.user.email
-                                            }}</a></td>
+                                    <td class="text-center"><a :href="'mailto:' + order.user.email">{{
+        order.user.email }}</a></td>
                                     <td class="text-center">{{ order.user.phone }}</td>
                                     <td class="text-center span-order" v-if="order.payment">
                                         <span class="success-order">Valider</span>

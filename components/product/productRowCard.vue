@@ -5,14 +5,14 @@ const loader = ref(true)
 const loadImages = ref(0);
 const props = defineProps({
   product: {
-    type :  Object,
-    required : true
+    type: Object,
+    required: true
   }
 });
 
-function waitLoadImages(){
+function waitLoadImages() {
   loadImages.value = loadImages.value + 1
-  if(loadImages.value == props.product.length){
+  if (loadImages.value == props.product.length) {
     loader.value = false;
     loadImages.value = 0;
   }
@@ -21,10 +21,11 @@ function waitLoadImages(){
 
 <template>
   <div class="container products-card-container">
-    <div class="row_card d-flex justify-content-evenly" :class="{'d-none':loader}">
-    <ProductCard v-for="product in props.product" :product="product" :key="product.id" @load-images="waitLoadImages()" />
+    <div class="row_card d-flex justify-content-evenly" :class="{ 'd-none': loader }">
+      <ProductCard v-for="product in props.product" :product="product" :key="product.id"
+        @load-images="waitLoadImages()" />
     </div>
-    <div class="d-flex justify-content-center spinner-container" :class="{'d-none':!loader}">
+    <div class="d-flex justify-content-center spinner-container" :class="{ 'd-none': !loader }">
       <div class="spinner-border mx-auto" style="width: 5rem; height: 5rem;" role="status"></div>
     </div>
   </div>
