@@ -94,7 +94,6 @@ async function fetchDeleteImage(imageId) {
     if (!response.ok) {
       throw new Error('Erreur lors de la requête HTTP');
     }
-    console.log('Image supprimée avec succès');
   } catch (error) {
     console.error('Erreur lors de la suppression de l\'image:', error);
   }
@@ -203,10 +202,8 @@ const submitForm = async (event) => {
           },
           body: JSON.stringify(data),
         });
-        console.log(imageToDeletedId.value)
         if (imageToDeletedId.value.length != 0) {
           for (const imageId of imageToDeletedId.value) {
-            console.log(imageId)
             fetchDeleteImage(imageId)
           }
           imageToDeletedId.value = [];
@@ -282,8 +279,8 @@ watch(
       <div class="caroussel_container p-3">
         <div v-if="selectedImages.length > 0" id="carouselExampleIndicators" class="carousel slide">
           <div class="carousel-inner">
-            <div v-for="(image, index) in selectedImages" :key="index" class="carousel-item active">
-              <img :src="image" class=" caroussel_images d-block w-100" alt="...">
+            <div v-for="(image, index) in selectedImages" :key="index" :id="index" class="carousel-item active">
+              <img :src="image" :id="index" class="caroussel_images d-block w-100" alt="...">
               <button type="button" @click="deleteUnselectedImages(image)" class="delete_image">X</button>
             </div>
           </div>
