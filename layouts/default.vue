@@ -12,6 +12,7 @@ onMounted(async () => {
   }
   await selectCatStore.setListOfCategorie();
   await selectCatStore.setAllProduct();
+  await selectCatStore.setSelectedCat(0,'Tous les fusils');
 });
 
 watch(

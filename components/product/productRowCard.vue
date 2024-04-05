@@ -6,7 +6,7 @@ const loadImages = ref(0);
 
 function waitLoadImages() {
   loadImages.value = loadImages.value + 1
-  if (loadImages.value == selectCatStore.getAllProducts.length) {
+  if (loadImages.value == selectCatStore.getlistOfSelectedProducts.length) {
     loader.value = false;
     loadImages.value = 0;
   }
@@ -16,7 +16,7 @@ function waitLoadImages() {
 <template>
   <div class="container products-card-container">
     <div class="row_card d-flex justify-content-evenly" :class="{ 'd-none': loader }">
-      <ProductCard v-for="product in selectCatStore.getAllProducts" :product="product" :key="product.id"
+      <ProductCard v-for="product in selectCatStore.getlistOfSelectedProducts" :product="product" :key="product.id"
         @load-images="waitLoadImages()" />
     </div>
     <div class="d-flex justify-content-center spinner-container" :class="{ 'd-none': !loader }">
