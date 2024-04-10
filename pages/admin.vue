@@ -1,4 +1,6 @@
 <script setup>
+import CreateAndUpdateProductModal from '~/components/admin/createAndUpdateProductModal.vue';
+
 const authStore = useAuthStore();
 
 const selectCatStore = useSelectedCatStore();
@@ -217,8 +219,8 @@ onMounted(async () => {
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-around">
-                                            <button class="btn btn-primary">Modifier</button>
-                                            <button :disabled="order.received || order.payment" class="btn btn-danger ms-2"
+                                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#orderModalTop" @click="authStore.setOrderToUpdateSelected(order)" :disabled="order.received && order.payment">Modifier</button>
+                                            <button :disabled="order.payment" class="btn btn-danger ms-2"
                                                 @click="deleteOrder(order.id)">Supprimer</button>
                                         </div>
                                     </td>
@@ -229,7 +231,8 @@ onMounted(async () => {
                 </div>
             </div>
         </div>
-        <AdminModal />
+        <CreateAndUpdateProductModal />
+        <AdminUpdateOrderModal />
     </div>
     <div class="d-flex justify-content-center spinner-container" :class="{ 'd-none': allIsLoad }">
         <div class="spinner-border mx-auto" style="width: 10rem; height: 10rem;" role="status"></div>
@@ -244,7 +247,7 @@ onMounted(async () => {
 
 .wait-order {
     background-color: rgb(251, 91, 32);
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     text-align: center;
     color: white;
     padding: 5px;
@@ -252,7 +255,7 @@ onMounted(async () => {
 
 .success-order {
     background-color: green;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     text-align: center;
     color: white;
     padding: 5px;

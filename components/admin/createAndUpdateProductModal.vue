@@ -235,78 +235,92 @@ watch(
 </script>
 
 <template>
-  <div class="container">
-    <form @submit.prevent="submitForm">
-      <div class="d-flex">
-        <div class="pe-2">
-          <label class="form-label" for="naturaBuyId">Natura Buy ID:</label>
-          <input class="form-control" type="text" id="naturaBuyId" v-model="naturaBuyId" />
-          <small class="text-danger" v-if="naturaBuyIdError">Veuillez rentrer l'id de vente naturabuy</small>
-        </div>
-        <div>
-          <label class="form-label" for="categorie">Categorie :</label>
-          <select class="form-select" aria-label="Default select example" v-model="categorieId">
-            <option selected :value="null">Open this select menu</option>
-            <option v-for="elt in catStore.getListOfCategorie" :key="elt.id" :value="elt.id">{{ elt.name }}</option>
-          </select>
-          <small class="text-danger" v-if="categorieIdError">Veuillez selectionner la categorie du produit</small>
-        </div>
-      </div>
-      <div>
-        <label class="form-label" for="name">Nom:</label>
-        <input class="form-control" type="text" id="name" v-model="name" />
-        <small class="text-danger" v-if="nameError">Veuillez entrer le nom du produits</small>
-      </div>
-      <div class="d-flex">
-        <div class="pe-2">
-          <label class="form-label" for="price">Price:</label>
-          <input class="form-control" type="number" id="price" v-model="price" />
-          <small class="text-danger" v-if="priceError">Veuillez entrer le prix du produit</small>
-        </div>
-        <div>
-          <label class="form-label" for="quantity">Quantity:</label>
-          <input class="form-control" type="number" id="quantity" v-model="quantity" />
-          <small class="text-danger" v-if="quantityError">Veuillez entrer la quantiter disponible du produit</small>
-        </div>
-      </div>
-      <div>
-        <label class="form-label" for="description">Description:</label>
-        <textarea class="form-control" id="description" v-model="description"></textarea>
-        <small class="text-danger" v-if="descriptionError">Veuillez entrer la description du produit</small>
-      </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        ref="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Produit :</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        @click="authStore.setProductToUpdate(null)"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form @submit.prevent="submitForm">
+                        <div class="d-flex">
+                            <div class="pe-2">
+                            <label class="form-label" for="naturaBuyId">Natura Buy ID:</label>
+                            <input class="form-control" type="text" id="naturaBuyId" v-model="naturaBuyId" />
+                            <small class="text-danger" v-if="naturaBuyIdError">Veuillez rentrer l'id de vente naturabuy</small>
+                            </div>
+                            <div>
+                            <label class="form-label" for="categorie">Categorie :</label>
+                            <select class="form-select" aria-label="Default select example" v-model="categorieId">
+                                <option selected :value="null">Open this select menu</option>
+                                <option v-for="elt in catStore.getListOfCategorie" :key="elt.id" :value="elt.id">{{ elt.name }}</option>
+                            </select>
+                            <small class="text-danger" v-if="categorieIdError">Veuillez selectionner la categorie du produit</small>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label" for="name">Nom:</label>
+                            <input class="form-control" type="text" id="name" v-model="name" />
+                            <small class="text-danger" v-if="nameError">Veuillez entrer le nom du produits</small>
+                        </div>
+                        <div class="d-flex">
+                            <div class="pe-2">
+                            <label class="form-label" for="price">Price:</label>
+                            <input class="form-control" type="number" id="price" v-model="price" />
+                            <small class="text-danger" v-if="priceError">Veuillez entrer le prix du produit</small>
+                            </div>
+                            <div>
+                            <label class="form-label" for="quantity">Quantity:</label>
+                            <input class="form-control" type="number" id="quantity" v-model="quantity" />
+                            <small class="text-danger" v-if="quantityError">Veuillez entrer la quantiter disponible du produit</small>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label" for="description">Description:</label>
+                            <textarea class="form-control" id="description" v-model="description"></textarea>
+                            <small class="text-danger" v-if="descriptionError">Veuillez entrer la description du produit</small>
+                        </div>
 
 
-      <div class="caroussel_container p-3">
-        <div v-if="selectedImages.length > 0" id="carouselExampleIndicators" class="carousel slide">
-          <div class="carousel-inner">
-            <div v-for="(image, index) in selectedImages" :key="index" :id="index" class="carousel-item active">
-              <img :src="image" :id="index" class="caroussel_images d-block w-100" alt="...">
-              <button type="button" @click="deleteUnselectedImages(image)" class="delete_image">X</button>
+                        <div class="caroussel_container p-3">
+                            <div v-if="selectedImages.length > 0" id="carouselExampleIndicators" class="carousel slide">
+                            <div class="carousel-inner">
+                                <div v-for="(image, index) in selectedImages" :key="index" :id="index" class="carousel-item active">
+                                <img :src="image" :id="index" class="caroussel_images d-block w-100" alt="...">
+                                <button type="button" @click="deleteUnselectedImages(image)" class="delete_image">X</button>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3 mt-4">
+                            <label class="input-group-text" for="inputGroupFile01">Select files</label>
+                            <input type="file" class="form-control" id="inputGroupFile01" @change="handleSelectImage" />
+                        </div>
+                        <small v-if="selectedImagesError" class="text-danger">Veuillez entrer une image</small>
+                        <small v-if="showError" class="text-danger">Fichier invalide</small>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary mx-auto">Enregistrer</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
         </div>
-      </div>
-      <div class="input-group mb-3 mt-4">
-        <label class="input-group-text" for="inputGroupFile01">Select files</label>
-        <input type="file" class="form-control" id="inputGroupFile01" @change="handleSelectImage" />
-      </div>
-      <small v-if="selectedImagesError" class="text-danger">Veuillez entrer une image</small>
-      <small v-if="showError" class="text-danger">Fichier invalide</small>
-      <div class="d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary mx-auto">Enregistrer</button>
-      </div>
-    </form>
-  </div>
+    </div>
 </template>
 
 <style scoped>

@@ -39,9 +39,9 @@ export const useAuthStore = defineStore('auth', {
     user: null as UserProfile | null,
     panier: null as any,
     allOrder: [] as any[],
-    productOrderSelected: [] as any,
     userOrder: [] as any[],
-    selectedProductToUpdate: null as any
+    selectedProductToUpdate: null as any,
+    selectedOrderToUpdate: null as any
   }),
   getters: {
     getIsLoggedIn(): null | boolean {
@@ -52,9 +52,6 @@ export const useAuthStore = defineStore('auth', {
     },
     getUserOrder(): any[] {
       return this.userOrder;
-    },
-    getProductOrderSelected(): any[] {
-      return this.productOrderSelected;
     },
     getProfile(): UserProfile | null {
       return this.user;
@@ -70,6 +67,9 @@ export const useAuthStore = defineStore('auth', {
     },
     getAllOrder(): any[] {
       return this.allOrder;
+    },
+    getSelectedOrderToUpdate(): any {
+      return this.selectedOrderToUpdate
     }
   },
   actions: {
@@ -97,6 +97,10 @@ export const useAuthStore = defineStore('auth', {
       this.selectedProductToUpdate = product;
     },
 
+    async setOrderToUpdateSelected(order: any): Promise<void> {
+      this.selectedOrderToUpdate = order;
+    },
+
 
     async validatePanierToOrder(): Promise<void> {
       const response = await fetch('https://reparm-api-without-docker.onrender.com/commande-produit/createWithPanier', {
@@ -113,10 +117,6 @@ export const useAuthStore = defineStore('auth', {
       } else {
         this.panier = []
       }
-    },
-
-    async setProductOrderSelected(newList: any[]): Promise<void> {
-      this.productOrderSelected = newList;
     },
 
     async setUserOrder(): Promise<void> {

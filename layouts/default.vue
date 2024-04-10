@@ -52,14 +52,11 @@ watch(
 .default-layout {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
 .default-layout-content {
   flex-grow: 1;
-}
-
-.default-layout {
-  min-height: 100vh;
 }
 
 .bg-color-primary {
