@@ -26,6 +26,11 @@ const calculateTotalPrice = () => {
 }
 
 
+async function orderBasket(){
+  await authStore.validatePanierToOrder();
+  validatebasket.value = false;
+}
+
 
 watch(
   () => authStore.getPanier,
@@ -47,7 +52,7 @@ watch(
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title panier_title" id="offcanvasRightLabel">Votre panier</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" @click="() => validatebasket = false"></button>
     </div>
     <div class="offcanvas-body">
       <div :class="{'d-none':noProduct}">
@@ -69,7 +74,7 @@ watch(
       <div :class="{'d-none':!validatebasket}">
         <p class="text-danger text-center">Voulez commandez ces produits?</p>
         <div class="d-flex justify-content-around">
-          <button class="btn btn-lg btn-success" @click="authStore.validatePanierToOrder()" >Valider</button>
+          <button class="btn btn-lg btn-success" @click="orderBasket()" >Valider</button>
           <button class="btn btn-lg btn-danger" @click="() => validatebasket= false">Annuler</button>
         </div>
       </div>

@@ -218,7 +218,7 @@ onMounted(async () => {
                                     <td>
                                         <div class="d-flex justify-content-around">
                                             <button class="btn btn-primary">Modifier</button>
-                                            <button class="btn btn-danger ms-2"
+                                            <button :disabled="order.received || order.payment" class="btn btn-danger ms-2"
                                                 @click="deleteOrder(order.id)">Supprimer</button>
                                         </div>
                                     </td>
