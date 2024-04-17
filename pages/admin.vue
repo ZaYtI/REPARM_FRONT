@@ -61,7 +61,10 @@ const itemsPerPage = ref(10);
 
 const totalPagesProduct = computed(() => Math.ceil(selectCatStore.getAllProducts.length / itemsPerPage.value));
 
-const totalPagesOrder = computed(() => Math.ceil(authStore.getAllOrder.length / itemsPerPage.value));
+const totalPagesOrder = computed(() =>{
+    const filteredOrders = authStore.getAllOrder.filter(order => !(order.payment && order.received))
+    return Math.ceil(filteredOrders.length / itemsPerPage.value);
+});
 
 
 const previousOrderIsVisible = computed(() => {
@@ -88,7 +91,8 @@ const currentProducts = computed(() => {
 });
 
 const currentOrders = computed(() => {
-    const sortedOrders = authStore.getAllOrder.toSorted((a, b) => a.id - b.id);
+    const filteredOrders = authStore.getAllOrder.filter(order => !(order.payment && order.received))
+    const sortedOrders = filteredOrders.toSorted((a, b) => a.id - b.id);
     const startIndex = (currentPageIndexOrder.value - 1) * itemsPerPage.value;
     const endIndex = startIndex + itemsPerPage.value;
     return sortedOrders.slice(startIndex, endIndex);
