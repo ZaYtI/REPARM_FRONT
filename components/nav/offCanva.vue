@@ -33,7 +33,7 @@ async function orderBasket(){
 
 async function createAndRedirectToStripeCheckout(){
   console.log('create order')
-  const response = await fetch('https://reparm-api-without-docker.onrender.com/stripe', {
+  const response = await fetch('https://api.souchezreparm.fr/stripe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

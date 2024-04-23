@@ -9,7 +9,7 @@ const product = ref(null)
 const loadedImage = ref(0)
 async function getProductById() {
   if (store.getlistOfSelectedProducts == null || store.getlistOfSelectedProducts == undefined || store.getlistOfSelectedProducts.length == 0) {
-    const response = await fetch('https://reparm-api-without-docker.onrender.com/product/getById/' + router.params.id, {
+    const response = await fetch('https://api.souchezreparm.fr/product/getById/' + router.params.id, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ async function getProductById() {
 }
 
 async function addProductToBasket() {
-  const response = await fetch('https://reparm-api-without-docker.onrender.com/panier-item/' + parseInt(router.params.id), {
+  const response = await fetch('https://api.souchezreparm.fr/panier-item/' + parseInt(router.params.id), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
