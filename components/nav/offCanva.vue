@@ -31,6 +31,25 @@ async function orderBasket(){
   validatebasket.value = false;
 }
 
+async function createAndRedirectToStripeCheckout(){
+  console.log('create order')
+  const response = await fetch('https://reparm-api-without-docker.onrender.com/stripe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authStore.getToken}`,
+        },
+  });
+  const responseData = await response.json();
+  if (response.status !== 200) {
+    if(responseData.url == undefined){
+      return;
+    }else{
+      location.replace(responseData.url)
+    }
+  }
+}
+
 
 watch(
   () => authStore.getPanier,
@@ -74,7 +93,7 @@ watch(
       <div :class="{'d-none':!validatebasket}">
         <p class="text-danger text-center">Voulez commandez ces produits?</p>
         <div class="d-flex justify-content-around">
-          <button class="btn btn-lg btn-success" @click="orderBasket()" >Valider</button>
+          <button class="btn btn-lg btn-success" @click="createAndRedirectToStripeCheckout()">Valider</button>
           <button class="btn btn-lg btn-danger" @click="() => validatebasket= false">Annuler</button>
         </div>
       </div>
