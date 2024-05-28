@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 
 interface UserProfile {
   id: number;
@@ -20,28 +20,28 @@ interface UserProfile {
 }
 
 interface RegisterUser {
-  civility: string,
-  lastName: string,
-  firstName: string,
-  phone: string,
-  country: string,
-  address: string,
-  email: string,
-  password: string,
-  birthDate: string,
-  postalCode: string,
+  civility: string;
+  lastName: string;
+  firstName: string;
+  phone: string;
+  country: string;
+  address: string;
+  email: string;
+  password: string;
+  birthDate: string;
+  postalCode: string;
 }
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => ({
     authenticated: null as null | boolean,
-    token: localStorage.getItem('token') || null,
+    token: localStorage.getItem("token") || null,
     user: null as UserProfile | null,
     panier: null as any,
     allOrder: [] as any[],
     userOrder: [] as any[],
     selectedProductToUpdate: null as any,
-    selectedOrderToUpdate: null as any
+    selectedOrderToUpdate: null as any,
   }),
   getters: {
     getIsLoggedIn(): null | boolean {
@@ -60,36 +60,35 @@ export const useAuthStore = defineStore('auth', {
       return this.token;
     },
     getPanier(): any {
-      return this.panier
+      return this.panier;
     },
     getIsAdmin(): boolean {
-      return this.user?.roleId == 2
+      return this.user?.roleId == 2;
     },
     getAllOrder(): any[] {
       return this.allOrder;
     },
     getSelectedOrderToUpdate(): any {
-      return this.selectedOrderToUpdate
-    }
+      return this.selectedOrderToUpdate;
+    },
   },
   actions: {
     async login(email: string, password: string): Promise<void> {
-      const response = await fetch('https://api.souchezreparm.fr/auth/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
       const responseData = await response.json();
       if (response.status !== 200) {
         this.authenticated = false;
-        localStorage.removeItem('token')
-        return;
+        localStorage.removeItem("token");
       } else {
         this.token = responseData.access_token;
         this.authenticated = true;
-        localStorage.setItem('token', responseData.access_token);
+        localStorage.setItem("token", responseData.access_token);
       }
     },
 
@@ -97,44 +96,50 @@ export const useAuthStore = defineStore('auth', {
       this.selectedProductToUpdate = product;
     },
 
+    async setBasket(panier:any){
+      this.panier = panier
+    },
+
     async setOrderToUpdateSelected(order: any): Promise<void> {
       this.selectedOrderToUpdate = order;
     },
 
-
     async validatePanierToOrder(): Promise<void> {
-      const response = await fetch('https://api.souchezreparm.fr/commande-produit/createWithPanier', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.token}`,
+      const response = await fetch(
+        "http://localhost:8000/commande-produit/createWithPanier",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.token}`,
+          },
         }
-      });
+      );
       if (!response.ok) {
         this.authenticated = false;
-        localStorage.removeItem('token')
+        localStorage.removeItem("token");
         return;
       } else {
-        this.panier = []
+        this.panier = [];
       }
     },
 
     async setUserOrder(): Promise<void> {
-      const response = await fetch('https://api.souchezreparm.fr/commande/user', {
-        method: 'GET',
+      const response = await fetch("http://localhost:8000/commande/user", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.token}`,
-        }
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token}`,
+        },
       });
       let responseData = await response.json();
       if (response.status !== 200) {
         this.authenticated = false;
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
         return;
       } else {
         if (Array.isArray(responseData)) {
-          responseData = responseData.map(order => {
+          responseData = responseData.map((order) => {
             if (order.createdAt && order.updatedAt) {
               order.createdAt = this.formatDate(order.createdAt);
               order.updatedAt = this.formatDate(order.updatedAt);
@@ -152,15 +157,20 @@ export const useAuthStore = defineStore('auth', {
 
     formatDate(dateString: string) {
       const dateObject = new Date(dateString);
-      return dateObject.getDate().toString().padStart(2, '0') + '-' + (dateObject.getMonth() + 1).toString().padStart(2, '0') + '-' + dateObject.getFullYear();
+      return (
+        dateObject.getDate().toString().padStart(2, "0") +
+        "-" +
+        (dateObject.getMonth() + 1).toString().padStart(2, "0") +
+        "-" +
+        dateObject.getFullYear()
+      );
     },
 
-
     async profile(): Promise<void> {
-      const response = await fetch('https://api.souchezreparm.fr/auth/profile', {
-        method: 'GET',
+      const response = await fetch("http://localhost:8000/auth/profile", {
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
         },
       });
 
@@ -168,7 +178,7 @@ export const useAuthStore = defineStore('auth', {
 
       if (response.status !== 200) {
         this.authenticated = false;
-        localStorage.removeItem('token')
+        localStorage.removeItem("token");
         return;
       } else {
         this.user = responseData;
@@ -180,112 +190,121 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async register(formData: RegisterUser): Promise<void> {
-      const response = await fetch('https://api.souchezreparm.fr/auth/register', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/auth/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       const responseData = await response.json();
-      if (responseData.access_token !== undefined || responseData.access_token !== null) {
+      if (
+        responseData.access_token !== undefined ||
+        responseData.access_token !== null
+      ) {
         this.token = responseData.access_token;
         this.authenticated = true;
-        localStorage.setItem('token', responseData.access_token);
+        localStorage.setItem("token", responseData.access_token);
       } else {
         this.authenticated = false;
-        localStorage.removeItem('token')
+        localStorage.removeItem("token");
         return;
       }
     },
 
     async userPanier(): Promise<void> {
-      const response = await fetch('https://api.souchezreparm.fr/panier-item/', {
-        method: 'GET',
+      const response = await fetch("http://localhost:8000/panier-item/", {
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
         },
       });
-      const responseData = await response.json()
+      const responseData = await response.json();
 
       if (response.status !== 200 && response.status !== 304) {
         this.authenticated = false;
-        localStorage.removeItem('token')
+        localStorage.removeItem("token");
         return;
       } else {
-        this.panier = responseData
+        this.panier = responseData;
       }
     },
 
     async createOrder(): Promise<void> {
-      const response = await fetch('https://api.souchezreparm.fr/commande_produit/createWithPanier', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
+      const response = await fetch(
+        "http://localhost:8000/commande_produit/createWithPanier",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
         }
-      })
+      );
       const responseData = await response.json();
       if (response.status !== 200) {
         this.authenticated = false;
-        localStorage.removeItem('token')
+        localStorage.removeItem("token");
         return;
       } else {
-        this.panier = responseData
+        this.panier = responseData;
       }
     },
 
     async logout(): Promise<void> {
-      const response = await fetch('https://api.souchezreparm.fr/auth/register', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/auth/register", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${this.token}`,
-        }
-      })
+          Authorization: `Bearer ${this.token}`,
+        },
+      });
       const responseData = await response.json();
       if (response.status !== 200) {
         this.authenticated = false;
-        localStorage.removeItem('token')
+        localStorage.removeItem("token");
         return;
       } else {
-        this.panier = responseData
+        this.panier = responseData;
       }
     },
 
     async isLoggedIn(): Promise<void> {
-      this.authenticated = localStorage.getItem('token') ? true : false;
+      this.authenticated = localStorage.getItem("token") ? true : false;
     },
 
     async setAllOrder(): Promise<void> {
-      const data = await fetch('https://api.souchezreparm.fr/commande/all', {
-        method: 'GET',
+      const data = await fetch("http://localhost:8000/commande/all", {
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${this.token}`,
-        }
-      })
+          Authorization: `Bearer ${this.token}`,
+        },
+      });
       if (data.status !== 200) {
         return;
       } else {
-        const order = await data.json()
-        this.allOrder = order
+        const order = await data.json();
+        this.allOrder = order;
       }
     },
 
     async removeProduct(productId: number): Promise<void> {
-      const response = await fetch('https://api.souchezreparm.fr/panier-item/' + productId, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-        },
-      });
-      const data = await response.json()
+      const response = await fetch(
+        "http://localhost:8000/panier-item/" + productId,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        }
+      );
+      const data = await response.json();
       if (response.status !== 200) {
         this.authenticated = false;
-        localStorage.removeItem('token')
+        localStorage.removeItem("token");
         return;
       } else {
         this.panier = data;
       }
-    }
+    },
   },
 });

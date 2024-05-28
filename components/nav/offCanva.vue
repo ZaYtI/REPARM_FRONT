@@ -1,102 +1,113 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
 const authStore = useAuthStore();
 
-const totalPrice = ref(0)
+const totalPrice = ref(0);
 
-const noProduct = ref(false)
+const noProduct = ref(false);
 
-const validatebasket = ref(false)
-
+const validatebasket = ref(false);
 
 onMounted(() => {
-  if(authStore.getPanier == null || authStore.getPanier.length > 0){
-    noProduct.value=true;
-  }else{
-    noProduct.value=false;
+  if (authStore.getPanier == null || authStore.getPanier.length > 0) {
+    noProduct.value = true;
+  } else {
+    noProduct.value = false;
   }
-})
+});
 
 const calculateTotalPrice = () => {
-  totalPrice.value = 0
+  totalPrice.value = 0;
   for (const product of authStore.getPanier) {
-    totalPrice.value = totalPrice.value + (product.produit.price * product.quantity)
+    totalPrice.value =
+      totalPrice.value + product.produit.price * product.quantity;
   }
-}
+};
 
-
-async function orderBasket(){
+async function orderBasket() {
   await authStore.validatePanierToOrder();
   validatebasket.value = false;
 }
-
-async function createAndRedirectToStripeCheckout(){
-  console.log('create order')
-  const response = await fetch('https://api.souchezreparm.fr/stripe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authStore.getToken}`,
-        },
-  });
-  const responseData = await response.json();
-  if (response.status !== 200) {
-    if(responseData.url == undefined){
-      return;
-    }else{
-      location.replace(responseData.url)
-    }
-  }
-}
-
 
 watch(
   () => authStore.getPanier,
   async (newListOfProduct, oldListOfProduct) => {
     if (newListOfProduct != null || newListOfProduct != undefined) {
-      if(newListOfProduct.length > 0){
-        noProduct.value = false
-      }else{
-        noProduct.value = true
+      if (newListOfProduct.length > 0) {
+        noProduct.value = false;
+      } else {
+        noProduct.value = true;
       }
-        calculateTotalPrice();
+      calculateTotalPrice();
     }
   }
 );
-
 </script>
 
 <template>
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div
+    class="offcanvas offcanvas-end"
+    tabindex="-1"
+    id="offcanvasRight"
+    aria-labelledby="offcanvasRightLabel"
+  >
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title panier_title" id="offcanvasRightLabel">Votre panier</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" @click="() => validatebasket = false"></button>
+      <h5 class="offcanvas-title panier_title" id="offcanvasRightLabel">
+        Votre panier
+      </h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+        @click="() => (validatebasket = false)"
+      ></button>
     </div>
     <div class="offcanvas-body">
-      <div :class="{'d-none':noProduct}">
-        <small class="text-secondary text-center">La validation de votre panier n'engage pas de paiement celui ci sera effectuer a la réception en magasins.</small>
+      <div :class="{ 'd-none': noProduct }">
+        <small class="text-secondary text-center"
+          >La validation de votre panier n'engage pas de paiement celui ci sera
+          effectuer a la réception en magasins.</small
+        >
         <ProductPanier />
       </div>
-      <div :class="{'d-none':!noProduct}" class="element_panier d-flex text-secondary">
+      <div
+        :class="{ 'd-none': !noProduct }"
+        class="element_panier d-flex text-secondary"
+      >
         <div class="element_panier_info ps-3">
           <p class="mb-0 text-secondary">Aucun produit disponible</p>
         </div>
       </div>
-      <div :class="{'d-none':noProduct}">
+      <div :class="{ 'd-none': noProduct }">
         <div class="mt-3 ms-2">
-        <small class="text-secondary">Total : {{ totalPrice }} €</small>
-      </div>
-      <div :class="{'d-none':validatebasket}" class="mt-2 d-flex justify-content-center" @click="() => validatebasket = true">
-        <button class="btn btn-lg panier_button">Valider mon panier</button>
-      </div>
-      <div :class="{'d-none':!validatebasket}">
-        <p class="text-danger text-center">Voulez commandez ces produits?</p>
-        <div class="d-flex justify-content-around">
-          <button class="btn btn-lg btn-success" @click="createAndRedirectToStripeCheckout()">Valider</button>
-          <button class="btn btn-lg btn-danger" @click="() => validatebasket= false">Annuler</button>
+          <small class="text-secondary">Total : {{ totalPrice }} €</small>
         </div>
-      </div>
+        <div
+          :class="{ 'd-none': validatebasket }"
+          class="mt-2 d-flex justify-content-center"
+          @click="() => (validatebasket = true)"
+        >
+          <button class="btn btn-lg panier_button">Valider mon panier</button>
+        </div>
+        <div :class="{ 'd-none': !validatebasket }">
+          <p class="text-danger text-center">Voulez commandez ces produits?</p>
+          <div class="d-flex justify-content-around">
+            <button
+              class="btn btn-lg btn-success"
+              @click="orderBasket()"
+            >
+              Valider
+            </button>
+            <button
+              class="btn btn-lg btn-danger"
+              @click="() => (validatebasket = false)"
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -104,14 +115,13 @@ watch(
 
 <style scoped>
 .panier_title {
-  color: #B54A29;
+  color: #b54a29;
   text-transform: uppercase;
   text-align: center;
 }
 
-
 .panier_button {
-  background-color: #B54A29;
+  background-color: #b54a29;
   color: white;
   border: none;
   border-radius: 10px;

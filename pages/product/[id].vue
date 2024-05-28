@@ -1,83 +1,93 @@
 <script setup>
-import { useSelectedCatStore } from '@/stores/selectedCat';
-import { useRoute } from 'vue-router'
+import { useSelectedCatStore } from "@/stores/selectedCat";
+import { useRoute } from "vue-router";
 const store = useSelectedCatStore();
 const authStore = useAuthStore();
-const router = useRoute()
+const router = useRoute();
 const redirection = useRouter();
-const product = ref(null)
-const loadedImage = ref(0)
+const product = ref(null);
+const loadedImage = ref(0);
 async function getProductById() {
-  if (store.getlistOfSelectedProducts == null || store.getlistOfSelectedProducts == undefined || store.getlistOfSelectedProducts.length == 0) {
-    const response = await fetch('https://api.souchezreparm.fr/product/getById/' + router.params.id, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+  if (
+    store.getlistOfSelectedProducts == null ||
+    store.getlistOfSelectedProducts == undefined ||
+    store.getlistOfSelectedProducts.length == 0
+  ) {
+    const response = await fetch(
+      "http://localhost:8000/product/getById/" + router.params.id,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    });
-    const responseData = await response.json()
+    );
+    const responseData = await response.json();
     if (response.status !== 200) {
-      throw new Error(responseData.message || 'Failed to get the product');
+      throw new Error(responseData.message || "Failed to get the product");
     } else {
-      product.value = responseData
+      product.value = responseData;
     }
   } else {
     for (const prod of store.getlistOfSelectedProducts) {
       if (prod.id == router.params.id) {
-        product.value = prod
-
+        product.value = prod;
       }
     }
-
   }
 }
 
 async function addProductToBasket() {
-  const response = await fetch('https://api.souchezreparm.fr/panier-item/' + parseInt(router.params.id), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${authStore.getToken}`
+  const response = await fetch(
+    "http://localhost:8000/panier-item/" + parseInt(router.params.id),
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authStore.getToken}`,
+      },
     }
-  })
-  const responseData = await response.json()
+  );
+  const responseData = await response.json();
   if (response.status !== 201) {
-    throw new Error(responseData.message || 'Failed to add product to basket')
-  }
-  else {
-    await authStore.userPanier();
+    throw new Error(responseData.message || "Failed to add product to basket");
+  } else {
+    await authStore.setBasket(responseData)
   }
 }
 
 async function clickOnAddToBasket() {
   if (authStore.getIsLoggedIn) {
-    await addProductToBasket()
+    await addProductToBasket();
   } else {
-    redirection.replace('/login')
+    redirection.replace("/login");
   }
 }
 
 function handleLoadImage() {
-  loadedImage.value = loadedImage.value + 1
+  loadedImage.value = loadedImage.value + 1;
 }
 
 onMounted(async () => {
-  await getProductById()
-})
+  await getProductById();
+});
 
-const isLoaded = ref(false)
+const isLoaded = ref(false);
 
 watch(loadedImage, async (newValue, oldValue) => {
   if (newValue == product.value.images.length) {
     isLoaded.value = true;
   }
-})
+});
 </script>
 
 <template>
-  <Banniere title="NOS FUSILS & CARABINES"
+  <Banniere
+    title="NOS FUSILS & CARABINES"
     subtitle="Notre spécialité chez Souchez Reparm est la vente de fusils d’occasion mais nous vendons également des armes neuves à la demande."
-    title-color="#B54A29" bottom-border />
+    title-color="#B54A29"
+    bottom-border
+  />
   <div class="container-xl mt-4">
     <div v-if="product" :class="{ 'd-none': !isLoaded }">
       <h1 class="product_title mt-5">{{ product.name }}</h1>
@@ -85,19 +95,42 @@ watch(loadedImage, async (newValue, oldValue) => {
         <div class="caroussel_container p-3">
           <div id="carouselExampleIndicators" class="carousel slide">
             <div class="carousel-inner">
-              <div v-for="(elt, index) in product.images" :key="elt.id" class="carousel-item"
-                :class="{ 'active': index == 0 }">
-                <img :src="elt.url" class="d-block w-100" alt="..." @load="handleLoadImage()">
+              <div
+                v-for="(elt, index) in product.images"
+                :key="elt.id"
+                class="carousel-item"
+                :class="{ active: index == 0 }"
+              >
+                <img
+                  :src="elt.url"
+                  class="d-block w-100"
+                  alt="..."
+                  @load="handleLoadImage()"
+                />
               </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-              data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
               <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-              data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
               <span class="visually-hidden">Next</span>
             </button>
           </div>
@@ -110,23 +143,32 @@ watch(loadedImage, async (newValue, oldValue) => {
               <p>{{ product.description }}</p>
             </div>
             <div class="price">
-              <h4>
-                prix: {{ product.price }}€
-              </h4>
+              <h4>prix: {{ product.price }}€</h4>
             </div>
             <div class="d-flex justify-content-center">
-              <button class="btn btn-lg add_basket_button" @click="clickOnAddToBasket">Ajouter au panier</button>
+              <button
+                class="btn btn-lg add_basket_button"
+                @click="clickOnAddToBasket"
+              >
+                Ajouter au panier
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="d-flex justify-content-center spinner-container" :class="{ 'd-none': isLoaded }">
-      <div class="spinner-border mx-auto" style="width: 5rem; height: 5rem;" role="status"></div>
+    <div
+      class="d-flex justify-content-center spinner-container"
+      :class="{ 'd-none': isLoaded }"
+    >
+      <div
+        class="spinner-border mx-auto"
+        style="width: 5rem; height: 5rem"
+        role="status"
+      ></div>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .weapon_container {
@@ -141,18 +183,18 @@ watch(loadedImage, async (newValue, oldValue) => {
 }
 
 .spinner-border {
-  color: #B54A29;
+  color: #b54a29;
 }
 
 .add_basket_button {
-  background-color: #B54A29;
+  background-color: #b54a29;
   color: white;
   margin: auto auto;
   text-align: center;
 }
 
 .product_title {
-  color: #B54A29;
+  color: #b54a29;
   width: 80%;
   text-align: center;
   margin: auto auto;

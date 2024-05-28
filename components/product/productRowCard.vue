@@ -20,7 +20,7 @@ function waitLoadImages() {
         @load-images="waitLoadImages()" />
     </div>
     <div class="d-flex justify-content-center spinner-container" :class="{ 'd-none': !loader }">
-      <div class="spinner-border mx-auto" style="width: 5rem; height: 5rem;" role="status"></div>
+      <div class="spinner-border mx-auto" style="width: 5rem; height: 5rem;" role="status" />
     </div>
   </div>
 </template>
