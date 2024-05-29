@@ -68,7 +68,7 @@ async function uploadImages(productId) {
 
   try {
     const response = await fetch(
-      `http://localhost:8000/upload-images/uploadImages/${productId}`,
+      `https://api.souchezreparm.fr/upload-images/uploadImages/${productId}`,
       {
         method: "POST",
         headers: {
@@ -89,7 +89,7 @@ async function uploadImages(productId) {
 async function fetchDeleteImage(imageId) {
   try {
     const response = await fetch(
-      `http://localhost:8000/upload-images/delete/${imageId}`,
+      `https://api.souchezreparm.fr/upload-images/delete/${imageId}`,
       {
         method: "DELETE",
         headers: {
@@ -197,7 +197,7 @@ const submitForm = async (event) => {
       let response;
       let productId;
       if (authStore.getSelectedProductToUpdate == null) {
-        response = await fetch("http://localhost:8000/product/create", {
+        response = await fetch("https://api.souchezreparm.fr/product/create", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${authStore.getToken}`,
@@ -210,7 +210,7 @@ const submitForm = async (event) => {
       } else {
         productId = authStore.getSelectedProductToUpdate.id;
         response = await fetch(
-          "http://localhost:8000/product/update/" + productId,
+          "https://api.souchezreparm.fr/product/update/" + productId,
           {
             method: "PUT",
             headers: {

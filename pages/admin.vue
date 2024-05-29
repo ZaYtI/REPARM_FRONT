@@ -13,7 +13,7 @@ const forward = ref(">>");
 async function deleteProduct(productId) {
   try {
     const response = await fetch(
-      `http://localhost:8000/product/delete/${productId}`,
+      `https://api.souchezreparm.fr/product/delete/${productId}`,
       {
         headers: {
           Authorization: `Bearer ${authStore.getToken}`,
@@ -36,7 +36,7 @@ async function deleteProduct(productId) {
 async function deleteOrder(orderId) {
   try {
     const response = await fetch(
-      `http://localhost:8000/commande/delete/${orderId}`,
+      `https://api.souchezreparm.fr/commande/delete/${orderId}`,
       {
         headers: {
           Authorization: `Bearer ${authStore.getToken}`,

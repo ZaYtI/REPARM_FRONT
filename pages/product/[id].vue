@@ -14,7 +14,7 @@ async function getProductById() {
     store.getlistOfSelectedProducts.length == 0
   ) {
     const response = await fetch(
-      "http://localhost:8000/product/getById/" + router.params.id,
+      "https://api.souchezreparm.fr/product/getById/" + router.params.id,
       {
         method: "GET",
         headers: {
@@ -39,7 +39,7 @@ async function getProductById() {
 
 async function addProductToBasket() {
   const response = await fetch(
-    "http://localhost:8000/panier-item/" + parseInt(router.params.id),
+    "https://api.souchezreparm.fr/panier-item/" + parseInt(router.params.id),
     {
       method: "POST",
       headers: {

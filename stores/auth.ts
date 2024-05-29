@@ -74,7 +74,7 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     async login(email: string, password: string): Promise<void> {
-      const response = await fetch("http://localhost:8000/auth/login", {
+      const response = await fetch("https://api.souchezreparm.fr/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +106,7 @@ export const useAuthStore = defineStore("auth", {
 
     async validatePanierToOrder(): Promise<void> {
       const response = await fetch(
-        "http://localhost:8000/commande-produit/createWithPanier",
+        "https://api.souchezreparm.fr/commande-produit/createWithPanier",
         {
           method: "POST",
           headers: {
@@ -125,7 +125,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async setUserOrder(): Promise<void> {
-      const response = await fetch("http://localhost:8000/commande/user", {
+      const response = await fetch("https://api.souchezreparm.fr/commande/user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -167,7 +167,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async profile(): Promise<void> {
-      const response = await fetch("http://localhost:8000/auth/profile", {
+      const response = await fetch("https://api.souchezreparm.fr/auth/profile", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.token}`,
@@ -190,7 +190,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async register(formData: RegisterUser): Promise<void> {
-      const response = await fetch("http://localhost:8000/auth/register", {
+      const response = await fetch("https://api.souchezreparm.fr/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -214,7 +214,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async userPanier(): Promise<void> {
-      const response = await fetch("http://localhost:8000/panier-item/", {
+      const response = await fetch("https://api.souchezreparm.fr/panier-item/", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.token}`,
@@ -233,7 +233,7 @@ export const useAuthStore = defineStore("auth", {
 
     async createOrder(): Promise<void> {
       const response = await fetch(
-        "http://localhost:8000/commande_produit/createWithPanier",
+        "https://api.souchezreparm.fr/commande_produit/createWithPanier",
         {
           method: "POST",
           headers: {
@@ -252,7 +252,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async logout(): Promise<void> {
-      const response = await fetch("http://localhost:8000/auth/register", {
+      const response = await fetch("https://api.souchezreparm.fr/auth/register", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${this.token}`,
@@ -273,7 +273,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async setAllOrder(): Promise<void> {
-      const data = await fetch("http://localhost:8000/commande/all", {
+      const data = await fetch("https://api.souchezreparm.fr/commande/all", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.token}`,
@@ -289,7 +289,7 @@ export const useAuthStore = defineStore("auth", {
 
     async removeProduct(productId: number): Promise<void> {
       const response = await fetch(
-        "http://localhost:8000/panier-item/" + productId,
+        "https://api.souchezreparm.fr/panier-item/" + productId,
         {
           method: "DELETE",
           headers: {

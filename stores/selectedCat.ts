@@ -57,13 +57,13 @@ export const useSelectedCatStore = defineStore("selectedCat", {
     },
 
     async setAllProduct() {
-      const data = await fetch("http://localhost:8000/product/getall");
+      const data = await fetch("https://api.souchezreparm.fr/product/getall");
       const products = await data.json();
       this.allProduct = products;
     },
 
     async setListOfCategorie(): Promise<void> {
-      const data = await fetch("http://localhost:8000/categorie/getall");
+      const data = await fetch("https://api.souchezreparm.fr/categorie/getall");
       const categorie = await data.json();
       this.listOfCategorie = [];
       for (const cat of categorie) {
