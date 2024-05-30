@@ -5,10 +5,6 @@ const store = useSelectedCatStore();
 <template>
   <div class="px-0 pt-3 selected-cat-container">
     <div class="justify-content-center button-wrapper d-lg-flex d-none">
-      <div class="button-container">
-        <button class="btn btn-start mx-3 text-uppercase" @click="() => store.setSelectedCat(0, 'Tous les fusils')"
-          :class="{ 'active': store.getSelectedCat === 'Tous les fusils' }">Tous les fusils</button>
-      </div>
       <div class="button-container" v-for="cat in store.getListOfCategorie" :key="cat">
         <button class="btn btn-start mx-3 text-uppercase" @click="() => store.setSelectedCat(cat.id, cat.name)"
           :class="{ 'active': store.getSelectedCat === cat.name }">{{ cat.name }}</button>
@@ -26,11 +22,6 @@ const store = useSelectedCatStore();
       <div class="collapse rounded-bottom" id="collapseExample">
         <div class="card card-body">
           <div class="justify-content-center">
-            <div class="button-container">
-              <button class="btn btn-phone w-100 text-uppercase"
-                @click="() => store.setSelectedCat(0, 'Tous les fusils')"
-                :class="{ 'active': store.getSelectedCat === 'Tous les fusils' }">Tous les fusils</button>
-            </div>
             <div class="button-container" v-for="cat in store.getListOfCategorie" :key="cat">
               <button class="btn btn-phone w-100 text-uppercase" @click="() => store.setSelectedCat(cat.id, cat.name)"
                 :class="{ 'active': store.getSelectedCat === cat.name }">{{ cat.name }}</button>
